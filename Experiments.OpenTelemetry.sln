@@ -1,0 +1,63 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{851B6928-D98B-4864-B71B-A93976672F50}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{84972C9B-FA46-4265-BEE6-4DA0DA4E0526}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		Directory.Build.props = Directory.Build.props
+		nuget.config = nuget.config
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experiments.OpenTelemetry.Host", "src\Experiments.OpenTelemetry.Host\Experiments.OpenTelemetry.Host.csproj", "{BEC1BA93-126C-417F-8E57-DA847178D1F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experiments.OpenTelemetry.Common", "src\Experiments.OpenTelemetry.Common\Experiments.OpenTelemetry.Common.csproj", "{4255D44B-A928-4330-A38C-8D2F8334B08F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experiments.OpenTelemetry.Library1", "src\Experiments.OpenTelemetry.Library1\Experiments.OpenTelemetry.Library1.csproj", "{53FAADE0-889C-4CF4-ADE3-3C9FDC012201}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experiments.OpenTelemetry.Telemetry", "src\Experiments.OpenTelemetry.Telemetry\Experiments.OpenTelemetry.Telemetry.csproj", "{A977D55B-F1BB-4736-8961-C400FF9FA76D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experiments.OpenTelemetry.Activities", "src\Experiments.OpenTelemetry.Activities\Experiments.OpenTelemetry.Activities.csproj", "{10BE5BDB-B164-449C-A675-7FDAAE2A71AE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BEC1BA93-126C-417F-8E57-DA847178D1F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEC1BA93-126C-417F-8E57-DA847178D1F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEC1BA93-126C-417F-8E57-DA847178D1F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEC1BA93-126C-417F-8E57-DA847178D1F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4255D44B-A928-4330-A38C-8D2F8334B08F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4255D44B-A928-4330-A38C-8D2F8334B08F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4255D44B-A928-4330-A38C-8D2F8334B08F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4255D44B-A928-4330-A38C-8D2F8334B08F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53FAADE0-889C-4CF4-ADE3-3C9FDC012201}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53FAADE0-889C-4CF4-ADE3-3C9FDC012201}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53FAADE0-889C-4CF4-ADE3-3C9FDC012201}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53FAADE0-889C-4CF4-ADE3-3C9FDC012201}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A977D55B-F1BB-4736-8961-C400FF9FA76D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A977D55B-F1BB-4736-8961-C400FF9FA76D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A977D55B-F1BB-4736-8961-C400FF9FA76D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A977D55B-F1BB-4736-8961-C400FF9FA76D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10BE5BDB-B164-449C-A675-7FDAAE2A71AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10BE5BDB-B164-449C-A675-7FDAAE2A71AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10BE5BDB-B164-449C-A675-7FDAAE2A71AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10BE5BDB-B164-449C-A675-7FDAAE2A71AE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BEC1BA93-126C-417F-8E57-DA847178D1F2} = {851B6928-D98B-4864-B71B-A93976672F50}
+		{4255D44B-A928-4330-A38C-8D2F8334B08F} = {851B6928-D98B-4864-B71B-A93976672F50}
+		{53FAADE0-889C-4CF4-ADE3-3C9FDC012201} = {851B6928-D98B-4864-B71B-A93976672F50}
+		{A977D55B-F1BB-4736-8961-C400FF9FA76D} = {851B6928-D98B-4864-B71B-A93976672F50}
+		{10BE5BDB-B164-449C-A675-7FDAAE2A71AE} = {851B6928-D98B-4864-B71B-A93976672F50}
+	EndGlobalSection
+EndGlobal
