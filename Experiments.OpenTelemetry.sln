@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experiments.OpenTelemetry.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experiments.OpenTelemetry.Activities", "src\Experiments.OpenTelemetry.Activities\Experiments.OpenTelemetry.Activities.csproj", "{10BE5BDB-B164-449C-A675-7FDAAE2A71AE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "submodules", "submodules", "{B2E2D382-30D0-49E6-B740-6171FC7EE895}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Functional", "submodules\Functional\src\Functional\Functional.csproj", "{7D48F0CC-4415-46EA-B5E1-A5215A1B3C12}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +53,10 @@ Global
 		{10BE5BDB-B164-449C-A675-7FDAAE2A71AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10BE5BDB-B164-449C-A675-7FDAAE2A71AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10BE5BDB-B164-449C-A675-7FDAAE2A71AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D48F0CC-4415-46EA-B5E1-A5215A1B3C12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D48F0CC-4415-46EA-B5E1-A5215A1B3C12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D48F0CC-4415-46EA-B5E1-A5215A1B3C12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D48F0CC-4415-46EA-B5E1-A5215A1B3C12}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -59,5 +67,6 @@ Global
 		{53FAADE0-889C-4CF4-ADE3-3C9FDC012201} = {851B6928-D98B-4864-B71B-A93976672F50}
 		{A977D55B-F1BB-4736-8961-C400FF9FA76D} = {851B6928-D98B-4864-B71B-A93976672F50}
 		{10BE5BDB-B164-449C-A675-7FDAAE2A71AE} = {851B6928-D98B-4864-B71B-A93976672F50}
+		{7D48F0CC-4415-46EA-B5E1-A5215A1B3C12} = {B2E2D382-30D0-49E6-B740-6171FC7EE895}
 	EndGlobalSection
 EndGlobal
