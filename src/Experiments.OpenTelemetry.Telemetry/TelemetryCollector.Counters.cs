@@ -6,7 +6,7 @@ public partial class TelemetryCollector
 {
     #region Fields
 
-    //private readonly Dictionary<string, Counter<long>> _counters = [];
+    private readonly Dictionary<string, Counter<long>> _counters = [];
     private readonly Dictionary<string, UpDownCounter<long>> _upDownCounters = [];
 
     #endregion
@@ -21,6 +21,8 @@ public partial class TelemetryCollector
 
     public void DecrementExecutingActivityCounter(string activityUid) => UpdateExecutingActivityCounter(-1, activityUid);
 
+    public void IncrementActivityErrorCounter(string activityUid) => IncrementActivityCounter(Counters.ActivityErrors, 1, activityUid);
+
     #endregion
 
     #region Private Methods
@@ -34,6 +36,14 @@ public partial class TelemetryCollector
     private void UpdateActivityQueueCounter(long delta, string activityUid)
     {
         var counter = _upDownCounters[Counters.ActivityQueue];
+        counter.Add(delta, new KeyValuePair<string, object?>(Tags.ActivityUid, activityUid));
+    }
+
+    private void IncrementActivityCounter(string counterName, long delta, string activityUid)
+    {
+        if (0 >= delta) { throw new ArgumentException($"Parameter {delta} should be greater than zero", nameof(delta)); }
+
+        var counter = _counters[counterName];
         counter.Add(delta, new KeyValuePair<string, object?>(Tags.ActivityUid, activityUid));
     }
 

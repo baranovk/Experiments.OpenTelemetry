@@ -1,23 +1,110 @@
 using System.Diagnostics;
 using Experiments.OpenTelemetry.Telemetry;
+using Functional;
+using static Functional.F;
+using Unit = System.ValueTuple;
 
 namespace Experiments.OpenTelemetry.Common;
 
-public abstract class ActivityBase : IProcessFlowJobActivity
+public abstract class ActivityBase(IActivityScheduler scheduler) : IProcessFlowJobActivity
 {
+    #region Constructors
+
+    #endregion
+
+    #region Properties
+
+    public abstract string Uid { get; }
+
+    public IActivityScheduler Scheduler { get; private set; } = scheduler;
+
+    protected TelemetryCollector? TelemetryCollector { get; private set; }
+
+    #endregion
+
+    #region Public Methods
+
     public async Task ExecuteAsync(ActivityContext ctx, CancellationToken cancellationToken = default)
     {
-        var collector = TelemetryCollector.GetInstance(ctx.TelemetryCollectorConfig);
-
-        collector.IncrementExecutingActivityCounter(ActivityUid);
         var sw = new Stopwatch();
-        sw.Start();
-        await ExecuteInternalAsync(ctx, cancellationToken).ConfigureAwait(false);
-        sw.Stop();
-        collector.DecrementExecutingActivityCounter(ActivityUid);
+
+        await (await GetActivityPrologue(ctx, sw)
+                .Bind<Exceptional<Unit>, Exceptional<Unit>>(_ => next => IncrementExecutingActivityCounter(next))
+                .Bind<Exceptional<Unit>, Exceptional<Unit>>(_ => next => GetExecuteActivityMiddleware(ctx, cancellationToken)(next))
+                .Bind<Exceptional<Unit>, Exceptional<Unit>>(_ => next => DecrementExecutingActivityCounter(next))
+                .RunAsync()
+                .ConfigureAwait(false)
+              )
+              .Match(
+                   async ex => await ExecuteActivityEpilogue(sw, ex).ConfigureAwait(false),
+                   async _ => await ExecuteActivityEpilogue(sw, None).ConfigureAwait(false)
+               )
+              .ConfigureAwait(false);
     }
 
-    protected abstract string ActivityUid { get; }
+    #endregion
 
-    protected abstract Task ExecuteInternalAsync(ActivityContext ctx, CancellationToken cancellationToken = default);
+    #region Protected Methods
+
+    protected abstract Task<Unit> ExecuteInternalAsync(ActivityContext ctx, CancellationToken cancellationToken = default);
+
+    #endregion
+
+    #region Private Methods
+
+    private AsyncMiddleware<Exceptional<Unit>> GetActivityPrologue(ActivityContext ctx, Stopwatch swActivityExecutionTime)
+        => new(new Func<ActivityContext, Stopwatch, Func<Exceptional<Unit>, Task<dynamic>>, Task<dynamic>>(ExecuteActivityPrologue)
+            .Curry()(ctx)(swActivityExecutionTime));
+
+    private AsyncMiddleware<Exceptional<Unit>> GetExecuteActivityMiddleware(ActivityContext ctx, CancellationToken cancellationToken)
+        => new(new Func<ActivityContext, CancellationToken, Func<Exceptional<Unit>, Task<dynamic>>, Task<dynamic>>(ExecuteActivityAsync)
+                .Curry()(ctx)(cancellationToken));
+
+    private async Task<dynamic> ExecuteActivityPrologue(ActivityContext ctx, Stopwatch swActivityExecutionTime, Func<Exceptional<Unit>, Task<dynamic>> next)
+    {
+        swActivityExecutionTime.Start();
+        Console.WriteLine($"{Uid} has started");
+
+        TelemetryCollector = TelemetryCollector.GetInstance(ctx.TelemetryCollectorConfig);
+        return await next(new Unit()).ConfigureAwait(false);
+    }
+
+    private async Task<dynamic> IncrementExecutingActivityCounter(Func<Exceptional<Unit>, Task<dynamic>> next)
+    {
+        TelemetryCollector?.IncrementExecutingActivityCounter(Uid);
+        return await next(Exceptional(new Unit())).ConfigureAwait(false);
+    }
+
+    private async Task<dynamic> ExecuteActivityAsync(ActivityContext ctx, CancellationToken cancellationToken,
+        Func<Exceptional<Unit>, Task<dynamic>> next)
+        => (await TryAsync(() => ExecuteInternalAsync(ctx, cancellationToken)).RunAsync().ConfigureAwait(false))
+            .Match(
+                ex => Async<dynamic>(Exceptional(ex)),
+                u => next(Exceptional(u))
+            )
+            .ConfigureAwait(false);
+
+    private async Task<dynamic> DecrementExecutingActivityCounter(Func<Exceptional<Unit>, Task<dynamic>> next)
+    {
+        TelemetryCollector?.DecrementExecutingActivityCounter(Uid);
+        return await next(new Unit()).ConfigureAwait(false);
+    }
+
+    private Task ExecuteActivityEpilogue(Stopwatch swActivityExecutionTime, Option<Exception> error)
+    {
+        // TODO: send sw.TotalSeconds to histogram
+        swActivityExecutionTime.Stop();
+        Console.WriteLine($"{Uid} has finished. Execution time: {swActivityExecutionTime.Elapsed}");
+
+        return error.Match(
+            () => Task.CompletedTask,
+            async ex =>
+            {
+                TelemetryCollector?.IncrementActivityErrorCounter(Uid);
+                await Console.Error.WriteLineAsync(ex.ToString()).ConfigureAwait(false);
+            }
+        );
+    }
+
+    #endregion
 }

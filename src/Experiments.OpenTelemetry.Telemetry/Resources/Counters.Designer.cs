@@ -61,6 +61,15 @@ namespace Experiments.OpenTelemetry.Telemetry.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to vio.activity.error.count.
+        /// </summary>
+        internal static string ActivityErrors {
+            get {
+                return ResourceManager.GetString("ActivityErrors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to vio.activity.queue.length.
         /// </summary>
         internal static string ActivityQueue {

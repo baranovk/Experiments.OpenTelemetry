@@ -1,4 +1,5 @@
 using Experiments.OpenTelemetry.Activities;
+using Experiments.OpenTelemetry.Common;
 using Experiments.OpenTelemetry.Telemetry;
 
 namespace Experiments.OpenTelemetry.Host;
@@ -9,6 +10,13 @@ internal static class Program
 
     private const int ActivityQueueLimit = 100;
     private const int ActivityQueuePeriod = 15000;
+
+    #endregion
+
+    #region Fields
+
+    private static ActivityScheduler? _entrypointScheduler;
+    private static ActivityScheduler? _activityScheduler;
 
     #endregion
 
@@ -36,11 +44,13 @@ internal static class Program
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        ActivityScheduler.Init(ActivityQueueLimit, cancellationToken);
+        _entrypointScheduler = new ActivityScheduler(ActivityQueueLimit, cancellationToken);
+        _activityScheduler = new ActivityScheduler(ActivityQueueLimit, cancellationToken);
 
         var telemetryCollectorConfig = new TelemetryCollectorConfig(new Uri("http"), TimeSpan.FromMilliseconds(3000));
-        var activityExecutor = new ActivityExecutor(telemetryCollectorConfig, cancellationToken);
-        ActivityScheduler.Instance.Subscribe(activityExecutor);
+
+        _entrypointScheduler.Subscribe(new ActivityExecutor(_activityScheduler, telemetryCollectorConfig, cancellationToken));
+        _activityScheduler.Subscribe(new ActivityExecutor(_activityScheduler, telemetryCollectorConfig, cancellationToken));
     }
 
     private static void Run(CancellationToken cancellationToken)
@@ -51,7 +61,7 @@ internal static class Program
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                ActivityScheduler.Instance.QueueActivity(new ActivityDescriptor(typeof(EntryPointActivity)));
+                _entrypointScheduler?.QueueActivity(new ActivityDescriptor(typeof(EntryPointActivity)));
 
                 Thread.Sleep(ActivityQueuePeriod);
             }
@@ -64,7 +74,8 @@ internal static class Program
 
     private static void ShutDown()
     {
-        ActivityScheduler.Instance.Dispose();
+        _entrypointScheduler?.Dispose();
+        _activityScheduler?.Dispose();
         Console.WriteLine("ShutDown OK");
     }
 }

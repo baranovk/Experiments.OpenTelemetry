@@ -136,6 +136,9 @@ dotnet_diagnostic.CA1062.severity = suggestion
 # Implement IDisposable correctly
 dotnet_diagnostic.CA1063.severity = suggestion
 dotnet_diagnostic.CA1031.severity = silent
+ 
+# CA1068: CancellationToken parameters must come last
+dotnet_diagnostic.CA1068.severity = suggestion
 
 # Nested types should not be visible
 dotnet_diagnostic.CA1034.severity = suggestion

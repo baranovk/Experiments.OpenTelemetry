@@ -1,17 +1,22 @@
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Reactive.Subjects;
 
-namespace Experiments.OpenTelemetry.Host;
+namespace Experiments.OpenTelemetry.Common;
 
-internal sealed class ActivityScheduler : IObservable<ActivityDescriptor>, IDisposable
+public sealed record ActivityDescriptor(Type ActivityType);
+
+public interface IActivityScheduler
 {
-    private static ActivityScheduler? _instance;
+    void QueueActivity(ActivityDescriptor descriptor);
+}
 
+public sealed class ActivityScheduler : IObservable<ActivityDescriptor>, IActivityScheduler, IDisposable
+{
     private bool _disposed;
     private readonly Subject<ActivityDescriptor> _activitySubject;
     private readonly BlockingCollection<ActivityDescriptor> _activityQueue;
 
-    private ActivityScheduler(int queueLimit = 100, CancellationToken cancellationToken = default)
+    public ActivityScheduler(int queueLimit = 100, CancellationToken cancellationToken = default)
     {
         _activityQueue = new(queueLimit);
         _activitySubject = new Subject<ActivityDescriptor>();
@@ -34,12 +39,8 @@ internal sealed class ActivityScheduler : IObservable<ActivityDescriptor>, IDisp
             Console.WriteLine(t.Exception!.ToString());
             _activitySubject.OnError(t.Exception!);
         },
-        default, TaskContinuationOptions.NotOnFaulted, TaskScheduler.Default);
+        default, TaskContinuationOptions.OnlyOnFaulted, TaskScheduler.Default);
     }
-
-    public static ActivityScheduler Instance => _instance ?? throw new InvalidOperationException();
-
-    public static void Init(int queueLimit = 100, CancellationToken cancellationToken = default) => _instance = new(queueLimit, cancellationToken);
 
     public void Dispose()
     {
