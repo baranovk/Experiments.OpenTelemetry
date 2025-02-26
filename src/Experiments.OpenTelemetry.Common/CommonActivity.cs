@@ -16,14 +16,20 @@ public class CommonActivity(string uid, ILogger logger, IActivityScheduler sched
             throw new Exception($"{Uid} error");
         }
 
-        await Task.Delay(
-            new Random().Next(Constants.ActivityExecutionTimeMinSeconds, Constants.ActivityExecutionTimeMaxSeconds + 1) * 1000,
-            cancellationToken
-        ).ConfigureAwait(false);
+        await DoWork(ctx, cancellationToken).ConfigureAwait(false);
+        await QueueNextActivity(ctx, cancellationToken).ConfigureAwait(false);
 
-        QueueNextActivity(ctx);
         return new();
     }
 
-    protected virtual void QueueNextActivity(ActivityContext ctx) { }
+    protected virtual async Task DoWork(ActivityContext ctx, CancellationToken cancellationToken = default)
+    {
+        await Task.Delay(
+            new Random().Next(Constants.ActivityExecutionTimeMinSeconds, Constants.ActivityExecutionTimeMaxSeconds + 1) * 1000,
+            cancellationToken
+        )
+        .ConfigureAwait(false);
+    }
+
+    protected virtual Task QueueNextActivity(ActivityContext ctx, CancellationToken cancellationToken = default) => Task.CompletedTask;
 }

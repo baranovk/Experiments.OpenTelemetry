@@ -8,12 +8,14 @@ namespace Experiments.OpenTelemetry.Host;
 internal sealed class ActivityExecutor(
     ILogger logger,
     IActivityScheduler scheduler,
+    IWorkItemSource workItemSource,
     TelemetryCollectorConfig telemetryCollectorConfig,
     CancellationToken cancellationToken = default)
     : IObserver<ActivityDescriptor>
 {
     private readonly ILogger _logger = logger;
     private readonly IActivityScheduler _scheduler = scheduler;
+    private readonly IWorkItemSource _workItemSource = workItemSource;
     private readonly TelemetryCollectorConfig _telemetryCollectorConfig = telemetryCollectorConfig;
     private readonly CancellationToken _cancellationToken = cancellationToken;
     private readonly Dictionary<string, long> _activityCounters = [];
@@ -21,7 +23,7 @@ internal sealed class ActivityExecutor(
     public void OnNext(ActivityDescriptor value)
     {
         var ctx = new ActivityContext(_telemetryCollectorConfig, value.CorrelationId);
-        var activity = (Activator.CreateInstance(value.ActivityType, value.ActivityUid, _logger, _scheduler) as IProcessFlowJobActivity)!;
+        var activity = CreateActivity(value);
 
         UpdateActivityCounter(activity.Uid);
         LogActiveActivityCounter(activity.Uid);
@@ -62,4 +64,24 @@ internal sealed class ActivityExecutor(
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void LogActiveActivityCounter(string activityUid)
         => _logger.LogInformation("Active {ActivityUid} activity count: {ActivityCount}", activityUid, _activityCounters[activityUid]);
+
+    private IProcessFlowJobActivity CreateActivity(ActivityDescriptor descriptor)
+    {
+        if (descriptor.ActivityType == typeof(EntryPointActivity))
+        {
+            return (Activator.CreateInstance(descriptor.ActivityType,
+                descriptor.ActivityUid, _logger, _scheduler, _workItemSource) as IProcessFlowJobActivity)!;
+        }
+
+        if (descriptor.ActivityType.BaseType == typeof(WorkItemsProcessor))
+        {
+            descriptor.WorkItemsBatchUid.Match(
+                () => throw new InvalidOperationException(),
+                uid => (Activator.CreateInstance(descriptor.ActivityType,
+                    descriptor.ActivityUid, _logger, _scheduler, descriptor.WorkItemsBatchUid, _workItemSource, uid) as IProcessFlowJobActivity)!
+            );
+        }
+
+        return (Activator.CreateInstance(descriptor.ActivityType, descriptor.ActivityUid, _logger, _scheduler) as IProcessFlowJobActivity)!;
+    }
 }

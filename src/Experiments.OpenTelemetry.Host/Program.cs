@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Experiments.OpenTelemetry.Common;
 using Experiments.OpenTelemetry.Telemetry;
 using Microsoft.Extensions.Logging;
+using static Functional.F;
 
 namespace Experiments.OpenTelemetry.Host;
 
@@ -72,11 +73,12 @@ internal sealed class Program
             cancellationToken
         );
 
+        var workItemSource = new WorkItemSource();
         var telemetryCollectorConfig = new TelemetryCollectorConfig(new Uri(PremetheusUri), TimeSpan.FromMilliseconds(3000));
         _telemetryCollector = TelemetryCollector.GetInstance(telemetryCollectorConfig);
 
-        _entrypointScheduler.Subscribe(new ActivityExecutor(_logger, _activityScheduler, telemetryCollectorConfig, cancellationToken));
-        _activityScheduler.Subscribe(new ActivityExecutor(_logger, _activityScheduler, telemetryCollectorConfig, cancellationToken));
+        _entrypointScheduler.Subscribe(new ActivityExecutor(_logger, _activityScheduler, workItemSource, telemetryCollectorConfig, cancellationToken));
+        _activityScheduler.Subscribe(new ActivityExecutor(_logger, _activityScheduler, workItemSource, telemetryCollectorConfig, cancellationToken));
     }
 
     private static async Task Run(CancellationToken cancellationToken)
@@ -86,7 +88,7 @@ internal sealed class Program
             await Task.Delay(ActivityQueuePeriod, cancellationToken).ConfigureAwait(false);
 
             _entrypointScheduler?.QueueActivity(
-                new ActivityDescriptor("Main_EntryPoint_Activity", typeof(EntryPointActivity), Guid.NewGuid().ToString())
+                new ActivityDescriptor("Main_EntryPoint_Activity", typeof(EntryPointActivity), Guid.NewGuid().ToString(), None)
             );
         }
     }

@@ -1,10 +1,25 @@
 using Experiments.OpenTelemetry.Common;
 using Microsoft.Extensions.Logging;
+using static Functional.F;
 
 namespace Experiments.OpenTelemetry.Library2;
 
-public sealed class Library2Activity(string uid, ILogger logger, IActivityScheduler scheduler) : CommonActivity(uid, logger, scheduler)
+public sealed class Library2Activity(
+    string uid,
+    ILogger logger,
+    IActivityScheduler scheduler,
+    Guid workItemBatchUid,
+    IWorkItemSource workItemSource)
+    : WorkItemsProcessor(uid, logger, scheduler, workItemBatchUid, workItemSource)
 {
-    protected override void QueueNextActivity(ActivityContext ctx)
-        => Scheduler.QueueActivity(new ActivityDescriptor("Library_2_Operation_A", typeof(Library2OperationA), ctx.CorrelationId));
+    protected override WorkItemSourceType WorkItemSourceType => WorkItemSourceType.Type2;
+
+    protected override Task QueueNextActivity(ActivityContext ctx, CancellationToken cancellationToken = default)
+    {
+        Scheduler.QueueActivity(
+            new ActivityDescriptor("Library_2_Operation_A", typeof(Library2OperationA), ctx.CorrelationId, Some(WorkItemBatchUid))
+        );
+
+        return Task.CompletedTask;
+    }
 }

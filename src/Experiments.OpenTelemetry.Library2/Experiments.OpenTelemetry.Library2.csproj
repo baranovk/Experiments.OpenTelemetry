@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\submodules\Functional\src\Functional\Functional.csproj" />
     <ProjectReference Include="..\Experiments.OpenTelemetry.Common\Experiments.OpenTelemetry.Common.csproj" />
   </ItemGroup>
 
