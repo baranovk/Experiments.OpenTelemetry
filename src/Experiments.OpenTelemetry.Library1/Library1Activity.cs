@@ -1,19 +1,10 @@
 using Experiments.OpenTelemetry.Common;
-using Unit = System.ValueTuple;
+using Microsoft.Extensions.Logging;
 
 namespace Experiments.OpenTelemetry.Library1;
 
-internal sealed class Library1Activity : ActivityBase
+public sealed class Library1Activity(string uid, ILogger logger, IActivityScheduler scheduler) : CommonActivity(uid, logger, scheduler)
 {
-    public Library1Activity(IActivityScheduler scheduler) : base(scheduler)
-    {
-    }
-
-    public override string Uid => "Library1Activity";
-
-    protected override async Task<Unit> ExecuteInternalAsync(ActivityContext ctx, CancellationToken cancellationToken = default)
-    {
-        await Task.Delay(new Random().Next(10000, 30000), cancellationToken).ConfigureAwait(false);
-        return new();
-    }
+    protected override void QueueNextActivity(ActivityContext ctx)
+        => Scheduler.QueueActivity(new ActivityDescriptor("Library_1_Operation_A", typeof(Library1OperationA), ctx.CorrelationId));
 }

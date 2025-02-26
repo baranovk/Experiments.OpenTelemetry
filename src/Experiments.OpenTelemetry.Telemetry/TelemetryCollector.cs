@@ -1,7 +1,3 @@
-using System.Diagnostics.Metrics;
-using Experiments.OpenTelemetry.Telemetry.Resources;
-using OpenTelemetry.Metrics;
-
 namespace Experiments.OpenTelemetry.Telemetry;
 
 public partial class TelemetryCollector : IDisposable

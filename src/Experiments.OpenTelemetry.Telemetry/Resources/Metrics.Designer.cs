@@ -59,14 +59,5 @@ namespace Experiments.OpenTelemetry.Telemetry.Resources {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to vio.activity.executing.count.
-        /// </summary>
-        internal static string ExecutingActivityCount {
-            get {
-                return ResourceManager.GetString("ExecutingActivityCount", resourceCulture);
-            }
-        }
     }
 }

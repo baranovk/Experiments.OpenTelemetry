@@ -1,38 +1,44 @@
-using Experiments.OpenTelemetry.Activities;
+using System.Diagnostics;
 using Experiments.OpenTelemetry.Common;
 using Experiments.OpenTelemetry.Telemetry;
+using Microsoft.Extensions.Logging;
 
 namespace Experiments.OpenTelemetry.Host;
 
-internal static class Program
+internal sealed class Program
 {
     #region Constants
 
+    private const int ActivityQueuePeriod = 5000;
     private const int ActivityQueueLimit = 100;
-    private const int ActivityQueuePeriod = 15000;
+    private const string PremetheusUri = "http://localhost:9090/api/v1/otlp/v1/metrics";
 
     #endregion
 
     #region Fields
 
+    private static bool _disposed;
     private static ActivityScheduler? _entrypointScheduler;
     private static ActivityScheduler? _activityScheduler;
+    private static CancellationTokenSource? _cts;
+    private static TelemetryCollector? _telemetryCollector;
+    private static ILoggerFactory? _loggerFactory;
+    private static ILogger? _logger;
 
     #endregion
 
-    static void Main()
+    static async Task Main()
     {
         try
         {
-            using var cts = new CancellationTokenSource();
-            Console.CancelKeyPress += (sender, e) => cts.Cancel();
+            _cts = new CancellationTokenSource();
 
-            Init(cts.Token);
-            Run(cts.Token);
+            Init(_cts.Token);
+            await Run(_cts.Token).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex);
+            _logger?.LogError(ex, "Host execution error");
         }
         finally
         {
@@ -44,38 +50,69 @@ internal static class Program
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        _entrypointScheduler = new ActivityScheduler(ActivityQueueLimit, cancellationToken);
-        _activityScheduler = new ActivityScheduler(ActivityQueueLimit, cancellationToken);
+        Console.CancelKeyPress += Exit;
 
-        var telemetryCollectorConfig = new TelemetryCollectorConfig(new Uri("http"), TimeSpan.FromMilliseconds(3000));
+        _loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+        _logger = _loggerFactory.CreateLogger<Program>();
 
-        _entrypointScheduler.Subscribe(new ActivityExecutor(_activityScheduler, telemetryCollectorConfig, cancellationToken));
-        _activityScheduler.Subscribe(new ActivityExecutor(_activityScheduler, telemetryCollectorConfig, cancellationToken));
+        static void updateActivityQueueLength(string activityUid, int activityQueueLength)
+            => _telemetryCollector?.UpdateActivityQueueLength(activityUid, activityQueueLength);
+
+        _entrypointScheduler = new ActivityScheduler(
+            _logger,
+            ActivityQueueLimit,
+            updateActivityQueueLength,
+            cancellationToken
+        );
+
+        _activityScheduler = new ActivityScheduler(
+            _logger,
+            ActivityQueueLimit,
+            updateActivityQueueLength,
+            cancellationToken
+        );
+
+        var telemetryCollectorConfig = new TelemetryCollectorConfig(new Uri(PremetheusUri), TimeSpan.FromMilliseconds(3000));
+        _telemetryCollector = TelemetryCollector.GetInstance(telemetryCollectorConfig);
+
+        _entrypointScheduler.Subscribe(new ActivityExecutor(_logger, _activityScheduler, telemetryCollectorConfig, cancellationToken));
+        _activityScheduler.Subscribe(new ActivityExecutor(_logger, _activityScheduler, telemetryCollectorConfig, cancellationToken));
     }
 
-    private static void Run(CancellationToken cancellationToken)
+    private static async Task Run(CancellationToken cancellationToken)
     {
-        try
+        while (!cancellationToken.IsCancellationRequested)
         {
-            while (true)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
+            await Task.Delay(ActivityQueuePeriod, cancellationToken).ConfigureAwait(false);
 
-                _entrypointScheduler?.QueueActivity(new ActivityDescriptor(typeof(EntryPointActivity)));
-
-                Thread.Sleep(ActivityQueuePeriod);
-            }
-        }
-        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
-        {
-            Console.WriteLine("Terminating... See ya!");
+            _entrypointScheduler?.QueueActivity(
+                new ActivityDescriptor("Main_EntryPoint_Activity", typeof(EntryPointActivity), Guid.NewGuid().ToString())
+            );
         }
     }
 
     private static void ShutDown()
     {
+        if (_disposed) { return; }
+
+        _logger?.LogInformation("Exiting...");
+
+        _cts?.Cancel();
+
         _entrypointScheduler?.Dispose();
         _activityScheduler?.Dispose();
-        Console.WriteLine("ShutDown OK");
+
+        _logger?.LogInformation("ShutDown OK");
+        _loggerFactory?.Dispose();
+        _cts?.Dispose();
+
+        _disposed = true;
+
+        if (Debugger.IsAttached)
+        {
+            Environment.Exit(1);
+        }
     }
+
+    private static void Exit(object? sender, ConsoleCancelEventArgs e) => ShutDown();
 }

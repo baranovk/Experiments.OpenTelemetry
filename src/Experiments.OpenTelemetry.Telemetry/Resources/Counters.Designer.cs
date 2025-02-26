@@ -61,7 +61,7 @@ namespace Experiments.OpenTelemetry.Telemetry.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to vio.activity.error.count.
+        ///   Looks up a localized string similar to activity_error_count.
         /// </summary>
         internal static string ActivityErrors {
             get {
@@ -70,7 +70,7 @@ namespace Experiments.OpenTelemetry.Telemetry.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to vio.activity.queue.length.
+        ///   Looks up a localized string similar to activity_queue_length.
         /// </summary>
         internal static string ActivityQueue {
             get {
@@ -79,7 +79,7 @@ namespace Experiments.OpenTelemetry.Telemetry.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to vio.activity.executing.count.
+        ///   Looks up a localized string similar to activity_executing_count.
         /// </summary>
         internal static string ExecutingActivities {
             get {

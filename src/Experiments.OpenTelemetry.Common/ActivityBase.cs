@@ -1,22 +1,21 @@
 using System.Diagnostics;
 using Experiments.OpenTelemetry.Telemetry;
 using Functional;
+using Microsoft.Extensions.Logging;
 using static Functional.F;
 using Unit = System.ValueTuple;
 
 namespace Experiments.OpenTelemetry.Common;
 
-public abstract class ActivityBase(IActivityScheduler scheduler) : IProcessFlowJobActivity
+public abstract class ActivityBase(string uid, ILogger logger, IActivityScheduler scheduler) : IProcessFlowJobActivity
 {
-    #region Constructors
-
-    #endregion
-
     #region Properties
 
-    public abstract string Uid { get; }
+    public string Uid => uid;
 
     public IActivityScheduler Scheduler { get; private set; } = scheduler;
+
+    protected ILogger Logger { get; private set; } = logger;
 
     protected TelemetryCollector? TelemetryCollector { get; private set; }
 
@@ -63,7 +62,7 @@ public abstract class ActivityBase(IActivityScheduler scheduler) : IProcessFlowJ
     private async Task<dynamic> ExecuteActivityPrologue(ActivityContext ctx, Stopwatch swActivityExecutionTime, Func<Exceptional<Unit>, Task<dynamic>> next)
     {
         swActivityExecutionTime.Start();
-        Console.WriteLine($"{Uid} has started");
+        Logger.LogInformation("Activity {Uid} has started", Uid);
 
         TelemetryCollector = TelemetryCollector.GetInstance(ctx.TelemetryCollectorConfig);
         return await next(new Unit()).ConfigureAwait(false);
@@ -77,7 +76,7 @@ public abstract class ActivityBase(IActivityScheduler scheduler) : IProcessFlowJ
 
     private async Task<dynamic> ExecuteActivityAsync(ActivityContext ctx, CancellationToken cancellationToken,
         Func<Exceptional<Unit>, Task<dynamic>> next)
-        => (await TryAsync(() => ExecuteInternalAsync(ctx, cancellationToken)).RunAsync().ConfigureAwait(false))
+        => await (await TryAsync(() => ExecuteInternalAsync(ctx, cancellationToken)).RunAsync().ConfigureAwait(false))
             .Match(
                 ex => Async<dynamic>(Exceptional(ex)),
                 u => next(Exceptional(u))
@@ -94,14 +93,15 @@ public abstract class ActivityBase(IActivityScheduler scheduler) : IProcessFlowJ
     {
         // TODO: send sw.TotalSeconds to histogram
         swActivityExecutionTime.Stop();
-        Console.WriteLine($"{Uid} has finished. Execution time: {swActivityExecutionTime.Elapsed}");
+        Logger.LogInformation("{Uid} has finished. Execution time: {ExecutionTime}", Uid, swActivityExecutionTime.Elapsed);
 
         return error.Match(
             () => Task.CompletedTask,
-            async ex =>
+            ex =>
             {
                 TelemetryCollector?.IncrementActivityErrorCounter(Uid);
-                await Console.Error.WriteLineAsync(ex.ToString()).ConfigureAwait(false);
+                Logger.LogError(ex, "Execute activity error");
+                return Task.CompletedTask;
             }
         );
     }

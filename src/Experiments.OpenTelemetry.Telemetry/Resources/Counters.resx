@@ -118,12 +118,12 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ActivityErrors" xml:space="preserve">
-    <value>vio.activity.error.count</value>
+    <value>activity_error_count</value>
   </data>
   <data name="ActivityQueue" xml:space="preserve">
-    <value>vio.activity.queue.length</value>
+    <value>activity_queue_length</value>
   </data>
   <data name="ExecutingActivities" xml:space="preserve">
-    <value>vio.activity.executing.count</value>
+    <value>activity_executing_count</value>
   </data>
 </root>

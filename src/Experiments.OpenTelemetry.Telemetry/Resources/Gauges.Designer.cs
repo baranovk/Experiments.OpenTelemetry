@@ -22,14 +22,14 @@ namespace Experiments.OpenTelemetry.Telemetry.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Tags {
+    internal class Gauges {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Tags() {
+        internal Gauges() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Experiments.OpenTelemetry.Telemetry.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Experiments.OpenTelemetry.Telemetry.Resources.Tags", typeof(Tags).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Experiments.OpenTelemetry.Telemetry.Resources.Gauges", typeof(Gauges).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,11 +61,11 @@ namespace Experiments.OpenTelemetry.Telemetry.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to activity.uid.
+        ///   Looks up a localized string similar to activity_queue_length.
         /// </summary>
-        internal static string ActivityUid {
+        internal static string ActivityQueueLength {
             get {
-                return ResourceManager.GetString("ActivityUid", resourceCulture);
+                return ResourceManager.GetString("ActivityQueueLength", resourceCulture);
             }
         }
     }

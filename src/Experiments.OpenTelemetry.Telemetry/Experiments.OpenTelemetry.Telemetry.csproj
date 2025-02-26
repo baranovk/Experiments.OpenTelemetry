@@ -18,6 +18,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Counters.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\Gauges.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Gauges.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\Metrics.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -34,6 +39,10 @@
     <EmbeddedResource Update="Resources\Counters.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Counters.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Gauges.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Gauges.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Metrics.resx">
       <Generator>ResXFileCodeGenerator</Generator>
