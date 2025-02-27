@@ -1,4 +1,5 @@
 using Experiments.OpenTelemetry.Common;
+using Experiments.OpenTelemetry.Telemetry;
 using Microsoft.Extensions.Logging;
 using static Functional.F;
 
@@ -9,8 +10,9 @@ public sealed class Library2Activity(
     ILogger logger,
     IActivityScheduler scheduler,
     Guid workItemBatchUid,
-    IWorkItemSource workItemSource)
-    : WorkItemsProcessor(uid, logger, scheduler, workItemBatchUid, workItemSource)
+    IWorkItemSource workItemSource,
+    ITelemetryCollector telemetryCollector)
+    : WorkItemsProcessor(uid, logger, scheduler, workItemBatchUid, workItemSource, telemetryCollector)
 {
     protected override WorkItemSourceType WorkItemSourceType => WorkItemSourceType.Type2;
 

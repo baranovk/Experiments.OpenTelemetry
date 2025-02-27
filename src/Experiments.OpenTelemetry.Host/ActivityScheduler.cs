@@ -5,20 +5,20 @@ using Microsoft.Extensions.Logging;
 
 namespace Experiments.OpenTelemetry.Host;
 
-internal delegate void OnAfterQueueActivity(string activityUid, int activityQueueLength);
+internal delegate void OnEnqueueActivity(string activityUid, int activityQueueLength);
 
 internal sealed class ActivityScheduler : IObservable<ActivityDescriptor>, IActivityScheduler, IDisposable
 {
     private bool _disposed;
     private readonly ILogger _logger;
-    private readonly OnAfterQueueActivity? _onAfterQueueActivity;
+    private readonly OnEnqueueActivity? _onAfterQueueActivity;
     private readonly Subject<ActivityDescriptor> _activitySubject;
     private readonly BlockingCollection<ActivityDescriptor> _activityQueue;
 
     public ActivityScheduler(
         ILogger logger,
         int queueLimit = 100,
-        OnAfterQueueActivity? onAfterQueueActivity = null,
+        OnEnqueueActivity? onAfterQueueActivity = null,
         CancellationToken cancellationToken = default)
     {
         _logger = logger;

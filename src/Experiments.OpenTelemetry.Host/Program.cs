@@ -1,5 +1,8 @@
 using System.Diagnostics;
+using Autofac;
 using Experiments.OpenTelemetry.Common;
+using Experiments.OpenTelemetry.Library1;
+using Experiments.OpenTelemetry.Library2;
 using Experiments.OpenTelemetry.Telemetry;
 using Microsoft.Extensions.Logging;
 using static Functional.F;
@@ -8,23 +11,16 @@ namespace Experiments.OpenTelemetry.Host;
 
 internal sealed class Program
 {
-    #region Constants
-
-    private const int ActivityQueuePeriod = 5000;
-    private const int ActivityQueueLimit = 100;
-    private const string PremetheusUri = "http://localhost:9090/api/v1/otlp/v1/metrics";
-
-    #endregion
-
     #region Fields
 
     private static bool _disposed;
     private static ActivityScheduler? _entrypointScheduler;
     private static ActivityScheduler? _activityScheduler;
     private static CancellationTokenSource? _cts;
-    private static TelemetryCollector? _telemetryCollector;
     private static ILoggerFactory? _loggerFactory;
     private static ILogger? _logger;
+    private static IContainer? _scope;
+    private static readonly List<IDisposable> _disposables = [];
 
     #endregion
 
@@ -53,39 +49,55 @@ internal sealed class Program
 
         Console.CancelKeyPress += Exit;
 
-        _loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
-        _logger = _loggerFactory.CreateLogger<Program>();
+        _scope = BuildContainer();
 
-        static void updateActivityQueueLength(string activityUid, int activityQueueLength)
-            => _telemetryCollector?.UpdateActivityQueueLength(activityUid, activityQueueLength);
+        var logger = _scope.Resolve<ILogger>();
+        var telemetryCollector = _scope.Resolve<ITelemetryCollector>();
+        var configuration = _scope.Resolve<IHostConfiguration>();
+
+        void onEnqueueActivity(string activityUid, int activityQueueLength)
+            => telemetryCollector.UpdateActivityQueueLength(activityUid, activityQueueLength);
 
         _entrypointScheduler = new ActivityScheduler(
-            _logger,
-            ActivityQueueLimit,
-            updateActivityQueueLength,
+            logger,
+            configuration.ActivityQueueLimit,
+            onEnqueueActivity,
             cancellationToken
         );
 
         _activityScheduler = new ActivityScheduler(
-            _logger,
-            ActivityQueueLimit,
-            updateActivityQueueLength,
+            logger,
+            configuration.ActivityQueueLimit,
+            onEnqueueActivity,
             cancellationToken
         );
 
-        var workItemSource = new WorkItemSource();
-        var telemetryCollectorConfig = new TelemetryCollectorConfig(new Uri(PremetheusUri), TimeSpan.FromMilliseconds(3000));
-        _telemetryCollector = TelemetryCollector.GetInstance(telemetryCollectorConfig);
+        var resolveActivity = new Func<IContainer, ActivityDescriptor, IProcessFlowJobActivity>(
+            ResolveActivity).Curry()(_scope);
 
-        _entrypointScheduler.Subscribe(new ActivityExecutor(_logger, _activityScheduler, workItemSource, telemetryCollectorConfig, cancellationToken));
-        _activityScheduler.Subscribe(new ActivityExecutor(_logger, _activityScheduler, workItemSource, telemetryCollectorConfig, cancellationToken));
+        var entryPointActivityExecutor = new ActivityExecutor(configuration.MaxConcurrentActivityExecution,
+            resolveActivity, logger, cancellationToken);
+
+        var activityExecutor = new ActivityExecutor(configuration.MaxConcurrentActivityExecution,
+            resolveActivity, logger, cancellationToken);
+
+        _disposables.Add(_entrypointScheduler.Subscribe(entryPointActivityExecutor));
+        _disposables.Add(_activityScheduler.Subscribe(activityExecutor));
+
+        _disposables.Add(_entrypointScheduler);
+        _disposables.Add(_activityScheduler);
+
+        _disposables.Add(entryPointActivityExecutor);
+        _disposables.Add(activityExecutor);
     }
 
     private static async Task Run(CancellationToken cancellationToken)
     {
+        var configuration = _scope!.Resolve<IHostConfiguration>();
+
         while (!cancellationToken.IsCancellationRequested)
         {
-            await Task.Delay(ActivityQueuePeriod, cancellationToken).ConfigureAwait(false);
+            await Task.Delay(configuration.ActivityQueuePeriod, cancellationToken).ConfigureAwait(false);
 
             _entrypointScheduler?.QueueActivity(
                 new ActivityDescriptor("Main_EntryPoint_Activity", typeof(EntryPointActivity), Guid.NewGuid().ToString(), None)
@@ -101,12 +113,12 @@ internal sealed class Program
 
         _cts?.Cancel();
 
-        _entrypointScheduler?.Dispose();
-        _activityScheduler?.Dispose();
+        foreach (var disposable in _disposables) { disposable.Dispose(); }
 
         _logger?.LogInformation("ShutDown OK");
         _loggerFactory?.Dispose();
         _cts?.Dispose();
+        _scope?.Dispose();
 
         _disposed = true;
 
@@ -117,4 +129,61 @@ internal sealed class Program
     }
 
     private static void Exit(object? sender, ConsoleCancelEventArgs e) => ShutDown();
+
+    private static IContainer BuildContainer()
+    {
+        var builder = new ContainerBuilder();
+
+        var configuration = new HostConfiguration();
+        _loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+        _logger = _loggerFactory.CreateLogger<Program>();
+
+        var telemetryCollectorConfig = new TelemetryCollectorConfig(new Uri(configuration.PrometheusUri), TimeSpan.FromMilliseconds(3000));
+
+        builder.RegisterInstance(_logger).As<ILogger>().SingleInstance();
+        builder.RegisterInstance(new TelemetryCollector(telemetryCollectorConfig)).As<ITelemetryCollector>().SingleInstance();
+        builder.RegisterInstance(new WorkItemSource()).As<IWorkItemSource>().SingleInstance();
+        builder.RegisterInstance(configuration).As<IHostConfiguration>().As<IHostConfigurationUpdater>().SingleInstance();
+
+        // TODO: register all activities automatically through type finder
+        builder.RegisterType<EntryPointActivity>();
+        builder.RegisterType<Library1Activity>();
+        builder.RegisterType<Library1OperationA>();
+        builder.RegisterType<Library1OperationB>();
+        builder.RegisterType<Library1OperationC>();
+        builder.RegisterType<Library1OperationD>();
+        builder.RegisterType<Library2Activity>();
+        builder.RegisterType<Library2OperationA>();
+        builder.RegisterType<Library2OperationB>();
+
+        return builder.Build();
+    }
+
+    private static IProcessFlowJobActivity ResolveActivity(IContainer scope, ActivityDescriptor descriptor)
+    {
+        if (descriptor.ActivityType == typeof(EntryPointActivity))
+        {
+            return scope.Resolve<EntryPointActivity>(
+                new NamedParameter("uid", descriptor.ActivityUid),
+                new NamedParameter("scheduler", _activityScheduler)
+            );
+        }
+
+        if (descriptor.ActivityType.BaseType == typeof(WorkItemsProcessor))
+        {
+            return descriptor.WorkItemsBatchUid.Match(
+                () => throw new InvalidOperationException(),
+                uid => (scope.Resolve(
+                            descriptor.ActivityType,
+                            new NamedParameter("uid", descriptor.ActivityUid),
+                            new NamedParameter("scheduler", _activityScheduler),
+                            new NamedParameter("workItemBatchUid", descriptor.WorkItemsBatchUid)) as IProcessFlowJobActivity)!
+            );
+        }
+
+        return (scope.Resolve(descriptor.ActivityType,
+                    new NamedParameter("uid", descriptor.ActivityUid),
+                    new NamedParameter("scheduler", _activityScheduler)
+                ) as IProcessFlowJobActivity)!;
+    }
 }

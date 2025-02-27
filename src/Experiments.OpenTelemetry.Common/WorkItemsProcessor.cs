@@ -1,3 +1,4 @@
+using Experiments.OpenTelemetry.Telemetry;
 using Microsoft.Extensions.Logging;
 
 namespace Experiments.OpenTelemetry.Common;
@@ -7,7 +8,8 @@ public abstract class WorkItemsProcessor(
     ILogger logger,
     IActivityScheduler scheduler,
     Guid workItemBatchUid,
-    IWorkItemSource workItemSource) : CommonActivity(uid, logger, scheduler)
+    IWorkItemSource workItemSource,
+    ITelemetryCollector telemetryCollector) : CommonActivity(uid, logger, scheduler, telemetryCollector)
 {
     protected abstract WorkItemSourceType WorkItemSourceType { get; }
 
@@ -18,7 +20,9 @@ public abstract class WorkItemsProcessor(
     protected override async Task DoWork(ActivityContext ctx, CancellationToken cancellationToken = default)
     {
         var rnd = new Random();
-        var workItems = await WorkItemSource.GetWorkItemsAsync(WorkItemSourceType, WorkItemBatchUid, cancellationToken).ConfigureAwait(false);
+        var workItems = await WorkItemSource
+                                .GetWorkItemsAsync(WorkItemSourceType, WorkItemBatchUid, cancellationToken)
+                                .ConfigureAwait(false);
 
         foreach (var _ in workItems)
         {

@@ -1,9 +1,14 @@
+using Experiments.OpenTelemetry.Telemetry;
 using Microsoft.Extensions.Logging;
 using Unit = System.ValueTuple;
 
 namespace Experiments.OpenTelemetry.Common;
 
-public class CommonActivity(string uid, ILogger logger, IActivityScheduler scheduler) : ActivityBase(uid, logger, scheduler)
+public class CommonActivity(
+    string uid,
+    ILogger logger,
+    IActivityScheduler scheduler,
+    ITelemetryCollector telemetryCollector) : ActivityBase(uid, logger, scheduler, telemetryCollector)
 {
     private static readonly int ErrorSignal = new Random().Next(1, 10);
 

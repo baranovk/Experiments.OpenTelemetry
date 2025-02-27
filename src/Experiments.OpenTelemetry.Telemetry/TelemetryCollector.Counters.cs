@@ -1,4 +1,3 @@
-using System.Diagnostics.Metrics;
 using Experiments.OpenTelemetry.Telemetry.Resources;
 
 namespace Experiments.OpenTelemetry.Telemetry;
@@ -15,9 +14,14 @@ public partial class TelemetryCollector
 
     public void UpdateActivityQueueLength(string activityUid, long length) => UpdateActivityGauge(Gauges.ActivityQueueLength, length, activityUid);
 
+    public void RecordActivityExecutionTime(string activityUid, TimeSpan executionTime)
+        => UpdateActivityHistogram(Histograms.ActivityExecutionTime, (long)executionTime.TotalSeconds, activityUid);
+
     #endregion
 
     #region Private Methods
+
+    #region Counters
 
     private void UpdateActivityCounter(string counterUid, long delta, string activityUid)
         => UpdateCounter(counterUid, delta, new KeyValuePair<string, object?>(Tags.ActivityUid, activityUid));
@@ -33,7 +37,7 @@ public partial class TelemetryCollector
             return;
         }
 
-        throw new InvalidOperationException($"Counter {counterUid} was not found");
+        throw new InvalidOperationException($"Counter \"{counterUid}\" was not found");
     }
 
     private void IncrementCounter(string counterUid, long delta, params KeyValuePair<string, object?>[] tags)
@@ -46,8 +50,12 @@ public partial class TelemetryCollector
             return;
         }
 
-        throw new InvalidOperationException($"Counter {counterUid} was not found");
+        throw new InvalidOperationException($"Counter \"{counterUid}\" was not found");
     }
+
+    #endregion
+
+    #region Gauges
 
     private void UpdateActivityGauge(string gaugeUid, long value, string activityUid)
         => UpdateGauge(gaugeUid, value, new KeyValuePair<string, object?>(Tags.ActivityUid, activityUid));
@@ -60,8 +68,28 @@ public partial class TelemetryCollector
             return;
         }
 
-        throw new InvalidOperationException($"Gauge {gaugeUid} was not found");
+        throw new InvalidOperationException($"Gauge \"{gaugeUid}\" was not found");
     }
+
+    #endregion
+
+    #region Histograms
+
+    private void UpdateActivityHistogram(string histogramUid, long value, string activityUid)
+        => UpdateHistogram(histogramUid, value, new KeyValuePair<string, object?>(Tags.ActivityUid, activityUid));
+
+    private void UpdateHistogram(string histogramUid, long value, params KeyValuePair<string, object?>[] tags)
+    {
+        if (_histograms.TryGetValue(histogramUid, out var histogram))
+        {
+            histogram.Record(value, tags);
+            return;
+        }
+
+        throw new InvalidOperationException($"Histogram \"{histogramUid}\" was not found");
+    }
+
+    #endregion
 
     #endregion
 }

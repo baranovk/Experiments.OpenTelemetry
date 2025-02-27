@@ -11,11 +11,12 @@ public partial class TelemetryCollector
 {
     #region Fields
 
-    private MeterProvider? _meterProvider;
     private Meter? _meter;
+    private MeterProvider? _meterProvider;
     private readonly Dictionary<string, Counter<long>> _counters = [];
     private readonly Dictionary<string, UpDownCounter<long>> _upDownCounters = [];
     private readonly Dictionary<string, Gauge<long>> _gauges = [];
+    private readonly Dictionary<string, Histogram<long>> _histograms = [];
 
     #endregion
 
@@ -36,13 +37,15 @@ public partial class TelemetryCollector
         _meter = new("Experiments.OpenTelemetry.Meter");
 
         _counters.Add(Counters.ActivityErrors, _meter.CreateCounter<long>(Counters.ActivityErrors));
-        _upDownCounters.Add(Counters.ExecutingActivities, _meter.CreateUpDownCounter<long>(Counters.ExecutingActivities));
         _gauges.Add(Gauges.ActivityQueueLength, _meter.CreateGauge<long>(Gauges.ActivityQueueLength));
+        _upDownCounters.Add(Counters.ExecutingActivities, _meter.CreateUpDownCounter<long>(Counters.ExecutingActivities));
+        _histograms.Add(Histograms.ActivityExecutionTime, _meter.CreateHistogram<long>(Histograms.ActivityExecutionTime));
 
         _meterProvider = Sdk.CreateMeterProviderBuilder()
             .AddMeter(_meter.Name)
-            .ConfigureResource(rb => rb.Clear().AddService("vio")
-                                       .AddAttributes([new KeyValuePair<string, object>("host.id", System.Net.Dns.GetHostEntry("").HostName)]))
+            .AddView(instrumentName: Histograms.ActivityExecutionTime,
+                new ExplicitBucketHistogramConfiguration { Boundaries = [60, 300, 600, 900, 1200, 3600] })
+            .ConfigureResource(rb => rb.Clear().AddService("vio", serviceInstanceId: System.Net.Dns.GetHostEntry("").HostName))
             .AddConsoleExporter((options, readerOptions) =>
             {
                 readerOptions.PeriodicExportingMetricReaderOptions = new PeriodicExportingMetricReaderOptions() { ExportIntervalMilliseconds = 500 };

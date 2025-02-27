@@ -7,7 +7,11 @@ using Unit = System.ValueTuple;
 
 namespace Experiments.OpenTelemetry.Common;
 
-public abstract class ActivityBase(string uid, ILogger logger, IActivityScheduler scheduler) : IProcessFlowJobActivity
+public abstract class ActivityBase(
+    string uid,
+    ILogger logger,
+    IActivityScheduler scheduler,
+    ITelemetryCollector telemetryCollector) : IProcessFlowJobActivity
 {
     #region Properties
 
@@ -17,7 +21,7 @@ public abstract class ActivityBase(string uid, ILogger logger, IActivitySchedule
 
     protected ILogger Logger { get; private set; } = logger;
 
-    protected TelemetryCollector? TelemetryCollector { get; private set; }
+    protected ITelemetryCollector TelemetryCollector => telemetryCollector;
 
     #endregion
 
@@ -64,13 +68,12 @@ public abstract class ActivityBase(string uid, ILogger logger, IActivitySchedule
         swActivityExecutionTime.Start();
         Logger.LogInformation("Activity {Uid} has started", Uid);
 
-        TelemetryCollector = TelemetryCollector.GetInstance(ctx.TelemetryCollectorConfig);
         return await next(new Unit()).ConfigureAwait(false);
     }
 
     private async Task<dynamic> IncrementExecutingActivityCounter(Func<Exceptional<Unit>, Task<dynamic>> next)
     {
-        TelemetryCollector?.IncrementExecutingActivityCounter(Uid);
+        TelemetryCollector.IncrementExecutingActivityCounter(Uid);
         return await next(Exceptional(new Unit())).ConfigureAwait(false);
     }
 
@@ -85,21 +88,22 @@ public abstract class ActivityBase(string uid, ILogger logger, IActivitySchedule
 
     private async Task<dynamic> DecrementExecutingActivityCounter(Func<Exceptional<Unit>, Task<dynamic>> next)
     {
-        TelemetryCollector?.DecrementExecutingActivityCounter(Uid);
+        TelemetryCollector.DecrementExecutingActivityCounter(Uid);
         return await next(new Unit()).ConfigureAwait(false);
     }
 
     private Task ExecuteActivityEpilogue(Stopwatch swActivityExecutionTime, Option<Exception> error)
     {
-        // TODO: send sw.TotalSeconds to histogram
         swActivityExecutionTime.Stop();
         Logger.LogInformation("{Uid} has finished. Execution time: {ExecutionTime}", Uid, swActivityExecutionTime.Elapsed);
+
+        TelemetryCollector.RecordActivityExecutionTime(Uid, TimeSpan.FromMilliseconds(swActivityExecutionTime.ElapsedMilliseconds));
 
         return error.Match(
             () => Task.CompletedTask,
             ex =>
             {
-                TelemetryCollector?.IncrementActivityErrorCounter(Uid);
+                TelemetryCollector.IncrementActivityErrorCounter(Uid);
                 Logger.LogError(ex, "Execute activity error");
                 return Task.CompletedTask;
             }

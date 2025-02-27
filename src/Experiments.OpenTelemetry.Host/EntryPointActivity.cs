@@ -1,6 +1,7 @@
 using Experiments.OpenTelemetry.Common;
 using Experiments.OpenTelemetry.Library1;
 using Experiments.OpenTelemetry.Library2;
+using Experiments.OpenTelemetry.Telemetry;
 using Microsoft.Extensions.Logging;
 
 namespace Experiments.OpenTelemetry.Host;
@@ -9,8 +10,9 @@ internal sealed class EntryPointActivity(
     string uid,
     ILogger logger,
     IActivityScheduler scheduler,
-    IWorkItemSource workItemSource)
-    : CommonActivity(uid, logger, scheduler)
+    IWorkItemSource workItemSource,
+    ITelemetryCollector telemetryCollector)
+    : CommonActivity(uid, logger, scheduler, telemetryCollector)
 {
     private readonly IWorkItemSource _workItemSource = workItemSource;
 
@@ -29,15 +31,12 @@ internal sealed class EntryPointActivity(
 
     private async Task<Guid> EnqueuWorkItems(WorkItemSourceType sourceType, CancellationToken cancellationToken = default)
     {
-        var batchUid = await _workItemSource.QueueWorkItemsAsync(
-                sourceType,
-                Enumerable
+        var workItems = Enumerable
                     .Range(1, new Random().Next(1, 51))
-                    .Select(i => new WorkItem(i))
-                    .ToList(),
-                cancellationToken
-            )
-            .ConfigureAwait(false);
+                    .Select(i => new WorkItem(sourceType, i))
+                    .ToList();
+
+        var batchUid = await _workItemSource.QueueWorkItemsAsync(sourceType, workItems, cancellationToken).ConfigureAwait(false);
 
         return batchUid;
     }

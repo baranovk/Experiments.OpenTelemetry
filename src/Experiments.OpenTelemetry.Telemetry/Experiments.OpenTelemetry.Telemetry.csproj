@@ -23,6 +23,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Gauges.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\Histograms.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Histograms.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\Metrics.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -43,6 +48,10 @@
     <EmbeddedResource Update="Resources\Gauges.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Gauges.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Histograms.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Histograms.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Metrics.resx">
       <Generator>ResXFileCodeGenerator</Generator>

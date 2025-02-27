@@ -1,17 +1,10 @@
 namespace Experiments.OpenTelemetry.Telemetry;
 
-public partial class TelemetryCollector : IDisposable
+public partial class TelemetryCollector : ITelemetryCollector, IDisposable
 {
-    #region Fields
-
-    private static readonly object _mutex = new();
-    private static TelemetryCollector? _instance;
-
-    #endregion
-
     #region Constructors
 
-    private TelemetryCollector(TelemetryCollectorConfig config)
+    public TelemetryCollector(TelemetryCollectorConfig config)
     {
         Build(config);
     }
@@ -19,16 +12,6 @@ public partial class TelemetryCollector : IDisposable
     #endregion
 
     #region Public Methods
-
-    public static TelemetryCollector GetInstance(TelemetryCollectorConfig config)
-    {
-        lock (_mutex)
-        {
-            _instance ??= new TelemetryCollector(config);
-        }
-
-        return _instance;
-    }
 
     public void Dispose()
     {

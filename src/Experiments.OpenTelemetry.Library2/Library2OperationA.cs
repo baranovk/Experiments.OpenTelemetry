@@ -1,16 +1,18 @@
 using Experiments.OpenTelemetry.Common;
+using Experiments.OpenTelemetry.Telemetry;
 using Microsoft.Extensions.Logging;
 using static Functional.F;
 
 namespace Experiments.OpenTelemetry.Library2;
 
-internal sealed class Library2OperationA(
+public sealed class Library2OperationA(
     string uid,
     ILogger logger,
     IActivityScheduler scheduler,
     Guid workItemBatchUid,
-    IWorkItemSource workItemSource)
-    : WorkItemsProcessor(uid, logger, scheduler, workItemBatchUid, workItemSource)
+    IWorkItemSource workItemSource,
+    ITelemetryCollector telemetryCollector)
+    : WorkItemsProcessor(uid, logger, scheduler, workItemBatchUid, workItemSource, telemetryCollector)
 {
     protected override WorkItemSourceType WorkItemSourceType => WorkItemSourceType.Type2;
 
