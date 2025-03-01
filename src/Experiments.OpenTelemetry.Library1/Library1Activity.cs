@@ -16,10 +16,12 @@ public sealed class Library1Activity(
 {
     protected override WorkItemSourceType WorkItemSourceType => WorkItemSourceType.Type1;
 
+    protected override Task DoWork(ActivityContext ctx, CancellationToken cancellationToken = default) => Task.CompletedTask;
+
     protected override Task QueueNextActivity(ActivityContext ctx, CancellationToken cancellationToken = default)
     {
         Scheduler.QueueActivity(
-            new ActivityDescriptor("Library_1_Operation_A", typeof(Library1OperationA), ctx.CorrelationId, Some(WorkItemBatchUid))
+            new ActivityDescriptor("Lib1:A", typeof(Library1OperationA), ctx.CorrelationId, Some(WorkItemBatchUid))
         );
 
         return Task.CompletedTask;

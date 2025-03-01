@@ -18,7 +18,6 @@ public sealed class Library2OperationB(
     protected override async Task DoWork(ActivityContext ctx, CancellationToken cancellationToken = default)
     {
         await base.DoWork(ctx, cancellationToken).ConfigureAwait(false);
-        //var workItems = WorkItemSource.GetWorkItemsAsync(WorkItemSourceType, WorkItemBatchUid, cancellationToken);
         await WorkItemSource.MarkProcessedAsync(WorkItemSourceType, WorkItemBatchUid, cancellationToken).ConfigureAwait(false);
     }
 }

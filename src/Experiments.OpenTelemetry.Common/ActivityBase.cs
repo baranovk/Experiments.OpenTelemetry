@@ -32,9 +32,7 @@ public abstract class ActivityBase(
         var sw = new Stopwatch();
 
         await (await GetActivityPrologue(ctx, sw)
-                .Bind<Exceptional<Unit>, Exceptional<Unit>>(_ => next => IncrementExecutingActivityCounter(next))
                 .Bind<Exceptional<Unit>, Exceptional<Unit>>(_ => next => GetExecuteActivityMiddleware(ctx, cancellationToken)(next))
-                .Bind<Exceptional<Unit>, Exceptional<Unit>>(_ => next => DecrementExecutingActivityCounter(next))
                 .RunAsync()
                 .ConfigureAwait(false)
               )
@@ -55,48 +53,31 @@ public abstract class ActivityBase(
 
     #region Private Methods
 
-    private AsyncMiddleware<Exceptional<Unit>> GetActivityPrologue(ActivityContext ctx, Stopwatch swActivityExecutionTime)
-        => new(new Func<ActivityContext, Stopwatch, Func<Exceptional<Unit>, Task<dynamic>>, Task<dynamic>>(ExecuteActivityPrologue)
-            .Curry()(ctx)(swActivityExecutionTime));
-
-    private AsyncMiddleware<Exceptional<Unit>> GetExecuteActivityMiddleware(ActivityContext ctx, CancellationToken cancellationToken)
-        => new(new Func<ActivityContext, CancellationToken, Func<Exceptional<Unit>, Task<dynamic>>, Task<dynamic>>(ExecuteActivityAsync)
-                .Curry()(ctx)(cancellationToken));
+    #region Activity Flow
 
     private async Task<dynamic> ExecuteActivityPrologue(ActivityContext ctx, Stopwatch swActivityExecutionTime, Func<Exceptional<Unit>, Task<dynamic>> next)
     {
         swActivityExecutionTime.Start();
         Logger.LogInformation("Activity {Uid} has started", Uid);
+        TelemetryCollector.IncrementExecutingActivityCounter(Uid);
 
         return await next(new Unit()).ConfigureAwait(false);
-    }
-
-    private async Task<dynamic> IncrementExecutingActivityCounter(Func<Exceptional<Unit>, Task<dynamic>> next)
-    {
-        TelemetryCollector.IncrementExecutingActivityCounter(Uid);
-        return await next(Exceptional(new Unit())).ConfigureAwait(false);
     }
 
     private async Task<dynamic> ExecuteActivityAsync(ActivityContext ctx, CancellationToken cancellationToken,
         Func<Exceptional<Unit>, Task<dynamic>> next)
         => await (await TryAsync(() => ExecuteInternalAsync(ctx, cancellationToken)).RunAsync().ConfigureAwait(false))
-            .Match(
-                ex => Async<dynamic>(Exceptional(ex)),
-                u => next(Exceptional(u))
-            )
-            .ConfigureAwait(false);
-
-    private async Task<dynamic> DecrementExecutingActivityCounter(Func<Exceptional<Unit>, Task<dynamic>> next)
-    {
-        TelemetryCollector.DecrementExecutingActivityCounter(Uid);
-        return await next(new Unit()).ConfigureAwait(false);
-    }
+                .Match(
+                    ex => Async<dynamic>(ex),
+                    u => next(Exceptional(u))
+                ).ConfigureAwait(false);
 
     private Task ExecuteActivityEpilogue(Stopwatch swActivityExecutionTime, Option<Exception> error)
     {
         swActivityExecutionTime.Stop();
         Logger.LogInformation("{Uid} has finished. Execution time: {ExecutionTime}", Uid, swActivityExecutionTime.Elapsed);
 
+        TelemetryCollector.DecrementExecutingActivityCounter(Uid);
         TelemetryCollector.RecordActivityExecutionTime(Uid, TimeSpan.FromMilliseconds(swActivityExecutionTime.ElapsedMilliseconds));
 
         return error.Match(
@@ -109,6 +90,20 @@ public abstract class ActivityBase(
             }
         );
     }
+
+    #endregion
+
+    #region Utility
+
+    private AsyncMiddleware<Exceptional<Unit>> GetActivityPrologue(ActivityContext ctx, Stopwatch swActivityExecutionTime)
+    => new(new Func<ActivityContext, Stopwatch, Func<Exceptional<Unit>, Task<dynamic>>, Task<dynamic>>(ExecuteActivityPrologue)
+        .Curry()(ctx)(swActivityExecutionTime));
+
+    private AsyncMiddleware<Exceptional<Unit>> GetExecuteActivityMiddleware(ActivityContext ctx, CancellationToken cancellationToken)
+        => new(new Func<ActivityContext, CancellationToken, Func<Exceptional<Unit>, Task<dynamic>>, Task<dynamic>>(ExecuteActivityAsync)
+                .Curry()(ctx)(cancellationToken));
+
+    #endregion
 
     #endregion
 }

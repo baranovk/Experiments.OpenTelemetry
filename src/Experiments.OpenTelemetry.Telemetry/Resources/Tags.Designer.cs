@@ -61,11 +61,20 @@ namespace Experiments.OpenTelemetry.Telemetry.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to activity.uid.
+        ///   Looks up a localized string similar to activity_uid.
         /// </summary>
         internal static string ActivityUid {
             get {
                 return ResourceManager.GetString("ActivityUid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to workitem_source_type.
+        /// </summary>
+        internal static string WorkItemSourceType {
+            get {
+                return ResourceManager.GetString("WorkItemSourceType", resourceCulture);
             }
         }
     }

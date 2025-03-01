@@ -86,5 +86,14 @@ namespace Experiments.OpenTelemetry.Telemetry.Resources {
                 return ResourceManager.GetString("ExecutingActivities", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to work_items_queue_length.
+        /// </summary>
+        internal static string WorkItemsQueueLength {
+            get {
+                return ResourceManager.GetString("WorkItemsQueueLength", resourceCulture);
+            }
+        }
     }
 }

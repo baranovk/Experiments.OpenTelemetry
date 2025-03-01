@@ -18,8 +18,8 @@ internal sealed class EntryPointActivity(
 
     private static readonly (string ActivityUid, Type ActivityType, WorkItemSourceType SourceType)[] _activityDescriptors =
     [
-        ("Library_1_EntryPoint_Activity", typeof(Library1Activity), WorkItemSourceType.Type1),
-        ("Library_2_EntryPoint_Activity", typeof(Library2Activity), WorkItemSourceType.Type2)
+        ("Lib1:Entry", typeof(Library1Activity), WorkItemSourceType.Type1),
+        ("Lib2:Entry", typeof(Library2Activity), WorkItemSourceType.Type2)
     ];
 
     protected override async Task QueueNextActivity(ActivityContext ctx, CancellationToken cancellationToken = default)

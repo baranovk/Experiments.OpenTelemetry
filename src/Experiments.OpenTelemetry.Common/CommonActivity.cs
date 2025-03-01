@@ -10,13 +10,15 @@ public class CommonActivity(
     IActivityScheduler scheduler,
     ITelemetryCollector telemetryCollector) : ActivityBase(uid, logger, scheduler, telemetryCollector)
 {
-    private static readonly int ErrorSignal = new Random().Next(1, 10);
+    private static readonly int ErrorSignal = new Random().Next(0, 5);
 
     protected override async Task<Unit> ExecuteInternalAsync(ActivityContext ctx, CancellationToken cancellationToken = default)
     {
+        //await Task.Yield();
+        //throw new Exception($"{Uid} error");
         var rnd = new Random();
 
-        if (ErrorSignal == rnd.Next(1, 11))
+        if (ErrorSignal == rnd.Next(0, 5))
         {
             throw new Exception($"{Uid} error");
         }

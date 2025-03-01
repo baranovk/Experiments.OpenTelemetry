@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Experiments.OpenTelemetry.Telemetry.Resources;
 
 namespace Experiments.OpenTelemetry.Telemetry;
@@ -16,6 +17,13 @@ public partial class TelemetryCollector
 
     public void RecordActivityExecutionTime(string activityUid, TimeSpan executionTime)
         => UpdateActivityHistogram(Histograms.ActivityExecutionTime, (long)executionTime.TotalSeconds, activityUid);
+
+    public void IncrementWorkItemsQueueCounter(string workItemSourceType, long delta)
+        => UpdateCounter(Counters.WorkItemsQueueLength, Math.Abs(delta), new KeyValuePair<string, object?>(Tags.WorkItemSourceType, workItemSourceType));
+
+    public void DecrementWorkItemsQueueCounter(string workItemSourceType, long delta)
+        => UpdateCounter(Counters.WorkItemsQueueLength, -1 * Math.Abs(delta),
+                new KeyValuePair<string, object?>(Tags.WorkItemSourceType, workItemSourceType));
 
     #endregion
 

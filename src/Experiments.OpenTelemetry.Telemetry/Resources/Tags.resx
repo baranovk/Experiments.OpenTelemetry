@@ -118,6 +118,9 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ActivityUid" xml:space="preserve">
-    <value>activity.uid</value>
+    <value>activity_uid</value>
+  </data>
+  <data name="WorkItemSourceType" xml:space="preserve">
+    <value>workitem_source_type</value>
   </data>
 </root>

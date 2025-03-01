@@ -39,6 +39,7 @@ public partial class TelemetryCollector
         _counters.Add(Counters.ActivityErrors, _meter.CreateCounter<long>(Counters.ActivityErrors));
         _gauges.Add(Gauges.ActivityQueueLength, _meter.CreateGauge<long>(Gauges.ActivityQueueLength));
         _upDownCounters.Add(Counters.ExecutingActivities, _meter.CreateUpDownCounter<long>(Counters.ExecutingActivities));
+        _upDownCounters.Add(Counters.WorkItemsQueueLength, _meter.CreateUpDownCounter<long>(Counters.WorkItemsQueueLength));
         _histograms.Add(Histograms.ActivityExecutionTime, _meter.CreateHistogram<long>(Histograms.ActivityExecutionTime));
 
         _meterProvider = Sdk.CreateMeterProviderBuilder()

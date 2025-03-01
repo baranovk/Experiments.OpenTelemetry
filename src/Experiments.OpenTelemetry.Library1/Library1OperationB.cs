@@ -18,7 +18,7 @@ public sealed class Library1OperationB(string uid,
     protected override Task QueueNextActivity(ActivityContext ctx, CancellationToken cancellationToken = default)
     {
         Scheduler.QueueActivity(
-            new ActivityDescriptor("Library_1_Operation_C", typeof(Library1OperationC), ctx.CorrelationId, Some(WorkItemBatchUid))
+            new ActivityDescriptor("Lib1:C", typeof(Library1OperationC), ctx.CorrelationId, Some(WorkItemBatchUid))
         );
 
         return Task.CompletedTask;

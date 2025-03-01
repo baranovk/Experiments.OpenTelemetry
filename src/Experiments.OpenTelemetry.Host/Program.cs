@@ -100,7 +100,7 @@ internal sealed class Program
             await Task.Delay(configuration.ActivityQueuePeriod, cancellationToken).ConfigureAwait(false);
 
             _entrypointScheduler?.QueueActivity(
-                new ActivityDescriptor("Main_EntryPoint_Activity", typeof(EntryPointActivity), Guid.NewGuid().ToString(), None)
+                new ActivityDescriptor("Main:Entry", typeof(EntryPointActivity), Guid.NewGuid().ToString(), None)
             );
         }
     }
@@ -142,8 +142,8 @@ internal sealed class Program
 
         builder.RegisterInstance(_logger).As<ILogger>().SingleInstance();
         builder.RegisterInstance(new TelemetryCollector(telemetryCollectorConfig)).As<ITelemetryCollector>().SingleInstance();
-        builder.RegisterInstance(new WorkItemSource()).As<IWorkItemSource>().SingleInstance();
         builder.RegisterInstance(configuration).As<IHostConfiguration>().As<IHostConfigurationUpdater>().SingleInstance();
+        builder.RegisterType<WorkItemSource>().As<IWorkItemSource>().SingleInstance();
 
         // TODO: register all activities automatically through type finder
         builder.RegisterType<EntryPointActivity>();
@@ -173,11 +173,11 @@ internal sealed class Program
         {
             return descriptor.WorkItemsBatchUid.Match(
                 () => throw new InvalidOperationException(),
-                uid => (scope.Resolve(
+                workItemsBatchUid => (scope.Resolve(
                             descriptor.ActivityType,
                             new NamedParameter("uid", descriptor.ActivityUid),
                             new NamedParameter("scheduler", _activityScheduler),
-                            new NamedParameter("workItemBatchUid", descriptor.WorkItemsBatchUid)) as IProcessFlowJobActivity)!
+                            new NamedParameter("workItemBatchUid", workItemsBatchUid)) as IProcessFlowJobActivity)!
             );
         }
 
