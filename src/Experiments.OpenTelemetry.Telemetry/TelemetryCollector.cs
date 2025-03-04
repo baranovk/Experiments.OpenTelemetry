@@ -17,6 +17,9 @@ public partial class TelemetryCollector : ITelemetryCollector, IDisposable
     {
         _meterProvider?.Dispose();
         _meter?.Dispose();
+
+        _activitySource.Dispose();
+        _tracerProvider?.Dispose();
     }
 
     #endregion

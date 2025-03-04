@@ -17,12 +17,12 @@ internal sealed class ActivityScheduler : IObservable<ActivityDescriptor>, IActi
 
     public ActivityScheduler(
         ILogger logger,
-        int queueLimit = 100,
+        int activityQueueLimit = 100,
         OnEnqueueActivity? onAfterQueueActivity = null,
         CancellationToken cancellationToken = default)
     {
         _logger = logger;
-        _activityQueue = new(queueLimit);
+        _activityQueue = new(activityQueueLimit);
         _onAfterQueueActivity = onAfterQueueActivity;
         _activitySubject = new Subject<ActivityDescriptor>();
 

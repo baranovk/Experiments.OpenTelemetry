@@ -100,7 +100,7 @@ internal sealed class Program
             await Task.Delay(configuration.ActivityQueuePeriod, cancellationToken).ConfigureAwait(false);
 
             _entrypointScheduler?.QueueActivity(
-                new ActivityDescriptor("Main:Entry", typeof(EntryPointActivity), Guid.NewGuid().ToString(), None)
+                new ActivityDescriptor("Main:Entry", typeof(EntryPointActivity), Guid.NewGuid().ToString("N"), None)
             );
         }
     }
@@ -138,7 +138,11 @@ internal sealed class Program
         _loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
         _logger = _loggerFactory.CreateLogger<Program>();
 
-        var telemetryCollectorConfig = new TelemetryCollectorConfig(new Uri(configuration.PrometheusUri), TimeSpan.FromMilliseconds(3000));
+        var telemetryCollectorConfig = new TelemetryCollectorConfig(
+            new Uri(configuration.PrometheusUri),
+            TimeSpan.FromMilliseconds(3000),
+            new Uri(configuration.JaegerUri),
+            TimeSpan.FromMilliseconds(3000));
 
         builder.RegisterInstance(_logger).As<ILogger>().SingleInstance();
         builder.RegisterInstance(new TelemetryCollector(telemetryCollectorConfig)).As<ITelemetryCollector>().SingleInstance();

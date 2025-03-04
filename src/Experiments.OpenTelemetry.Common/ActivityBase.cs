@@ -13,6 +13,12 @@ public abstract class ActivityBase(
     IActivityScheduler scheduler,
     ITelemetryCollector telemetryCollector) : IProcessFlowJobActivity
 {
+    #region Fields
+
+    private Activity? _activity;
+
+    #endregion
+
     #region Properties
 
     public string Uid => uid;
@@ -58,6 +64,7 @@ public abstract class ActivityBase(
     private async Task<dynamic> ExecuteActivityPrologue(ActivityContext ctx, Stopwatch swActivityExecutionTime, Func<Exceptional<Unit>, Task<dynamic>> next)
     {
         swActivityExecutionTime.Start();
+        _activity = TelemetryCollector.StartActivity($"Execute {Uid}", ctx.CorrelationId);
         Logger.LogInformation("Activity {Uid} has started", Uid);
         TelemetryCollector.IncrementExecutingActivityCounter(Uid);
 
@@ -81,11 +88,13 @@ public abstract class ActivityBase(
         TelemetryCollector.RecordActivityExecutionTime(Uid, TimeSpan.FromMilliseconds(swActivityExecutionTime.ElapsedMilliseconds));
 
         return error.Match(
-            () => Task.CompletedTask,
+            () => { _activity?.Stop(); return Task.CompletedTask; },
             ex =>
             {
                 TelemetryCollector.IncrementActivityErrorCounter(Uid);
                 Logger.LogError(ex, "Execute activity error");
+                _activity?.SetStatus(ActivityStatusCode.Error, ex.Message);
+                _activity?.Stop();
                 return Task.CompletedTask;
             }
         );

@@ -1,0 +1,19 @@
+services:
+    jaeger:
+        image: jaegertracing/jaeger:2.3.0
+        container_name: jaeger
+        ports:
+            - 16686:16686
+            - 6832:6832
+            - 4318:4318
+            - 4317:4317
+        restart: unless-stopped
+        environment:
+          - LOG_LEVEL=debug
+        deploy:
+            resources:
+                limits:
+                    cpus: "1"
+                    memory: 1G
+        
+

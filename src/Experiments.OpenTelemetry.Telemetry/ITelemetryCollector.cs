@@ -1,7 +1,11 @@
+using System.Diagnostics;
+
 namespace Experiments.OpenTelemetry.Telemetry;
 
 public interface ITelemetryCollector
 {
+    #region Metrics
+
     public void IncrementExecutingActivityCounter(string activityUid);
 
     public void DecrementExecutingActivityCounter(string activityUid);
@@ -15,4 +19,12 @@ public interface ITelemetryCollector
     public void IncrementWorkItemsQueueCounter(string workItemSourceType, long delta);
 
     public void DecrementWorkItemsQueueCounter(string workItemSourceType, long delta);
+
+    #endregion
+
+    #region Trace
+
+    Activity? StartActivity(string name, string correlationId);
+
+    #endregion
 }

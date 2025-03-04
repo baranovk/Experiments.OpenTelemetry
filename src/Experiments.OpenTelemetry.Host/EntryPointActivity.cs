@@ -22,17 +22,21 @@ internal sealed class EntryPointActivity(
         ("Lib2:Entry", typeof(Library2Activity), WorkItemSourceType.Type2)
     ];
 
+    protected override Task DoWork(ActivityContext ctx, CancellationToken cancellationToken = default) => Task.CompletedTask;
+
     protected override async Task QueueNextActivity(ActivityContext ctx, CancellationToken cancellationToken = default)
     {
         var descriptor = _activityDescriptors[new Random().Next(_activityDescriptors.Length)];
         var workItemsBatchUid = await EnqueuWorkItems(descriptor.SourceType, cancellationToken).ConfigureAwait(false);
+
+        using var activity = TelemetryCollector.StartActivity($"Queue {descriptor.ActivityUid}", ctx.CorrelationId);
         Scheduler.QueueActivity(new ActivityDescriptor(descriptor.ActivityUid, descriptor.ActivityType, ctx.CorrelationId, workItemsBatchUid));
     }
 
     private async Task<Guid> EnqueuWorkItems(WorkItemSourceType sourceType, CancellationToken cancellationToken = default)
     {
         var workItems = Enumerable
-                    .Range(1, new Random().Next(1, 51))
+                    .Range(1, new Random().Next(10, 21))
                     .Select(i => new WorkItem(sourceType, i))
                     .ToList();
 

@@ -5,6 +5,7 @@ services:
     command:
       - --config.file=/etc/prometheus/prometheus.yml      
       - --web.enable-otlp-receiver
+      - --enable-feature=exemplar-storage
     # command:
     #   - '--config.file=/etc/prometheus/prometheus.yml --enable-feature=otlp-write-receiver'
     ports:
