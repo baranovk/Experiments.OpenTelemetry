@@ -4,13 +4,13 @@ namespace Experiments.OpenTelemetry.Telemetry;
 
 public partial class TelemetryCollector
 {
-    public Activity? StartActivity(string name, string correlationId)
+    public Activity? StartActivity(string name, string correlationId, string? parentId = null)
     {
         try
         {
             var parentContext = new ActivityContext(
                 ActivityTraceId.CreateFromString(correlationId),
-                ActivitySpanId.CreateRandom(),
+                null == parentId ? default : ActivitySpanId.CreateFromString(parentId),
                 ActivityTraceFlags.Recorded);
 
             return _activitySource.StartActivity(name, ActivityKind.Internal, parentContext);

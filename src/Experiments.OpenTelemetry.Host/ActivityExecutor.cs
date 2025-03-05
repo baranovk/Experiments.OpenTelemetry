@@ -28,7 +28,6 @@ internal sealed class ActivityExecutor(
     {
         if (_disposed) { return; }
 
-        var ctx = new ActivityContext(value.CorrelationId);
         var activity = _buildActivity(value);
 
         Task.Run(
@@ -42,7 +41,7 @@ internal sealed class ActivityExecutor(
                     LogActiveActivityCounter($"[{DateTime.Now.ToString("hh:mm:ss.fff tt")}] Before execute {activity.Uid}");
                 }
 
-                await activity!.ExecuteAsync(ctx, _cancellationToken).ConfigureAwait(false);
+                await activity!.ExecuteAsync(value.Context, _cancellationToken).ConfigureAwait(false);
             },
             _cancellationToken
         )

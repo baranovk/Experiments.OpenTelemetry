@@ -16,12 +16,6 @@ public sealed class Library2OperationA(
 {
     protected override WorkItemSourceType WorkItemSourceType => WorkItemSourceType.Type2;
 
-    protected override Task QueueNextActivity(ActivityContext ctx, CancellationToken cancellationToken = default)
-    {
-        Scheduler.QueueActivity(
-            new ActivityDescriptor("Lib2:B", typeof(Library2OperationB), ctx.CorrelationId, Some(WorkItemBatchUid))
-        );
-
-        return Task.CompletedTask;
-    }
+    protected override async Task QueueNextActivity(ActivityContext ctx, CancellationToken cancellationToken = default)
+        => await QueueNextActivity<Library2OperationB>("Lib2:B", ctx, Some(WorkItemBatchUid), cancellationToken).ConfigureAwait(false);
 }

@@ -24,7 +24,7 @@ public interface ITelemetryCollector
 
     #region Trace
 
-    Activity? StartActivity(string name, string correlationId);
+    Activity? StartActivity(string name, string correlationId, string? parentId = null);
 
     #endregion
 }

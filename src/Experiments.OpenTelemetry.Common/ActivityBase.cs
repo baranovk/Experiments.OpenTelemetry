@@ -13,6 +13,12 @@ public abstract class ActivityBase(
     IActivityScheduler scheduler,
     ITelemetryCollector telemetryCollector) : IProcessFlowJobActivity
 {
+    #region Constants
+
+    private const string ParentTraceIdActivityKey = "PTID";
+
+    #endregion
+
     #region Fields
 
     private Activity? _activity;
@@ -55,6 +61,27 @@ public abstract class ActivityBase(
 
     protected abstract Task<Unit> ExecuteInternalAsync(ActivityContext ctx, CancellationToken cancellationToken = default);
 
+    protected static ActivityContext CaptureContext(ActivityContext current)
+    {
+        var ctx = current.Clone();
+        ctx.Bag.Set(ParentTraceIdActivityKey, GetParentTracingActivityId(current));
+        return ctx;
+    }
+
+    protected Task QueueNextActivity<TActivity>(string activityUid, ActivityContext ctx, Option<Guid> workItemBatchUid,
+        CancellationToken cancellationToken = default)
+        => QueueNextActivity(activityUid, typeof(TActivity), ctx, workItemBatchUid, cancellationToken);
+
+    protected Task QueueNextActivity(string activityUid, Type activityType, ActivityContext ctx, Option<Guid> workItemBatchUid,
+        CancellationToken cancellationToken = default)
+    {
+        Scheduler.QueueActivity(new ActivityDescriptor(activityUid, activityType, CaptureContext(ctx), workItemBatchUid));
+        return Task.CompletedTask;
+    }
+
+    protected Activity? StartTracingActivity(ActivityContext ctx, string? activityName = null)
+        => TelemetryCollector.StartActivity(activityName ?? $"Execute {Uid}", ctx.CorrelationId, GetParentTracingActivityId(ctx));
+
     #endregion
 
     #region Private Methods
@@ -64,7 +91,7 @@ public abstract class ActivityBase(
     private async Task<dynamic> ExecuteActivityPrologue(ActivityContext ctx, Stopwatch swActivityExecutionTime, Func<Exceptional<Unit>, Task<dynamic>> next)
     {
         swActivityExecutionTime.Start();
-        _activity = TelemetryCollector.StartActivity($"Execute {Uid}", ctx.CorrelationId);
+        _activity = StartTracingActivity(ctx);
         Logger.LogInformation("Activity {Uid} has started", Uid);
         TelemetryCollector.IncrementExecutingActivityCounter(Uid);
 
@@ -111,6 +138,9 @@ public abstract class ActivityBase(
     private AsyncMiddleware<Exceptional<Unit>> GetExecuteActivityMiddleware(ActivityContext ctx, CancellationToken cancellationToken)
         => new(new Func<ActivityContext, CancellationToken, Func<Exceptional<Unit>, Task<dynamic>>, Task<dynamic>>(ExecuteActivityAsync)
                 .Curry()(ctx)(cancellationToken));
+
+    private static string? GetParentTracingActivityId(ActivityContext ctx)
+        => Activity.Current?.SpanId.ToString() ?? ctx.Bag.Get(ParentTraceIdActivityKey)?.ToString();
 
     #endregion
 

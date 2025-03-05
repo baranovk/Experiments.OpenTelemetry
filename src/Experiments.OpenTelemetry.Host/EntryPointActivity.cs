@@ -3,6 +3,7 @@ using Experiments.OpenTelemetry.Library1;
 using Experiments.OpenTelemetry.Library2;
 using Experiments.OpenTelemetry.Telemetry;
 using Microsoft.Extensions.Logging;
+using static Functional.F;
 
 namespace Experiments.OpenTelemetry.Host;
 
@@ -26,11 +27,13 @@ internal sealed class EntryPointActivity(
 
     protected override async Task QueueNextActivity(ActivityContext ctx, CancellationToken cancellationToken = default)
     {
-        var descriptor = _activityDescriptors[new Random().Next(_activityDescriptors.Length)];
-        var workItemsBatchUid = await EnqueuWorkItems(descriptor.SourceType, cancellationToken).ConfigureAwait(false);
+        var (ActivityUid, ActivityType, SourceType) = _activityDescriptors[new Random().Next(_activityDescriptors.Length)];
+        var workItemsBatchUid = await EnqueuWorkItems(SourceType, cancellationToken).ConfigureAwait(false);
 
-        using var activity = TelemetryCollector.StartActivity($"Queue {descriptor.ActivityUid}", ctx.CorrelationId);
-        Scheduler.QueueActivity(new ActivityDescriptor(descriptor.ActivityUid, descriptor.ActivityType, ctx.CorrelationId, workItemsBatchUid));
+        //using var activity = StartTracingActivity(ctx, $"Queue {ActivityUid}");
+
+        await QueueNextActivity(ActivityUid, ActivityType, ctx,
+            Some(workItemsBatchUid), cancellationToken).ConfigureAwait(false);
     }
 
     private async Task<Guid> EnqueuWorkItems(WorkItemSourceType sourceType, CancellationToken cancellationToken = default)

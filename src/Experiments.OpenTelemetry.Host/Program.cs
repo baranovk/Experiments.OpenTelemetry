@@ -100,8 +100,14 @@ internal sealed class Program
             await Task.Delay(configuration.ActivityQueuePeriod, cancellationToken).ConfigureAwait(false);
 
             _entrypointScheduler?.QueueActivity(
-                new ActivityDescriptor("Main:Entry", typeof(EntryPointActivity), Guid.NewGuid().ToString("N"), None)
+                new ActivityDescriptor("Main:Entry", typeof(EntryPointActivity), new Common.ActivityContext(Guid.NewGuid().ToString("N")), None)
             );
+
+            await Task.Delay(300000, cancellationToken).ConfigureAwait(false);
+
+#pragma warning disable S1751 // Loops with at most one iteration should be refactored
+            break;
+#pragma warning restore S1751 // Loops with at most one iteration should be refactored
         }
     }
 
