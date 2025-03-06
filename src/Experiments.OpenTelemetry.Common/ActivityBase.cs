@@ -42,6 +42,7 @@ public abstract class ActivityBase(
     public async Task ExecuteAsync(ActivityContext ctx, CancellationToken cancellationToken = default)
     {
         var sw = new Stopwatch();
+        _activity = StartTracingActivity(ctx);
 
         await (await GetActivityPrologue(ctx, sw)
                 .Bind<Exceptional<Unit>, Exceptional<Unit>>(_ => next => GetExecuteActivityMiddleware(ctx, cancellationToken)(next))
@@ -91,7 +92,7 @@ public abstract class ActivityBase(
     private async Task<dynamic> ExecuteActivityPrologue(ActivityContext ctx, Stopwatch swActivityExecutionTime, Func<Exceptional<Unit>, Task<dynamic>> next)
     {
         swActivityExecutionTime.Start();
-        _activity = StartTracingActivity(ctx);
+
         Logger.LogInformation("Activity {Uid} has started", Uid);
         TelemetryCollector.IncrementExecutingActivityCounter(Uid);
 

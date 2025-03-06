@@ -52,9 +52,9 @@ internal sealed class ActivityExecutor(
                 {
                     UpdateActivityCounter(activity.Uid, -1);
                     LogActiveActivityCounter($"[{DateTime.Now.ToString("hh:mm:ss.fff tt")}] After execute {activity.Uid}");
+                    if (!_disposed) { _activitySemaphore.Release(); }
                 }
 
-                _activitySemaphore.Release();
                 return t;
             },
             cancellationToken: default, TaskContinuationOptions.None, TaskScheduler.Default
@@ -71,7 +71,8 @@ internal sealed class ActivityExecutor(
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void UpdateActivityCounter(string activityUid, long delta = 1)
-        => _activityCounters[activityUid] = _activityCounters.TryGetValue(activityUid, out var counter) ? counter + delta : delta;
+        => _activityCounters[activityUid] = _activityCounters.TryGetValue(activityUid, out var counter)
+                                                ? Math.Max(counter + delta, 0) : Math.Max(delta, 0);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void LogActiveActivityCounter(string label)
@@ -89,8 +90,11 @@ internal sealed class ActivityExecutor(
 
     public void Dispose()
     {
-        if (_disposed) { return; }
-        _activitySemaphore?.Dispose();
-        _disposed = true;
+        lock (_mutex)
+        {
+            if (_disposed) { return; }
+            _activitySemaphore?.Dispose();
+            _disposed = true;
+        }
     }
 }

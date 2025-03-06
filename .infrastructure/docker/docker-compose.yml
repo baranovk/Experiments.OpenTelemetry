@@ -10,3 +10,8 @@ services:
     extends:
       file: docker-compose.grafana.yml
       service: grafana
+
+  jaeger:
+    extends:
+      file: docker-compose.jaeger.yml
+      service: jaeger

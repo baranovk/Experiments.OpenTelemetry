@@ -66,6 +66,7 @@ public partial class TelemetryCollector
             {
                 options.ExportProcessorType = ExportProcessorType.Simple;
                 options.TimeoutMilliseconds = (int)config.OtlpMetricExporterTimeout.TotalMilliseconds;
+                //options.BatchExportProcessorOptions.ScheduledDelayMilliseconds = (int)config.OtlpMetricExporterTimeout.TotalMilliseconds;
                 options.Endpoint = config.OtlpMetricExporterEndpoint;
                 options.Protocol = OpenTelemetryExporter.OtlpExportProtocol.HttpProtobuf;
             })
@@ -77,7 +78,6 @@ public partial class TelemetryCollector
         _tracerProvider = Sdk.CreateTracerProviderBuilder()
             .AddSource(_activitySource.Name)
             .ConfigureResource(BuildResources)
-            //.AddConsoleExporter()
             .AddOtlpExporter(options =>
             {
                 options.ExportProcessorType = ExportProcessorType.Simple;

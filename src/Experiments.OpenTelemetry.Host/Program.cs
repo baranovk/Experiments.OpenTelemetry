@@ -20,6 +20,7 @@ internal sealed class Program
     private static ILoggerFactory? _loggerFactory;
     private static ILogger? _logger;
     private static IContainer? _scope;
+    private static readonly object _mutex = new();
     private static readonly List<IDisposable> _disposables = [];
 
     #endregion
@@ -102,35 +103,32 @@ internal sealed class Program
             _entrypointScheduler?.QueueActivity(
                 new ActivityDescriptor("Main:Entry", typeof(EntryPointActivity), new Common.ActivityContext(Guid.NewGuid().ToString("N")), None)
             );
-
-            await Task.Delay(300000, cancellationToken).ConfigureAwait(false);
-
-#pragma warning disable S1751 // Loops with at most one iteration should be refactored
-            break;
-#pragma warning restore S1751 // Loops with at most one iteration should be refactored
         }
     }
 
     private static void ShutDown()
     {
-        if (_disposed) { return; }
-
-        _logger?.LogInformation("Exiting...");
-
-        _cts?.Cancel();
-
-        foreach (var disposable in _disposables) { disposable.Dispose(); }
-
-        _logger?.LogInformation("ShutDown OK");
-        _loggerFactory?.Dispose();
-        _cts?.Dispose();
-        _scope?.Dispose();
-
-        _disposed = true;
-
-        if (Debugger.IsAttached)
+        lock (_mutex)
         {
-            Environment.Exit(1);
+            if (_disposed) { return; }
+
+            _logger?.LogInformation("Exiting...");
+
+            _cts?.Cancel();
+
+            foreach (var disposable in _disposables) { disposable.Dispose(); }
+
+            _logger?.LogInformation("ShutDown OK");
+            _loggerFactory?.Dispose();
+            _cts?.Dispose();
+            _scope?.Dispose();
+
+            _disposed = true;
+
+            if (Debugger.IsAttached)
+            {
+                Environment.Exit(1);
+            }
         }
     }
 
@@ -146,9 +144,9 @@ internal sealed class Program
 
         var telemetryCollectorConfig = new TelemetryCollectorConfig(
             new Uri(configuration.PrometheusUri),
-            TimeSpan.FromMilliseconds(3000),
+            TimeSpan.FromMilliseconds(60000),
             new Uri(configuration.JaegerUri),
-            TimeSpan.FromMilliseconds(3000));
+            TimeSpan.FromMilliseconds(60000));
 
         builder.RegisterInstance(_logger).As<ILogger>().SingleInstance();
         builder.RegisterInstance(new TelemetryCollector(telemetryCollectorConfig)).As<ITelemetryCollector>().SingleInstance();
