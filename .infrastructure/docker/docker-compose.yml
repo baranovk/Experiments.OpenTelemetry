@@ -15,3 +15,8 @@ services:
     extends:
       file: docker-compose.jaeger.yml
       service: jaeger
+
+  alertmanager:
+    extends:
+      file: docker-compose.alertmanager.yml
+      service: alertmanager

@@ -1,0 +1,13 @@
+groups:
+- name: vio-alerts
+  labels:
+    system: vio
+  rules:
+  - alert: TotalErrorRate
+    expr: increase(activity_error_count_total[5m]) > 1
+    # for: 1m
+    keep_firing_for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: Total errors rate incresed above threshold

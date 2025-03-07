@@ -3,14 +3,13 @@ services:
     image: prom/prometheus
     container_name: prometheus
     command:
-      - --config.file=/etc/prometheus/prometheus.yml      
+      - --config.file=/etc/prometheus/config.yml      
       - --web.enable-otlp-receiver
-      - --enable-feature=exemplar-storage
-    # command:
-    #   - '--config.file=/etc/prometheus/prometheus.yml --enable-feature=otlp-write-receiver'
+      - --enable-feature=exemplar-storage    
     ports:
       - 9090:9090
     restart: unless-stopped
     volumes:
-      - ../config/prometheus:/etc/prometheus
+      - ../config/prometheus/config.yml:/etc/prometheus/config.yml
+      - ../config/prometheus/alert.rules.yml:/etc/prometheus/alert.rules.yml
       - ../.data/prometheus:/prometheus
