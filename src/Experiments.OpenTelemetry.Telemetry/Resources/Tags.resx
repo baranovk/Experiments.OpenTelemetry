@@ -120,6 +120,9 @@
   <data name="ActivityUid" xml:space="preserve">
     <value>activity_uid</value>
   </data>
+  <data name="ErrorType" xml:space="preserve">
+    <value>error_type</value>
+  </data>
   <data name="WorkItemSourceType" xml:space="preserve">
     <value>workitem_source_type</value>
   </data>

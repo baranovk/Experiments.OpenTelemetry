@@ -70,6 +70,15 @@ namespace Experiments.OpenTelemetry.Telemetry.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to error_type.
+        /// </summary>
+        internal static string ErrorType {
+            get {
+                return ResourceManager.GetString("ErrorType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to workitem_source_type.
         /// </summary>
         internal static string WorkItemSourceType {

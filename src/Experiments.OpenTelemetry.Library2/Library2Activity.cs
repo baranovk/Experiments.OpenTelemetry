@@ -11,8 +11,9 @@ public sealed class Library2Activity(
     IActivityScheduler scheduler,
     Guid workItemBatchUid,
     IWorkItemSource workItemSource,
-    ITelemetryCollector telemetryCollector)
-    : WorkItemsProcessor(uid, logger, scheduler, workItemBatchUid, workItemSource, telemetryCollector)
+    ITelemetryCollector telemetryCollector,
+    IActivityConfiguration configuration)
+    : WorkItemsProcessor<Library2Activity>(uid, logger, scheduler, workItemBatchUid, workItemSource, telemetryCollector, configuration)
 {
     protected override WorkItemSourceType WorkItemSourceType => WorkItemSourceType.Type2;
 

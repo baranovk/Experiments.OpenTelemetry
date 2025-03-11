@@ -11,7 +11,8 @@ public partial class TelemetryCollector
 
     public void DecrementExecutingActivityCounter(string activityUid) => UpdateActivityCounter(Counters.ExecutingActivities, -1, activityUid);
 
-    public void IncrementActivityErrorCounter(string activityUid) => IncrementActivityCounter(Counters.ActivityErrors, 1, activityUid);
+    public void IncrementActivityErrorCounter(string activityUid, string errorType)
+        => IncrementActivityCounter(Counters.ActivityErrors, 1, activityUid, errorType);
 
     public void UpdateActivityQueueLength(string activityUid, long length) => UpdateActivityGauge(Gauges.ActivityQueueLength, length, activityUid);
 
@@ -34,8 +35,9 @@ public partial class TelemetryCollector
     private void UpdateActivityCounter(string counterUid, long delta, string activityUid)
         => UpdateCounter(counterUid, delta, new KeyValuePair<string, object?>(Tags.ActivityUid, activityUid));
 
-    private void IncrementActivityCounter(string counterUid, long delta, string activityUid)
-        => IncrementCounter(counterUid, delta, new KeyValuePair<string, object?>(Tags.ActivityUid, activityUid));
+    private void IncrementActivityCounter(string counterUid, long delta, string activityUid, string errorType)
+        => IncrementCounter(counterUid, delta, new KeyValuePair<string, object?>(Tags.ActivityUid, activityUid),
+                new KeyValuePair<string, object?>(Tags.ErrorType, errorType));
 
     private void UpdateCounter(string counterUid, long delta, params KeyValuePair<string, object?>[] tags)
     {

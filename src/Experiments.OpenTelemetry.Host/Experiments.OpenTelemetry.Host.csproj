@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\submodules\Functional\src\Functional\Functional.csproj" />
     <ProjectReference Include="..\Experiments.OpenTelemetry.Common\Experiments.OpenTelemetry.Common.csproj" />
+    <ProjectReference Include="..\Experiments.OpenTelemetry.Communication\Experiments.OpenTelemetry.Communication.csproj" />
     <ProjectReference Include="..\Experiments.OpenTelemetry.Library1\Experiments.OpenTelemetry.Library1.csproj" />
     <ProjectReference Include="..\Experiments.OpenTelemetry.Library2\Experiments.OpenTelemetry.Library2.csproj" />
   </ItemGroup>

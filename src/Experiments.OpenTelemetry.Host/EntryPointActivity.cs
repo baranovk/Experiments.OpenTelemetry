@@ -12,8 +12,9 @@ internal sealed class EntryPointActivity(
     ILogger logger,
     IActivityScheduler scheduler,
     IWorkItemSource workItemSource,
-    ITelemetryCollector telemetryCollector)
-    : CommonActivity(uid, logger, scheduler, telemetryCollector)
+    ITelemetryCollector telemetryCollector,
+    IActivityConfiguration configuration)
+    : CommonActivity<EntryPointActivity>(uid, logger, scheduler, telemetryCollector, configuration)
 {
     private readonly IWorkItemSource _workItemSource = workItemSource;
 

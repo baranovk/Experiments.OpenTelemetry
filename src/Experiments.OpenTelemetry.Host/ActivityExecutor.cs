@@ -9,31 +9,39 @@ using static Functional.F;
 namespace Experiments.OpenTelemetry.Host;
 
 internal sealed class ActivityExecutor(
-    int maxConcurrentActivitiesCount,
+    Func<int> getMaxConcurrentActivitiesCount,
     Func<ActivityDescriptor, IProcessFlowJobActivity> buildActivity,
     ILogger logger,
     CancellationToken cancellationToken = default)
-    : IObserver<ActivityDescriptor>, IDisposable
+    : IObserver<ActivityDescriptor>
 {
-    private bool _disposed;
+    private int _executingActivityCount;
     private static readonly object _mutex = new();
+    private static readonly object _parallelismMutex = new();
     private readonly StringBuilder _sb = new();
-    private readonly SemaphoreSlim _activitySemaphore = new(maxConcurrentActivitiesCount, maxConcurrentActivitiesCount);
-    private readonly Func<ActivityDescriptor, IProcessFlowJobActivity> _buildActivity = buildActivity;
     private readonly ILogger _logger = logger;
     private readonly CancellationToken _cancellationToken = cancellationToken;
     private readonly ConcurrentDictionary<string, long> _activityCounters = [];
+    private readonly Func<int> _getMaxConcurrentActivitiesCount = getMaxConcurrentActivitiesCount;
+    private readonly Func<ActivityDescriptor, IProcessFlowJobActivity> _buildActivity = buildActivity;
 
     public void OnNext(ActivityDescriptor value)
     {
-        if (_disposed) { return; }
-
         var activity = _buildActivity(value);
 
         Task.Run(
             async () =>
             {
-                await _activitySemaphore.WaitAsync(_cancellationToken).ConfigureAwait(false);
+                lock (_parallelismMutex)
+                {
+                    if (_executingActivityCount == _getMaxConcurrentActivitiesCount())
+                    {
+                        _logger.LogInformation("Max execution activities limit was reached: {MaxConcurrentActivities}", _executingActivityCount);
+                        Monitor.Wait(_parallelismMutex);
+                    }
+
+                    _executingActivityCount++;
+                }
 
                 lock (_mutex)
                 {
@@ -52,7 +60,12 @@ internal sealed class ActivityExecutor(
                 {
                     UpdateActivityCounter(activity.Uid, -1);
                     LogActiveActivityCounter($"[{DateTime.Now.ToString("hh:mm:ss.fff tt")}] After execute {activity.Uid}");
-                    if (!_disposed) { _activitySemaphore.Release(); }
+                }
+
+                lock (_parallelismMutex)
+                {
+                    _executingActivityCount--;
+                    Monitor.Pulse(_parallelismMutex);
                 }
 
                 return t;
@@ -87,14 +100,4 @@ internal sealed class ActivityExecutor(
                     acc.Sb.ToString(),
                     acc.TotalActivities
                 ));
-
-    public void Dispose()
-    {
-        lock (_mutex)
-        {
-            if (_disposed) { return; }
-            _activitySemaphore?.Dispose();
-            _disposed = true;
-        }
-    }
 }

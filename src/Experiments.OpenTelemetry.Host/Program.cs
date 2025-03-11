@@ -55,6 +55,7 @@ internal sealed class Program
         var logger = _scope.Resolve<ILogger>();
         var telemetryCollector = _scope.Resolve<ITelemetryCollector>();
         var configuration = _scope.Resolve<IHostConfiguration>();
+        var configurationUpdater = _scope.Resolve<IHostConfigurationUpdater>();
 
         void onEnqueueActivity(string activityUid, int activityQueueLength)
             => telemetryCollector.UpdateActivityQueueLength(activityUid, activityQueueLength);
@@ -76,20 +77,32 @@ internal sealed class Program
         var resolveActivity = new Func<IContainer, ActivityDescriptor, IProcessFlowJobActivity>(
             ResolveActivity).Curry()(_scope);
 
-        var entryPointActivityExecutor = new ActivityExecutor(configuration.MaxConcurrentActivityExecution,
+        var entryPointActivityExecutor = new ActivityExecutor(() => configuration.MaxConcurrentExecutingActivities,
             resolveActivity, logger, cancellationToken);
 
-        var activityExecutor = new ActivityExecutor(configuration.MaxConcurrentActivityExecution,
+        var activityExecutor = new ActivityExecutor(() => configuration.MaxConcurrentExecutingActivities,
             resolveActivity, logger, cancellationToken);
+
+        var commandServer = new CommandServer(5000, logger, configurationUpdater);
+
+        Task.Run(
+            async () => await commandServer.RunAsync(cancellationToken).ConfigureAwait(false),
+            cancellationToken
+        )
+        .ContinueWith(
+            t => logger.LogError(t.Exception, "Command server error"),
+            cancellationToken: default,
+            TaskContinuationOptions.OnlyOnFaulted,
+            TaskScheduler.Default
+        );
+
+        _disposables.Add(commandServer);
 
         _disposables.Add(_entrypointScheduler.Subscribe(entryPointActivityExecutor));
         _disposables.Add(_activityScheduler.Subscribe(activityExecutor));
 
         _disposables.Add(_entrypointScheduler);
         _disposables.Add(_activityScheduler);
-
-        _disposables.Add(entryPointActivityExecutor);
-        _disposables.Add(activityExecutor);
     }
 
     private static async Task Run(CancellationToken cancellationToken)
@@ -98,7 +111,7 @@ internal sealed class Program
 
         while (!cancellationToken.IsCancellationRequested)
         {
-            await Task.Delay(configuration.ActivityQueuePeriod, cancellationToken).ConfigureAwait(false);
+            await Task.Delay(configuration.EntrypointActivityQueuePeriod, cancellationToken).ConfigureAwait(false);
 
             _entrypointScheduler?.QueueActivity(
                 new ActivityDescriptor("Main:Entry", typeof(EntryPointActivity), new Common.ActivityContext(Guid.NewGuid().ToString("N")), None)
@@ -177,7 +190,7 @@ internal sealed class Program
             );
         }
 
-        if (descriptor.ActivityType.BaseType == typeof(WorkItemsProcessor))
+        if (descriptor.ActivityType.BaseType == typeof(WorkItemsProcessor<>))
         {
             return descriptor.WorkItemsBatchUid.Match(
                 () => throw new InvalidOperationException(),

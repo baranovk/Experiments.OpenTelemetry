@@ -11,7 +11,8 @@ public abstract class ActivityBase(
     string uid,
     ILogger logger,
     IActivityScheduler scheduler,
-    ITelemetryCollector telemetryCollector) : IProcessFlowJobActivity
+    ITelemetryCollector telemetryCollector,
+    IActivityConfiguration configuration) : IProcessFlowJobActivity
 {
     #region Constants
 
@@ -21,7 +22,9 @@ public abstract class ActivityBase(
 
     #region Fields
 
-    private Activity? _activity;
+    private Activity? _telemetryActivity;
+    private static readonly object _mutex = new();
+    private static readonly Dictionary<Type, long> _activityExecutionCount = new();
 
     #endregion
 
@@ -35,6 +38,8 @@ public abstract class ActivityBase(
 
     protected ITelemetryCollector TelemetryCollector => telemetryCollector;
 
+    protected IActivityConfiguration Configuration => configuration;
+
     #endregion
 
     #region Public Methods
@@ -42,7 +47,7 @@ public abstract class ActivityBase(
     public async Task ExecuteAsync(ActivityContext ctx, CancellationToken cancellationToken = default)
     {
         var sw = new Stopwatch();
-        _activity = StartTracingActivity(ctx);
+        _telemetryActivity = StartTracingActivity(ctx);
 
         await (await GetActivityPrologue(ctx, sw)
                 .Bind<Exceptional<Unit>, Exceptional<Unit>>(_ => next => GetExecuteActivityMiddleware(ctx, cancellationToken)(next))
@@ -83,6 +88,17 @@ public abstract class ActivityBase(
     protected Activity? StartTracingActivity(ActivityContext ctx, string? activityName = null)
         => TelemetryCollector.StartActivity(activityName ?? $"Execute {Uid}", ctx.CorrelationId, GetParentTracingActivityId(ctx));
 
+    protected static long IncrementExecutionCount(Type activityType)
+    {
+        lock (_mutex)
+        {
+            _activityExecutionCount[activityType] =
+                _activityExecutionCount.TryGetValue(activityType, out var count) ? count + 1 : 1;
+
+            return _activityExecutionCount[activityType];
+        }
+    }
+
     #endregion
 
     #region Private Methods
@@ -116,13 +132,13 @@ public abstract class ActivityBase(
         TelemetryCollector.RecordActivityExecutionTime(Uid, TimeSpan.FromMilliseconds(swActivityExecutionTime.ElapsedMilliseconds));
 
         return error.Match(
-            () => { _activity?.Stop(); return Task.CompletedTask; },
+            () => { _telemetryActivity?.Stop(); return Task.CompletedTask; },
             ex =>
             {
-                TelemetryCollector.IncrementActivityErrorCounter(Uid);
+                TelemetryCollector.IncrementActivityErrorCounter(Uid, ex is DomainException domEx ? domEx.ErrorType.ToString() : "Unclassified");
                 Logger.LogError(ex, "Execute activity error");
-                _activity?.SetStatus(ActivityStatusCode.Error, ex.Message);
-                _activity?.Stop();
+                _telemetryActivity?.SetStatus(ActivityStatusCode.Error, ex.Message);
+                _telemetryActivity?.Stop();
                 return Task.CompletedTask;
             }
         );

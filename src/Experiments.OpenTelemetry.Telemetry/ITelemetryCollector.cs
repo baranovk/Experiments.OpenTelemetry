@@ -10,7 +10,7 @@ public interface ITelemetryCollector
 
     public void DecrementExecutingActivityCounter(string activityUid);
 
-    public void IncrementActivityErrorCounter(string activityUid);
+    public void IncrementActivityErrorCounter(string activityUid, string errorType);
 
     public void UpdateActivityQueueLength(string activityUid, long length);
 

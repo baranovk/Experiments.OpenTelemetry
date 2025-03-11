@@ -32,6 +32,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experiments.OpenTelemetry.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experiments.OpenTelemetry.Library2", "src\Experiments.OpenTelemetry.Library2\Experiments.OpenTelemetry.Library2.csproj", "{FA47F5AA-AEB0-4EFE-B1AF-9B6324EF20C9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experiments.OpenTelemetry.Configurator", "src\Experiments.OpenTelemetry.Configurator\Experiments.OpenTelemetry.Configurator.csproj", "{54670670-A5E3-437A-A2BE-319FF177292B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experiments.OpenTelemetry.Communication", "src\Experiments.OpenTelemetry.Communication\Experiments.OpenTelemetry.Communication.csproj", "{06B67F0A-E896-404C-8217-4EC6566AE662}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -66,6 +70,14 @@ Global
 		{FA47F5AA-AEB0-4EFE-B1AF-9B6324EF20C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA47F5AA-AEB0-4EFE-B1AF-9B6324EF20C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA47F5AA-AEB0-4EFE-B1AF-9B6324EF20C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54670670-A5E3-437A-A2BE-319FF177292B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54670670-A5E3-437A-A2BE-319FF177292B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54670670-A5E3-437A-A2BE-319FF177292B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54670670-A5E3-437A-A2BE-319FF177292B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06B67F0A-E896-404C-8217-4EC6566AE662}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06B67F0A-E896-404C-8217-4EC6566AE662}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06B67F0A-E896-404C-8217-4EC6566AE662}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06B67F0A-E896-404C-8217-4EC6566AE662}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -78,5 +90,7 @@ Global
 		{7D48F0CC-4415-46EA-B5E1-A5215A1B3C12} = {B2E2D382-30D0-49E6-B740-6171FC7EE895}
 		{C6B1C7D5-FD52-47FA-BE55-AD7B8448186B} = {88992576-758D-478A-96B0-5D43F3C5FDA4}
 		{FA47F5AA-AEB0-4EFE-B1AF-9B6324EF20C9} = {851B6928-D98B-4864-B71B-A93976672F50}
+		{54670670-A5E3-437A-A2BE-319FF177292B} = {851B6928-D98B-4864-B71B-A93976672F50}
+		{06B67F0A-E896-404C-8217-4EC6566AE662} = {851B6928-D98B-4864-B71B-A93976672F50}
 	EndGlobalSection
 EndGlobal

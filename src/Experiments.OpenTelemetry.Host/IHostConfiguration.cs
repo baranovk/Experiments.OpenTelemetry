@@ -1,10 +1,12 @@
+using Experiments.OpenTelemetry.Communication;
+
 namespace Experiments.OpenTelemetry.Host;
 
 internal interface IHostConfiguration
 {
-    int MaxConcurrentActivityExecution { get; }
+    int MaxConcurrentExecutingActivities { get; }
 
-    TimeSpan ActivityQueuePeriod { get; }
+    TimeSpan EntrypointActivityQueuePeriod { get; }
 
     int ActivityQueueLimit { get; }
 
@@ -13,9 +15,19 @@ internal interface IHostConfiguration
 
 internal interface IHostConfigurationUpdater
 {
-    void SetMaxConcurrentActivityExecution(int value);
+    void SetMaxConcurrentExecutingActivities(int value);
 
-    void SetActivityQueuePeriod(TimeSpan value);
+    void SetEntrypointActivityQueuePeriod(TimeSpan value);
 
-    void SetActivityQueueLimit(int value);
+    void SetActivityErrorRatePercent(Percentage percent);
+
+    void SetActivityExecutionTimeMinMilliseconds(int value);
+
+    void SetActivityExecutionTimeMaxMilliseconds(int value);
+
+    void SetActivityWorkItemProcessingTimeMinMilliseconds(int value);
+
+    void SetActivityWorkItemProcessingTimeMaxMilliseconds(int value);
+
+    //void SetActivityQueueLimit(int value);
 }

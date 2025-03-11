@@ -10,8 +10,9 @@ public sealed class Library1OperationD(
     IActivityScheduler scheduler,
     Guid workItemBatchUid,
     IWorkItemSource workItemSource,
-    ITelemetryCollector telemetryCollector)
-    : WorkItemsProcessor(uid, logger, scheduler, workItemBatchUid, workItemSource, telemetryCollector)
+    ITelemetryCollector telemetryCollector,
+    IActivityConfiguration configuration)
+    : WorkItemsProcessor<Library1OperationD>(uid, logger, scheduler, workItemBatchUid, workItemSource, telemetryCollector, configuration)
 {
     protected override WorkItemSourceType WorkItemSourceType => WorkItemSourceType.Type1;
 
