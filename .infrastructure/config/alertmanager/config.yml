@@ -1,9 +1,10 @@
 global:
   # The smarthost and SMTP sender used for mail notifications.
-  smtp_smarthost: 'smtp.mail.ru:465'
-  smtp_from: 'alertmanager@example.org'
-  smtp_auth_username: ''
-  smtp_auth_password: ''
+  smtp_smarthost: '${SMTP_SMARTHOST}'
+  smtp_from: '${SMTP_FROM}'
+  smtp_auth_identity: '${SMTP_AUTH_IDENTITY}'
+  smtp_auth_username: '${SMTP_AUTH_USERNAME}'
+  smtp_auth_password: '${SMTP_AUTH_PASSWORD}'
   smtp_require_tls: true
 
 # The directory from which notification templates are read.
@@ -70,4 +71,4 @@ inhibit_rules:
 receivers:
   - name: 'email-alert'
     email_configs:
-      - to: 'team-X+alerts@example.org'
+      - to: '${EMAIL_ALERT_RECEIVER}'

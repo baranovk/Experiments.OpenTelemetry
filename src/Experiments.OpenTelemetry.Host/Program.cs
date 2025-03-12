@@ -163,8 +163,13 @@ internal sealed class Program
 
         builder.RegisterInstance(_logger).As<ILogger>().SingleInstance();
         builder.RegisterInstance(new TelemetryCollector(telemetryCollectorConfig)).As<ITelemetryCollector>().SingleInstance();
-        builder.RegisterInstance(configuration).As<IHostConfiguration>().As<IHostConfigurationUpdater>().SingleInstance();
         builder.RegisterType<WorkItemSource>().As<IWorkItemSource>().SingleInstance();
+
+        builder.RegisterInstance(configuration)
+            .As<IHostConfiguration>()
+            .As<IHostConfigurationUpdater>()
+            .As<IActivityConfiguration>()
+            .SingleInstance();
 
         // TODO: register all activities automatically through type finder
         builder.RegisterType<EntryPointActivity>();
@@ -190,7 +195,8 @@ internal sealed class Program
             );
         }
 
-        if (descriptor.ActivityType.BaseType == typeof(WorkItemsProcessor<>))
+        if (null != descriptor.ActivityType.BaseType
+            && descriptor.ActivityType.BaseType.GetGenericTypeDefinition().IsAssignableFrom(typeof(WorkItemsProcessor<>)))
         {
             return descriptor.WorkItemsBatchUid.Match(
                 () => throw new InvalidOperationException(),
