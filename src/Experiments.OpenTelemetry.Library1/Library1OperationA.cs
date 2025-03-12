@@ -17,6 +17,12 @@ public sealed class Library1OperationA(
 {
     protected override WorkItemSourceType WorkItemSourceType => WorkItemSourceType.Type1;
 
+    protected override Task DoWork(ActivityContext ctx, CancellationToken cancellationToken = default)
+    {
+        using var activity = StartTracingActivity(ctx, "DoWork");
+        return base.DoWork(ctx, cancellationToken);
+    }
+
     protected override async Task QueueNextActivity(ActivityContext ctx, CancellationToken cancellationToken = default)
         => await QueueNextActivity<Library1OperationB>("Lib1:B", ctx, Some(WorkItemBatchUid), cancellationToken).ConfigureAwait(false);
 }

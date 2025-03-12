@@ -31,8 +31,6 @@ internal sealed class EntryPointActivity(
         var (ActivityUid, ActivityType, SourceType) = _activityDescriptors[new Random().Next(_activityDescriptors.Length)];
         var workItemsBatchUid = await EnqueuWorkItems(SourceType, cancellationToken).ConfigureAwait(false);
 
-        //using var activity = StartTracingActivity(ctx, $"Queue {ActivityUid}");
-
         await QueueNextActivity(ActivityUid, ActivityType, ctx,
             Some(workItemsBatchUid), cancellationToken).ConfigureAwait(false);
     }

@@ -1,0 +1,669 @@
+{
+  "configuration" : {
+    "scope" : "SoftwareSystem"
+  },
+  "description" : "Description",
+  "documentation" : { },
+  "id" : 1,
+  "lastModifiedAgent" : "structurizr-ui",
+  "lastModifiedDate" : "2025-03-12T15:37:57Z",
+  "model" : {
+    "customElements" : [ {
+      "id" : "1",
+      "name" : "Prometheus",
+      "properties" : {
+        "structurizr.dsl.identifier" : "prometheus"
+      },
+      "tags" : "Element,Prometheus"
+    }, {
+      "id" : "2",
+      "name" : "Grafana",
+      "properties" : {
+        "structurizr.dsl.identifier" : "grafana"
+      },
+      "relationships" : [ {
+        "description" : "Отображает метрики",
+        "destinationId" : "1",
+        "id" : "44",
+        "sourceId" : "2",
+        "tags" : "Relationship"
+      }, {
+        "description" : "Отображает трейсы",
+        "destinationId" : "3",
+        "id" : "45",
+        "sourceId" : "2",
+        "tags" : "Relationship"
+      } ],
+      "tags" : "Element,Grafana"
+    }, {
+      "id" : "3",
+      "name" : "Jaeger",
+      "properties" : {
+        "structurizr.dsl.identifier" : "jaeger"
+      },
+      "tags" : "Element,Jaeger"
+    } ],
+    "softwareSystems" : [ {
+      "containers" : [ {
+        "components" : [ {
+          "documentation" : { },
+          "id" : "6",
+          "name" : "Main:Entry Activity",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.host.act_main"
+          },
+          "relationships" : [ {
+            "description" : "Ставит в очередь",
+            "destinationId" : "7",
+            "id" : "46",
+            "sourceId" : "6",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component,Main_Entry_Activity"
+        }, {
+          "documentation" : { },
+          "id" : "7",
+          "name" : "Lib1:Entry Activity",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.host.act_lib1_entry"
+          },
+          "tags" : "Element,Component,Lib1_Entry_Activity"
+        } ],
+        "documentation" : { },
+        "id" : "5",
+        "name" : "Host",
+        "properties" : {
+          "structurizr.dsl.identifier" : "ss.host"
+        },
+        "relationships" : [ {
+          "description" : "Запускает по графику",
+          "destinationId" : "8",
+          "id" : "17",
+          "sourceId" : "5",
+          "tags" : "Relationship"
+        } ],
+        "tags" : "Element,Container"
+      }, {
+        "documentation" : { },
+        "id" : "8",
+        "name" : "Main:Entry Activity",
+        "properties" : {
+          "structurizr.dsl.identifier" : "ss.act_main"
+        },
+        "relationships" : [ {
+          "description" : "Запускает (ставит в очередь)",
+          "destinationId" : "9",
+          "id" : "18",
+          "sourceId" : "8",
+          "tags" : "Relationship"
+        }, {
+          "description" : "Запускает (ставит в очередь)",
+          "destinationId" : "14",
+          "id" : "23",
+          "sourceId" : "8",
+          "tags" : "Relationship"
+        }, {
+          "description" : "Отправляет метрики",
+          "destinationId" : "1",
+          "id" : "26",
+          "sourceId" : "8",
+          "tags" : "Relationship"
+        }, {
+          "description" : "Отправляет трейсы",
+          "destinationId" : "3",
+          "id" : "35",
+          "sourceId" : "8",
+          "tags" : "Relationship"
+        } ],
+        "tags" : "Element,Container,Container_Main_Entry_Activity"
+      }, {
+        "documentation" : { },
+        "id" : "9",
+        "name" : "Lib1:Entry Activity",
+        "properties" : {
+          "structurizr.dsl.identifier" : "ss.act_lib1_entry"
+        },
+        "relationships" : [ {
+          "description" : "Запускает (ставит в очередь)",
+          "destinationId" : "10",
+          "id" : "19",
+          "sourceId" : "9",
+          "tags" : "Relationship"
+        }, {
+          "description" : "Отправляет метрики",
+          "destinationId" : "1",
+          "id" : "28",
+          "sourceId" : "9",
+          "tags" : "Relationship"
+        }, {
+          "description" : "Отправляет трейсы",
+          "destinationId" : "3",
+          "id" : "37",
+          "sourceId" : "9",
+          "tags" : "Relationship"
+        } ],
+        "tags" : "Element,Container,Container_Lib1_Entry_Activity"
+      }, {
+        "documentation" : { },
+        "id" : "10",
+        "name" : "Lib1:A",
+        "properties" : {
+          "structurizr.dsl.identifier" : "ss.act_lib1_a"
+        },
+        "relationships" : [ {
+          "description" : "Запускает (ставит в очередь)",
+          "destinationId" : "11",
+          "id" : "20",
+          "sourceId" : "10",
+          "tags" : "Relationship"
+        }, {
+          "description" : "Отправляет метрики",
+          "destinationId" : "1",
+          "id" : "29",
+          "sourceId" : "10",
+          "tags" : "Relationship"
+        }, {
+          "description" : "Отправляет трейсы",
+          "destinationId" : "3",
+          "id" : "38",
+          "sourceId" : "10",
+          "tags" : "Relationship"
+        } ],
+        "tags" : "Element,Container,Container_Lib1_A_Activity"
+      }, {
+        "documentation" : { },
+        "id" : "11",
+        "name" : "Lib1:B",
+        "properties" : {
+          "structurizr.dsl.identifier" : "ss.act_lib1_b"
+        },
+        "relationships" : [ {
+          "description" : "Запускает (ставит в очередь)",
+          "destinationId" : "12",
+          "id" : "21",
+          "sourceId" : "11",
+          "tags" : "Relationship"
+        }, {
+          "description" : "Отправляет метрики",
+          "destinationId" : "1",
+          "id" : "30",
+          "sourceId" : "11",
+          "tags" : "Relationship"
+        }, {
+          "description" : "Отправляет трейсы",
+          "destinationId" : "3",
+          "id" : "39",
+          "sourceId" : "11",
+          "tags" : "Relationship"
+        } ],
+        "tags" : "Element,Container,Container_Lib1_B_Activity"
+      }, {
+        "documentation" : { },
+        "id" : "12",
+        "name" : "Lib1:C",
+        "properties" : {
+          "structurizr.dsl.identifier" : "ss.act_lib1_c"
+        },
+        "relationships" : [ {
+          "description" : "Запускает (ставит в очередь)",
+          "destinationId" : "13",
+          "id" : "22",
+          "sourceId" : "12",
+          "tags" : "Relationship"
+        }, {
+          "description" : "Отправляет метрики",
+          "destinationId" : "1",
+          "id" : "31",
+          "sourceId" : "12",
+          "tags" : "Relationship"
+        }, {
+          "description" : "Отправляет трейсы",
+          "destinationId" : "3",
+          "id" : "40",
+          "sourceId" : "12",
+          "tags" : "Relationship"
+        } ],
+        "tags" : "Element,Container,Container_Lib1_C_Activity"
+      }, {
+        "documentation" : { },
+        "id" : "13",
+        "name" : "Lib1:D",
+        "properties" : {
+          "structurizr.dsl.identifier" : "ss.act_lib1_d"
+        },
+        "tags" : "Element,Container,Container_Lib1_D_Activity"
+      }, {
+        "documentation" : { },
+        "id" : "14",
+        "name" : "Lib2:Entry Activity",
+        "properties" : {
+          "structurizr.dsl.identifier" : "ss.act_lib2_entry"
+        },
+        "relationships" : [ {
+          "description" : "Запускает (ставит в очередь)",
+          "destinationId" : "15",
+          "id" : "24",
+          "sourceId" : "14",
+          "tags" : "Relationship"
+        }, {
+          "description" : "Отправляет метрики",
+          "destinationId" : "1",
+          "id" : "32",
+          "sourceId" : "14",
+          "tags" : "Relationship"
+        }, {
+          "description" : "Отправляет трейсы",
+          "destinationId" : "3",
+          "id" : "41",
+          "sourceId" : "14",
+          "tags" : "Relationship"
+        } ],
+        "tags" : "Element,Container,Container_Lib2_Entry_Activity"
+      }, {
+        "documentation" : { },
+        "id" : "15",
+        "name" : "Lib2:A",
+        "properties" : {
+          "structurizr.dsl.identifier" : "ss.act_lib2_a"
+        },
+        "relationships" : [ {
+          "description" : "Запускает (ставит в очередь)",
+          "destinationId" : "16",
+          "id" : "25",
+          "sourceId" : "15",
+          "tags" : "Relationship"
+        }, {
+          "description" : "Отправляет метрики",
+          "destinationId" : "1",
+          "id" : "33",
+          "sourceId" : "15",
+          "tags" : "Relationship"
+        }, {
+          "description" : "Отправляет трейсы",
+          "destinationId" : "3",
+          "id" : "42",
+          "sourceId" : "15",
+          "tags" : "Relationship"
+        } ],
+        "tags" : "Element,Container,Container_Lib2_A_Activity"
+      }, {
+        "documentation" : { },
+        "id" : "16",
+        "name" : "Lib2:B",
+        "properties" : {
+          "structurizr.dsl.identifier" : "ss.act_lib2_b"
+        },
+        "relationships" : [ {
+          "description" : "Отправляет метрики",
+          "destinationId" : "1",
+          "id" : "34",
+          "sourceId" : "16",
+          "tags" : "Relationship"
+        }, {
+          "description" : "Отправляет трейсы",
+          "destinationId" : "3",
+          "id" : "43",
+          "sourceId" : "16",
+          "tags" : "Relationship"
+        } ],
+        "tags" : "Element,Container,Container_Lib2_B_Activity"
+      } ],
+      "documentation" : { },
+      "id" : "4",
+      "location" : "Unspecified",
+      "name" : "Prototype",
+      "properties" : {
+        "structurizr.dsl.identifier" : "ss"
+      },
+      "relationships" : [ {
+        "description" : "Отправляет метрики",
+        "destinationId" : "1",
+        "id" : "27",
+        "linkedRelationshipId" : "26",
+        "sourceId" : "4"
+      }, {
+        "description" : "Отправляет трейсы",
+        "destinationId" : "3",
+        "id" : "36",
+        "linkedRelationshipId" : "35",
+        "sourceId" : "4"
+      } ],
+      "tags" : "Element,Software System"
+    } ]
+  },
+  "name" : "Name",
+  "properties" : {
+    "structurizr.dsl" : "d29ya3NwYWNlICJOYW1lIiAiRGVzY3JpcHRpb24iIHsKCiAgICAhaWRlbnRpZmllcnMgaGllcmFyY2hpY2FsCiAgICAhZG9jcyBkb2NzCiAgICAhYWRycyBhZHIKCiAgICBtb2RlbCB7CiAgICAgICAgcHJvbWV0aGV1cyA9IGVsZW1lbnQgIlByb21ldGhldXMiIHsKICAgICAgICAgICAgdGFncyAiUHJvbWV0aGV1cyIKICAgICAgICB9ICAgICAgICAKICAgICAgICBncmFmYW5hID0gZWxlbWVudCAiR3JhZmFuYSIgewogICAgICAgICAgICB0YWdzICJHcmFmYW5hIgogICAgICAgIH0KICAgICAgICBqYWVnZXIgPSBlbGVtZW50ICJKYWVnZXIiIHsKICAgICAgICAgICAgdGFncyAiSmFlZ2VyIgogICAgICAgIH0KICAgICAgICBzcyA9IHNvZnR3YXJlU3lzdGVtICJQcm90b3R5cGUiIHsKICAgICAgICAgICAgaG9zdCA9IGNvbnRhaW5lciAiSG9zdCIgewogICAgICAgICAgICAgICAgYWN0X21haW4gPSBjb21wb25lbnQgIk1haW46RW50cnkgQWN0aXZpdHkiIHsKICAgICAgICAgICAgICAgICAgICB0YWdzICJNYWluX0VudHJ5X0FjdGl2aXR5IgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgYWN0X2xpYjFfZW50cnkgPSBjb21wb25lbnQgIkxpYjE6RW50cnkgQWN0aXZpdHkiIHsKICAgICAgICAgICAgICAgICAgICB0YWdzICJMaWIxX0VudHJ5X0FjdGl2aXR5IgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICB9CiAgICAgICAgICAgIGFjdF9tYWluID0gY29udGFpbmVyICJNYWluOkVudHJ5IEFjdGl2aXR5IiB7CiAgICAgICAgICAgICAgICB0YWdzICJDb250YWluZXJfTWFpbl9FbnRyeV9BY3Rpdml0eSIKICAgICAgICAgICAgfQogICAgICAgICAgICBhY3RfbGliMV9lbnRyeSA9IGNvbnRhaW5lciAiTGliMTpFbnRyeSBBY3Rpdml0eSIgewogICAgICAgICAgICAgICAgdGFncyAiQ29udGFpbmVyX0xpYjFfRW50cnlfQWN0aXZpdHkiCiAgICAgICAgICAgIH0KICAgICAgICAgICAgYWN0X2xpYjFfYSA9IGNvbnRhaW5lciAiTGliMTpBIiB7CiAgICAgICAgICAgICAgICB0YWdzICJDb250YWluZXJfTGliMV9BX0FjdGl2aXR5IgogICAgICAgICAgICB9CiAgICAgICAgICAgIGFjdF9saWIxX2IgPSBjb250YWluZXIgIkxpYjE6QiIgewogICAgICAgICAgICAgICAgdGFncyAiQ29udGFpbmVyX0xpYjFfQl9BY3Rpdml0eSIKICAgICAgICAgICAgfQogICAgICAgICAgICBhY3RfbGliMV9jID0gY29udGFpbmVyICJMaWIxOkMiIHsKICAgICAgICAgICAgICAgIHRhZ3MgIkNvbnRhaW5lcl9MaWIxX0NfQWN0aXZpdHkiCiAgICAgICAgICAgIH0KICAgICAgICAgICAgYWN0X2xpYjFfZCA9IGNvbnRhaW5lciAiTGliMTpEIiB7CiAgICAgICAgICAgICAgICB0YWdzICJDb250YWluZXJfTGliMV9EX0FjdGl2aXR5IgogICAgICAgICAgICB9CiAgICAgICAgICAgIGFjdF9saWIyX2VudHJ5ID0gY29udGFpbmVyICJMaWIyOkVudHJ5IEFjdGl2aXR5IiB7CiAgICAgICAgICAgICAgICB0YWdzICJDb250YWluZXJfTGliMl9FbnRyeV9BY3Rpdml0eSIKICAgICAgICAgICAgfQogICAgICAgICAgICBhY3RfbGliMl9hID0gY29udGFpbmVyICJMaWIyOkEiIHsKICAgICAgICAgICAgICAgIHRhZ3MgIkNvbnRhaW5lcl9MaWIyX0FfQWN0aXZpdHkiCiAgICAgICAgICAgIH0KICAgICAgICAgICAgYWN0X2xpYjJfYiA9IGNvbnRhaW5lciAiTGliMjpCIiB7CiAgICAgICAgICAgICAgICB0YWdzICJDb250YWluZXJfTGliMl9CX0FjdGl2aXR5IgogICAgICAgICAgICB9CiAgICAgICAgfQoKICAgICAgICBzcy5ob3N0IC0+IHNzLmFjdF9tYWluICLQl9Cw0L/Rg9GB0LrQsNC10YIg0L/QviDQs9GA0LDRhNC40LrRgyIKCiAgICAgICAgc3MuYWN0X21haW4gLT4gc3MuYWN0X2xpYjFfZW50cnkgItCX0LDQv9GD0YHQutCw0LXRgiAo0YHRgtCw0LLQuNGCINCyINC+0YfQtdGA0LXQtNGMKSIKICAgICAgICBzcy5hY3RfbGliMV9lbnRyeSAtPiBzcy5hY3RfbGliMV9hICLQl9Cw0L/Rg9GB0LrQsNC10YIgKNGB0YLQsNCy0LjRgiDQsiDQvtGH0LXRgNC10LTRjCkiCiAgICAgICAgc3MuYWN0X2xpYjFfYSAtPiBzcy5hY3RfbGliMV9iICLQl9Cw0L/Rg9GB0LrQsNC10YIgKNGB0YLQsNCy0LjRgiDQsiDQvtGH0LXRgNC10LTRjCkiCiAgICAgICAgc3MuYWN0X2xpYjFfYiAtPiBzcy5hY3RfbGliMV9jICLQl9Cw0L/Rg9GB0LrQsNC10YIgKNGB0YLQsNCy0LjRgiDQsiDQvtGH0LXRgNC10LTRjCkiCiAgICAgICAgc3MuYWN0X2xpYjFfYyAtPiBzcy5hY3RfbGliMV9kICLQl9Cw0L/Rg9GB0LrQsNC10YIgKNGB0YLQsNCy0LjRgiDQsiDQvtGH0LXRgNC10LTRjCkiCiAgICAgICAgCiAgICAgICAgc3MuYWN0X21haW4gLT4gc3MuYWN0X2xpYjJfZW50cnkgItCX0LDQv9GD0YHQutCw0LXRgiAo0YHRgtCw0LLQuNGCINCyINC+0YfQtdGA0LXQtNGMKSIKICAgICAgICBzcy5hY3RfbGliMl9lbnRyeSAtPiBzcy5hY3RfbGliMl9hICLQl9Cw0L/Rg9GB0LrQsNC10YIgKNGB0YLQsNCy0LjRgiDQsiDQvtGH0LXRgNC10LTRjCkiCiAgICAgICAgc3MuYWN0X2xpYjJfYSAtPiBzcy5hY3RfbGliMl9iICLQl9Cw0L/Rg9GB0LrQsNC10YIgKNGB0YLQsNCy0LjRgiDQsiDQvtGH0LXRgNC10LTRjCkiCgogICAgICAgIHNzLmFjdF9tYWluIC0+IHByb21ldGhldXMgItCe0YLQv9GA0LDQstC70Y/QtdGCINC80LXRgtGA0LjQutC4IgogICAgICAgIHNzLmFjdF9saWIxX2VudHJ5IC0+IHByb21ldGhldXMgItCe0YLQv9GA0LDQstC70Y/QtdGCINC80LXRgtGA0LjQutC4IgogICAgICAgIHNzLmFjdF9saWIxX2EgLT4gcHJvbWV0aGV1cyAi0J7RgtC/0YDQsNCy0LvRj9C10YIg0LzQtdGC0YDQuNC60LgiCiAgICAgICAgc3MuYWN0X2xpYjFfYiAtPiBwcm9tZXRoZXVzICLQntGC0L/RgNCw0LLQu9GP0LXRgiDQvNC10YLRgNC40LrQuCIKICAgICAgICBzcy5hY3RfbGliMV9jIC0+IHByb21ldGhldXMgItCe0YLQv9GA0LDQstC70Y/QtdGCINC80LXRgtGA0LjQutC4IgogICAgICAgIHNzLmFjdF9saWIyX2VudHJ5IC0+IHByb21ldGhldXMgItCe0YLQv9GA0LDQstC70Y/QtdGCINC80LXRgtGA0LjQutC4IgogICAgICAgIHNzLmFjdF9saWIyX2EgLT4gcHJvbWV0aGV1cyAi0J7RgtC/0YDQsNCy0LvRj9C10YIg0LzQtdGC0YDQuNC60LgiCiAgICAgICAgc3MuYWN0X2xpYjJfYiAtPiBwcm9tZXRoZXVzICLQntGC0L/RgNCw0LLQu9GP0LXRgiDQvNC10YLRgNC40LrQuCIKCiAgICAgICAgc3MuYWN0X21haW4gLT4gamFlZ2VyICLQntGC0L/RgNCw0LLQu9GP0LXRgiDRgtGA0LXQudGB0YsiCiAgICAgICAgc3MuYWN0X2xpYjFfZW50cnkgLT4gamFlZ2VyICLQntGC0L/RgNCw0LLQu9GP0LXRgiDRgtGA0LXQudGB0YsiCiAgICAgICAgc3MuYWN0X2xpYjFfYSAtPiBqYWVnZXIgItCe0YLQv9GA0LDQstC70Y/QtdGCINGC0YDQtdC50YHRiyIKICAgICAgICBzcy5hY3RfbGliMV9iIC0+IGphZWdlciAi0J7RgtC/0YDQsNCy0LvRj9C10YIg0YLRgNC10LnRgdGLIgogICAgICAgIHNzLmFjdF9saWIxX2MgLT4gamFlZ2VyICLQntGC0L/RgNCw0LLQu9GP0LXRgiDRgtGA0LXQudGB0YsiCiAgICAgICAgc3MuYWN0X2xpYjJfZW50cnkgLT4gamFlZ2VyICLQntGC0L/RgNCw0LLQu9GP0LXRgiDRgtGA0LXQudGB0YsiCiAgICAgICAgc3MuYWN0X2xpYjJfYSAtPiBqYWVnZXIgItCe0YLQv9GA0LDQstC70Y/QtdGCINGC0YDQtdC50YHRiyIKICAgICAgICBzcy5hY3RfbGliMl9iIC0+IGphZWdlciAi0J7RgtC/0YDQsNCy0LvRj9C10YIg0YLRgNC10LnRgdGLIgoKICAgICAgICBncmFmYW5hIC0+IHByb21ldGhldXMgItCe0YLQvtCx0YDQsNC20LDQtdGCINC80LXRgtGA0LjQutC4IgogICAgICAgIGdyYWZhbmEgLT4gamFlZ2VyICLQntGC0L7QsdGA0LDQttCw0LXRgiDRgtGA0LXQudGB0YsiCiAgICAgICAgCiAgICAgICAgc3MuaG9zdC5hY3RfbWFpbiAtPiBzcy5ob3N0LmFjdF9saWIxX2VudHJ5ICLQodGC0LDQstC40YIg0LIg0L7Rh9C10YDQtdC00YwiCiAgICB9CgogICAgdmlld3MgewogICAgICAgIGNvbnRhaW5lciBzcyAiU3lzdGVtIiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgICAgICBpbmNsdWRlIGdyYWZhbmEKICAgICAgICAgICAgYXV0b2xheW91dCBscgogICAgICAgIH0KCiAgICAgICAgY29tcG9uZW50IHNzLmhvc3QgIkhvc3QiIHsKICAgICAgICAgICAgaW5jbHVkZSAqCiAgICAgICAgICAgIGF1dG9sYXlvdXQgbHIKICAgICAgICB9CgogICAgICAgIHN0eWxlcyB7CiAgICAgICAgICAgIGVsZW1lbnQgIkVsZW1lbnQiIHsKICAgICAgICAgICAgICAgIGNvbG9yICNmZmZmZmYKICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJQZXJzb24iIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgI2QzNDQwNwogICAgICAgICAgICAgICAgc2hhcGUgcGVyc29uCiAgICAgICAgICAgIH0KICAgICAgICAgICAgZWxlbWVudCAiU29mdHdhcmUgU3lzdGVtIiB7CiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICNmODY2MjgKICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJDb250YWluZXIiIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgI2Y4ODcyOAogICAgICAgICAgICB9CiAgICAgICAgICAgIGVsZW1lbnQgIkRhdGFiYXNlIiB7CiAgICAgICAgICAgICAgICBzaGFwZSBjeWxpbmRlcgogICAgICAgICAgICB9CiAgICAgICAgfQogICAgfQoKICAgIGNvbmZpZ3VyYXRpb24gewogICAgICAgIHNjb3BlIHNvZnR3YXJlc3lzdGVtCiAgICB9Cgp9"
+  },
+  "views" : {
+    "componentViews" : [ {
+      "automaticLayout" : {
+        "applied" : true,
+        "edgeSeparation" : 0,
+        "implementation" : "Graphviz",
+        "nodeSeparation" : 300,
+        "rankDirection" : "LeftRight",
+        "rankSeparation" : 300,
+        "vertices" : false
+      },
+      "containerId" : "5",
+      "dimensions" : {
+        "height" : 811,
+        "width" : 1640
+      },
+      "elements" : [ {
+        "id" : "6",
+        "x" : 219,
+        "y" : 185
+      }, {
+        "id" : "7",
+        "x" : 969,
+        "y" : 185
+      } ],
+      "externalContainerBoundariesVisible" : false,
+      "key" : "Host",
+      "order" : 2,
+      "relationships" : [ {
+        "id" : "46"
+      } ]
+    } ],
+    "configuration" : {
+      "branding" : { },
+      "lastSavedView" : "System",
+      "metadataSymbols" : "SquareBrackets",
+      "styles" : {
+        "elements" : [ {
+          "color" : "#ffffff",
+          "tag" : "Element"
+        }, {
+          "background" : "#d34407",
+          "shape" : "Person",
+          "tag" : "Person"
+        }, {
+          "background" : "#f86628",
+          "tag" : "Software System"
+        }, {
+          "background" : "#f88728",
+          "tag" : "Container"
+        }, {
+          "shape" : "Cylinder",
+          "tag" : "Database"
+        } ]
+      },
+      "terminology" : { }
+    },
+    "containerViews" : [ {
+      "automaticLayout" : {
+        "applied" : true,
+        "edgeSeparation" : 0,
+        "implementation" : "Graphviz",
+        "nodeSeparation" : 300,
+        "rankDirection" : "LeftRight",
+        "rankSeparation" : 300,
+        "vertices" : false
+      },
+      "dimensions" : {
+        "height" : 9682,
+        "width" : 5390
+      },
+      "elements" : [ {
+        "id" : "1",
+        "x" : 4719,
+        "y" : 2614
+      }, {
+        "id" : "2",
+        "x" : 3969,
+        "y" : 5043
+      }, {
+        "id" : "3",
+        "x" : 4719,
+        "y" : 6864
+      }, {
+        "id" : "5",
+        "x" : 219,
+        "y" : 785
+      }, {
+        "id" : "8",
+        "x" : 969,
+        "y" : 785
+      }, {
+        "id" : "9",
+        "x" : 1719,
+        "y" : 185
+      }, {
+        "id" : "10",
+        "x" : 2469,
+        "y" : 185
+      }, {
+        "id" : "11",
+        "x" : 3219,
+        "y" : 185
+      }, {
+        "id" : "12",
+        "x" : 3969,
+        "y" : 185
+      }, {
+        "id" : "13",
+        "x" : 4719,
+        "y" : 185
+      }, {
+        "id" : "14",
+        "x" : 1719,
+        "y" : 785
+      }, {
+        "id" : "15",
+        "x" : 2469,
+        "y" : 785
+      }, {
+        "id" : "16",
+        "x" : 3219,
+        "y" : 785
+      } ],
+      "externalSoftwareSystemBoundariesVisible" : false,
+      "key" : "System",
+      "order" : 1,
+      "relationships" : [ {
+        "id" : "17"
+      }, {
+        "id" : "18"
+      }, {
+        "id" : "19"
+      }, {
+        "id" : "20"
+      }, {
+        "id" : "21"
+      }, {
+        "id" : "22"
+      }, {
+        "id" : "23"
+      }, {
+        "id" : "24"
+      }, {
+        "id" : "25"
+      }, {
+        "id" : "26",
+        "vertices" : [ {
+          "x" : 2469,
+          "y" : 4285
+        }, {
+          "x" : 3669,
+          "y" : 4285
+        }, {
+          "x" : 4419,
+          "y" : 4043
+        } ]
+      }, {
+        "id" : "28",
+        "vertices" : [ {
+          "x" : 2169,
+          "y" : 635
+        }, {
+          "x" : 2469,
+          "y" : 1235
+        }, {
+          "x" : 3219,
+          "y" : 2210
+        }, {
+          "x" : 3969,
+          "y" : 2635
+        } ]
+      }, {
+        "id" : "29",
+        "vertices" : [ {
+          "x" : 2919,
+          "y" : 635
+        }, {
+          "x" : 3219,
+          "y" : 1235
+        }, {
+          "x" : 3969,
+          "y" : 1985
+        }, {
+          "x" : 4419,
+          "y" : 2326
+        } ]
+      }, {
+        "id" : "30",
+        "vertices" : [ {
+          "x" : 4419,
+          "y" : 1481
+        } ]
+      }, {
+        "id" : "31",
+        "vertices" : [ {
+          "x" : 4419,
+          "y" : 710
+        } ]
+      }, {
+        "id" : "32",
+        "vertices" : [ {
+          "x" : 2469,
+          "y" : 4210
+        }, {
+          "x" : 3669,
+          "y" : 4210
+        }, {
+          "x" : 4419,
+          "y" : 3601
+        } ]
+      }, {
+        "id" : "33",
+        "vertices" : [ {
+          "x" : 3219,
+          "y" : 1776
+        }, {
+          "x" : 3969,
+          "y" : 2385
+        } ]
+      }, {
+        "id" : "34",
+        "vertices" : [ {
+          "x" : 4419,
+          "y" : 1926
+        } ]
+      }, {
+        "id" : "35",
+        "vertices" : [ {
+          "x" : 2690,
+          "y" : 9447
+        }, {
+          "x" : 3448,
+          "y" : 9447
+        }, {
+          "x" : 4419,
+          "y" : 8535
+        } ]
+      }, {
+        "id" : "37",
+        "vertices" : [ {
+          "x" : 2169,
+          "y" : 635
+        }, {
+          "x" : 2469,
+          "y" : 1897
+        }, {
+          "x" : 3969,
+          "y" : 7318
+        }, {
+          "x" : 4419,
+          "y" : 7318
+        } ]
+      }, {
+        "id" : "38",
+        "vertices" : [ {
+          "x" : 2919,
+          "y" : 635
+        }, {
+          "x" : 3219,
+          "y" : 1751
+        }, {
+          "x" : 3669,
+          "y" : 3351
+        }, {
+          "x" : 3969,
+          "y" : 6535
+        } ]
+      }, {
+        "id" : "39",
+        "vertices" : [ {
+          "x" : 3669,
+          "y" : 635
+        }, {
+          "x" : 3969,
+          "y" : 5493
+        }, {
+          "x" : 4419,
+          "y" : 6014
+        } ]
+      }, {
+        "id" : "40"
+      }, {
+        "id" : "41",
+        "vertices" : [ {
+          "x" : 2469,
+          "y" : 4285
+        }, {
+          "x" : 3969,
+          "y" : 8460
+        }, {
+          "x" : 4419,
+          "y" : 8460
+        } ]
+      }, {
+        "id" : "42",
+        "vertices" : [ {
+          "x" : 3669,
+          "y" : 4360
+        }, {
+          "x" : 3969,
+          "y" : 7243
+        }, {
+          "x" : 4419,
+          "y" : 7243
+        } ]
+      }, {
+        "id" : "43",
+        "vertices" : [ {
+          "x" : 3669,
+          "y" : 1926
+        }, {
+          "x" : 3969,
+          "y" : 6026
+        } ]
+      }, {
+        "id" : "44",
+        "vertices" : [ {
+          "x" : 4419,
+          "y" : 4818
+        } ]
+      }, {
+        "id" : "45",
+        "vertices" : [ {
+          "x" : 4419,
+          "y" : 5568
+        } ]
+      } ],
+      "softwareSystemId" : "4"
+    } ]
+  }
+}
