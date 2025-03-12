@@ -26,6 +26,10 @@ public partial class TelemetryCollector
         => UpdateCounter(Counters.WorkItemsQueueLength, -1 * Math.Abs(delta),
                 new KeyValuePair<string, object?>(Tags.WorkItemSourceType, workItemSourceType));
 
+    public void IncrementWorkItemsProcessedCounter(string workItemSourceType, long delta)
+        => UpdateCounter(Counters.WorkItemsProcessed, Math.Abs(delta),
+                new KeyValuePair<string, object?>(Tags.WorkItemSourceType, workItemSourceType));
+
     #endregion
 
     #region Private Methods

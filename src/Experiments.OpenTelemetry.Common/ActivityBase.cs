@@ -137,7 +137,7 @@ public abstract class ActivityBase(
             {
                 TelemetryCollector.IncrementActivityErrorCounter(Uid, ex is DomainException domEx ? domEx.ErrorType.ToString() : "Unclassified");
                 Logger.LogError(ex, "Execute activity error");
-                _telemetryActivity?.SetStatus(ActivityStatusCode.Error, ex.Message);
+                _telemetryActivity?.SetStatus(ActivityStatusCode.Error, $"Message: {ex.Message} | StackTrace: {ex.StackTrace}");
                 _telemetryActivity?.Stop();
                 return Task.CompletedTask;
             }

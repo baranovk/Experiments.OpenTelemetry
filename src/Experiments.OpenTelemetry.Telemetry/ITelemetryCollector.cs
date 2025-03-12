@@ -20,6 +20,8 @@ public interface ITelemetryCollector
 
     public void DecrementWorkItemsQueueCounter(string workItemSourceType, long delta);
 
+    public void IncrementWorkItemsProcessedCounter(string workItemSourceType, long delta);
+
     #endregion
 
     #region Trace

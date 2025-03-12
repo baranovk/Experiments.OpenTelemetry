@@ -46,6 +46,7 @@ public partial class TelemetryCollector
     private void PrepareMetricsInfrastructure(TelemetryCollectorConfig config)
     {
         _counters.Add(Counters.ActivityErrors, _meter.CreateCounter<long>(Counters.ActivityErrors));
+        _counters.Add(Counters.WorkItemsProcessed, _meter.CreateCounter<long>(Counters.WorkItemsProcessed));
         _gauges.Add(Gauges.ActivityQueueLength, _meter.CreateGauge<long>(Gauges.ActivityQueueLength));
         _upDownCounters.Add(Counters.ExecutingActivities, _meter.CreateUpDownCounter<long>(Counters.ExecutingActivities));
         _upDownCounters.Add(Counters.WorkItemsQueueLength, _meter.CreateUpDownCounter<long>(Counters.WorkItemsQueueLength));
@@ -57,11 +58,6 @@ public partial class TelemetryCollector
             .AddView(instrumentName: Histograms.ActivityExecutionTime,
                 new ExplicitBucketHistogramConfiguration { Boundaries = [60, 300, 600, 900, 1200, 3600] })
             .ConfigureResource(BuildResources)
-            //.AddConsoleExporter((options, readerOptions) =>
-            //{
-            //    readerOptions.PeriodicExportingMetricReaderOptions = new PeriodicExportingMetricReaderOptions() { ExportIntervalMilliseconds = 500 };
-            //    options.Targets = OpenTelemetryExporter.ConsoleExporterOutputTargets.Console;
-            //})
             .AddOtlpExporter(options =>
             {
                 options.ExportProcessorType = ExportProcessorType.Simple;
@@ -74,20 +70,17 @@ public partial class TelemetryCollector
     }
 
     private void PrepareTracingInfrastructure(TelemetryCollectorConfig config)
-    {
-        _tracerProvider = Sdk.CreateTracerProviderBuilder()
-            .AddSource(_activitySource.Name)
-            .ConfigureResource(BuildResources)
-            .AddOtlpExporter(options =>
-            {
-                options.ExportProcessorType = ExportProcessorType.Simple;
-                options.TimeoutMilliseconds = (int)config.OtlpTracesExporterTimeout.TotalMilliseconds;
-                options.Endpoint = config.OtlpTracesExporterEndpoint;
-                options.Protocol = OpenTelemetryExporter.OtlpExportProtocol.Grpc;
-            })
-            .Build();
-
-    }
+        => _tracerProvider = Sdk.CreateTracerProviderBuilder()
+                .AddSource(_activitySource.Name)
+                .ConfigureResource(BuildResources)
+                .AddOtlpExporter(options =>
+                {
+                    options.ExportProcessorType = ExportProcessorType.Simple;
+                    options.TimeoutMilliseconds = (int)config.OtlpTracesExporterTimeout.TotalMilliseconds;
+                    options.Endpoint = config.OtlpTracesExporterEndpoint;
+                    options.Protocol = OpenTelemetryExporter.OtlpExportProtocol.Grpc;
+                })
+                .Build();
 
     private static void BuildResources(ResourceBuilder rb)
         => rb.Clear().AddService(ServiceName, serviceInstanceId: System.Net.Dns.GetHostEntry(string.Empty).HostName);

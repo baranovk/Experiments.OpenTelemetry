@@ -88,6 +88,15 @@ namespace Experiments.OpenTelemetry.Telemetry.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to work_items_processed.
+        /// </summary>
+        internal static string WorkItemsProcessed {
+            get {
+                return ResourceManager.GetString("WorkItemsProcessed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to work_items_queue_length.
         /// </summary>
         internal static string WorkItemsQueueLength {

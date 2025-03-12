@@ -35,6 +35,7 @@ internal sealed class WorkItemSource : IWorkItemSource
             var count = workItems.Count();
             workItemsSegment.Remove(batchUid);
             _telemetryCollector.DecrementWorkItemsQueueCounter(sourceType.ToString(), count);
+            _telemetryCollector.IncrementWorkItemsProcessedCounter(sourceType.ToString(), count);
         }
 
         return Task.CompletedTask;

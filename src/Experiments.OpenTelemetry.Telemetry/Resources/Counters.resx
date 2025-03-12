@@ -126,6 +126,9 @@
   <data name="ExecutingActivities" xml:space="preserve">
     <value>activity_executing_count</value>
   </data>
+  <data name="WorkItemsProcessed" xml:space="preserve">
+    <value>work_items_processed</value>
+  </data>
   <data name="WorkItemsQueueLength" xml:space="preserve">
     <value>work_items_queue_length</value>
   </data>

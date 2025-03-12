@@ -28,11 +28,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Histograms.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\Metrics.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Metrics.resx</DependentUpon>
-    </Compile>
     <Compile Update="Resources\Tags.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -52,10 +47,6 @@
     <EmbeddedResource Update="Resources\Histograms.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Histograms.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Metrics.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Metrics.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Tags.resx">
       <Generator>ResXFileCodeGenerator</Generator>
