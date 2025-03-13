@@ -16,6 +16,8 @@ workspace "Name" "Description" {
         }
         ss = softwareSystem "Prototype" {
             host = container "Host" {
+                description "Запускает Activities"
+
                 act_main = component "Main:Entry Activity" {
                     tags "Main_Entry_Activity"
                 }
@@ -172,23 +174,23 @@ workspace "Name" "Description" {
         ss.act_lib2_entry -> ss.act_lib2_a "Запускает (ставит в очередь)"
         ss.act_lib2_a -> ss.act_lib2_b "Запускает (ставит в очередь)"
 
-        #ss.act_main -> prometheus "Отправляет метрики"
-        #ss.act_lib1_entry -> prometheus "Отправляет метрики"
-        #ss.act_lib1_a -> prometheus "Отправляет метрики"
-        #ss.act_lib1_b -> prometheus "Отправляет метрики"
-        #ss.act_lib1_c -> prometheus "Отправляет метрики"
-        #ss.act_lib2_entry -> prometheus "Отправляет метрики"
-        #ss.act_lib2_a -> prometheus "Отправляет метрики"
-        #ss.act_lib2_b -> prometheus "Отправляет метрики"
+        ss.act_main -> prometheus "Отправляет метрики"
+        ss.act_lib1_entry -> prometheus "Отправляет метрики"
+        ss.act_lib1_a -> prometheus "Отправляет метрики"
+        ss.act_lib1_b -> prometheus "Отправляет метрики"
+        ss.act_lib1_c -> prometheus "Отправляет метрики"
+        ss.act_lib2_entry -> prometheus "Отправляет метрики"
+        ss.act_lib2_a -> prometheus "Отправляет метрики"
+        ss.act_lib2_b -> prometheus "Отправляет метрики"
 
-        #ss.act_main -> jaeger "Отправляет трейсы"
-        #ss.act_lib1_entry -> jaeger "Отправляет трейсы"
-        #ss.act_lib1_a -> jaeger "Отправляет трейсы"
-        #ss.act_lib1_b -> jaeger "Отправляет трейсы"
-        #ss.act_lib1_c -> jaeger "Отправляет трейсы"
-        #ss.act_lib2_entry -> jaeger "Отправляет трейсы"
-        #ss.act_lib2_a -> jaeger "Отправляет трейсы"
-        #ss.act_lib2_b -> jaeger "Отправляет трейсы"
+        ss.act_main -> jaeger "Отправляет трейсы"
+        ss.act_lib1_entry -> jaeger "Отправляет трейсы"
+        ss.act_lib1_a -> jaeger "Отправляет трейсы"
+        ss.act_lib1_b -> jaeger "Отправляет трейсы"
+        ss.act_lib1_c -> jaeger "Отправляет трейсы"
+        ss.act_lib2_entry -> jaeger "Отправляет трейсы"
+        ss.act_lib2_a -> jaeger "Отправляет трейсы"
+        ss.act_lib2_b -> jaeger "Отправляет трейсы"
 
         ss -> prometheus "Отправляет метрики" {
             tags "Send_Metrics_Rel"
@@ -212,8 +214,8 @@ workspace "Name" "Description" {
 
         container ss "ActivityFlow" {
             include *
-            exclude prometheus
-            exclude jaeger
+            #exclude prometheus
+            #exclude jaeger
             exclude ss.activity
             autolayout lr
         }
