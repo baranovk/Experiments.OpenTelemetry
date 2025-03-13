@@ -47,6 +47,8 @@ public abstract class ActivityBase(
     public async Task ExecuteAsync(ActivityContext ctx, CancellationToken cancellationToken = default)
     {
         var sw = new Stopwatch();
+
+        // надо начинать span именно здесь, иначе когда будет вызвана функция Match, Activity.Current будет равно null
         _telemetryActivity = StartTracingActivity(ctx);
 
         await (await GetActivityPrologue(ctx, sw)

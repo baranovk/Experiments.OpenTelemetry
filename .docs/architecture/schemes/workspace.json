@@ -6,7 +6,7 @@
   "documentation" : { },
   "id" : 1,
   "lastModifiedAgent" : "structurizr-ui",
-  "lastModifiedDate" : "2025-03-12T15:37:57Z",
+  "lastModifiedDate" : "2025-03-13T12:35:50Z",
   "model" : {
     "customElements" : [ {
       "id" : "1",
@@ -24,17 +24,17 @@
       "relationships" : [ {
         "description" : "Отображает метрики",
         "destinationId" : "1",
-        "id" : "44",
+        "id" : "85",
         "sourceId" : "2",
         "tags" : "Relationship"
       }, {
         "description" : "Отображает трейсы",
         "destinationId" : "3",
-        "id" : "45",
+        "id" : "86",
         "sourceId" : "2",
         "tags" : "Relationship"
       } ],
-      "tags" : "Element,Grafana"
+      "tags" : "Element,Grafana,Green"
     }, {
       "id" : "3",
       "name" : "Jaeger",
@@ -53,9 +53,15 @@
             "structurizr.dsl.identifier" : "ss.host.act_main"
           },
           "relationships" : [ {
-            "description" : "Ставит в очередь",
-            "destinationId" : "7",
-            "id" : "46",
+            "description" : "Lib1:Entry Descriptor",
+            "destinationId" : "15",
+            "id" : "38",
+            "sourceId" : "6",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Lib2:Entry Descriptor",
+            "destinationId" : "15",
+            "id" : "39",
             "sourceId" : "6",
             "tags" : "Relationship"
           } ],
@@ -67,7 +73,207 @@
           "properties" : {
             "structurizr.dsl.identifier" : "ss.host.act_lib1_entry"
           },
-          "tags" : "Element,Component,Lib1_Entry_Activity"
+          "relationships" : [ {
+            "description" : "Ставит в очередь Lib1:A",
+            "destinationId" : "15",
+            "id" : "47",
+            "sourceId" : "7",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component,Lib1_Entry_Activity,Red"
+        }, {
+          "documentation" : { },
+          "id" : "8",
+          "name" : "Lib1:A Activity",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.host.act_lib1_a"
+          },
+          "relationships" : [ {
+            "description" : "Ставит в очередь Lib1:B",
+            "destinationId" : "15",
+            "id" : "48",
+            "sourceId" : "8",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component,Lib1_A_Activity,Red"
+        }, {
+          "documentation" : { },
+          "id" : "9",
+          "name" : "Lib1:B Activity",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.host.act_lib1_b"
+          },
+          "relationships" : [ {
+            "description" : "Ставит в очередь Lib1:C",
+            "destinationId" : "15",
+            "id" : "49",
+            "sourceId" : "9",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component,Lib1_B_Activity,Red"
+        }, {
+          "documentation" : { },
+          "id" : "10",
+          "name" : "Lib1:C Activity",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.host.act_lib1_c"
+          },
+          "relationships" : [ {
+            "description" : "Ставит в очередь Lib1:D",
+            "destinationId" : "15",
+            "id" : "50",
+            "sourceId" : "10",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component,Lib1_C_Activity,Red"
+        }, {
+          "documentation" : { },
+          "id" : "11",
+          "name" : "Lib1:D Activity",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.host.act_lib1_d"
+          },
+          "tags" : "Element,Component,Lib1_D_Activity,Red"
+        }, {
+          "documentation" : { },
+          "id" : "12",
+          "name" : "Lib2:Entry Activity",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.host.act_lib2_entry"
+          },
+          "relationships" : [ {
+            "description" : "Ставит в очередь Lib2:A",
+            "destinationId" : "15",
+            "id" : "54",
+            "sourceId" : "12",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component,Lib2_Entry_Activity,Gray"
+        }, {
+          "documentation" : { },
+          "id" : "13",
+          "name" : "Lib2:A Activity",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.host.act_lib2_a"
+          },
+          "relationships" : [ {
+            "description" : "Ставит в очередь Lib2:B",
+            "destinationId" : "15",
+            "id" : "55",
+            "sourceId" : "13",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component,Lib2_A_Activity,Gray"
+        }, {
+          "documentation" : { },
+          "id" : "14",
+          "name" : "Lib2:B Activity",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.host.act_lib2_b"
+          },
+          "tags" : "Element,Component,Lib2_B_Activity,Gray"
+        }, {
+          "documentation" : { },
+          "id" : "15",
+          "name" : "Activity Scheduler",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.host.activity_scheduler"
+          },
+          "relationships" : [ {
+            "description" : "Отправляет Activity на исполнение по графику",
+            "destinationId" : "18",
+            "id" : "41",
+            "sourceId" : "15",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component,Activity_Scheduler,Scheduler,Green"
+        }, {
+          "documentation" : { },
+          "id" : "16",
+          "name" : "Main:Entry Activity Scheduler",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.host.main_activity_scheduler"
+          },
+          "relationships" : [ {
+            "description" : "Отправляет Main:Entry на исполнение по графику",
+            "destinationId" : "17",
+            "id" : "40",
+            "sourceId" : "16",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component,Main_Activity_Scheduler,Scheduler,Green"
+        }, {
+          "documentation" : { },
+          "id" : "17",
+          "name" : "Main:Entry Activity Executor",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.host.main_activity_executor"
+          },
+          "relationships" : [ {
+            "description" : "Запускает",
+            "destinationId" : "6",
+            "id" : "37",
+            "sourceId" : "17",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component,Main_Activity_Executor,Robot"
+        }, {
+          "documentation" : { },
+          "id" : "18",
+          "name" : "Activity Executor",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.host.activity_executor"
+          },
+          "relationships" : [ {
+            "description" : "Запускает",
+            "destinationId" : "7",
+            "id" : "42",
+            "sourceId" : "18",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Запускает",
+            "destinationId" : "8",
+            "id" : "43",
+            "sourceId" : "18",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Запускает",
+            "destinationId" : "9",
+            "id" : "44",
+            "sourceId" : "18",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Запускает",
+            "destinationId" : "10",
+            "id" : "45",
+            "sourceId" : "18",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Запускает",
+            "destinationId" : "11",
+            "id" : "46",
+            "sourceId" : "18",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Запускает",
+            "destinationId" : "12",
+            "id" : "51",
+            "sourceId" : "18",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Запускает",
+            "destinationId" : "13",
+            "id" : "52",
+            "sourceId" : "18",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Запускает",
+            "destinationId" : "14",
+            "id" : "53",
+            "sourceId" : "18",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component,Activity_Executor,Robot"
         } ],
         "documentation" : { },
         "id" : "5",
@@ -77,236 +283,316 @@
         },
         "relationships" : [ {
           "description" : "Запускает по графику",
-          "destinationId" : "8",
-          "id" : "17",
+          "destinationId" : "19",
+          "id" : "74",
           "sourceId" : "5",
           "tags" : "Relationship"
         } ],
         "tags" : "Element,Container"
       }, {
         "documentation" : { },
-        "id" : "8",
+        "id" : "19",
         "name" : "Main:Entry Activity",
         "properties" : {
           "structurizr.dsl.identifier" : "ss.act_main"
         },
         "relationships" : [ {
           "description" : "Запускает (ставит в очередь)",
-          "destinationId" : "9",
-          "id" : "18",
-          "sourceId" : "8",
+          "destinationId" : "20",
+          "id" : "75",
+          "sourceId" : "19",
           "tags" : "Relationship"
         }, {
           "description" : "Запускает (ставит в очередь)",
-          "destinationId" : "14",
-          "id" : "23",
-          "sourceId" : "8",
-          "tags" : "Relationship"
-        }, {
-          "description" : "Отправляет метрики",
-          "destinationId" : "1",
-          "id" : "26",
-          "sourceId" : "8",
-          "tags" : "Relationship"
-        }, {
-          "description" : "Отправляет трейсы",
-          "destinationId" : "3",
-          "id" : "35",
-          "sourceId" : "8",
+          "destinationId" : "25",
+          "id" : "80",
+          "sourceId" : "19",
           "tags" : "Relationship"
         } ],
         "tags" : "Element,Container,Container_Main_Entry_Activity"
       }, {
         "documentation" : { },
-        "id" : "9",
+        "id" : "20",
         "name" : "Lib1:Entry Activity",
         "properties" : {
           "structurizr.dsl.identifier" : "ss.act_lib1_entry"
         },
         "relationships" : [ {
           "description" : "Запускает (ставит в очередь)",
-          "destinationId" : "10",
-          "id" : "19",
-          "sourceId" : "9",
-          "tags" : "Relationship"
-        }, {
-          "description" : "Отправляет метрики",
-          "destinationId" : "1",
-          "id" : "28",
-          "sourceId" : "9",
-          "tags" : "Relationship"
-        }, {
-          "description" : "Отправляет трейсы",
-          "destinationId" : "3",
-          "id" : "37",
-          "sourceId" : "9",
+          "destinationId" : "21",
+          "id" : "76",
+          "sourceId" : "20",
           "tags" : "Relationship"
         } ],
         "tags" : "Element,Container,Container_Lib1_Entry_Activity"
       }, {
         "documentation" : { },
-        "id" : "10",
-        "name" : "Lib1:A",
+        "id" : "21",
+        "name" : "Lib1:A Activity",
         "properties" : {
           "structurizr.dsl.identifier" : "ss.act_lib1_a"
         },
         "relationships" : [ {
           "description" : "Запускает (ставит в очередь)",
-          "destinationId" : "11",
-          "id" : "20",
-          "sourceId" : "10",
-          "tags" : "Relationship"
-        }, {
-          "description" : "Отправляет метрики",
-          "destinationId" : "1",
-          "id" : "29",
-          "sourceId" : "10",
-          "tags" : "Relationship"
-        }, {
-          "description" : "Отправляет трейсы",
-          "destinationId" : "3",
-          "id" : "38",
-          "sourceId" : "10",
+          "destinationId" : "22",
+          "id" : "77",
+          "sourceId" : "21",
           "tags" : "Relationship"
         } ],
         "tags" : "Element,Container,Container_Lib1_A_Activity"
       }, {
         "documentation" : { },
-        "id" : "11",
-        "name" : "Lib1:B",
+        "id" : "22",
+        "name" : "Lib1:B Activity",
         "properties" : {
           "structurizr.dsl.identifier" : "ss.act_lib1_b"
         },
         "relationships" : [ {
           "description" : "Запускает (ставит в очередь)",
-          "destinationId" : "12",
-          "id" : "21",
-          "sourceId" : "11",
-          "tags" : "Relationship"
-        }, {
-          "description" : "Отправляет метрики",
-          "destinationId" : "1",
-          "id" : "30",
-          "sourceId" : "11",
-          "tags" : "Relationship"
-        }, {
-          "description" : "Отправляет трейсы",
-          "destinationId" : "3",
-          "id" : "39",
-          "sourceId" : "11",
+          "destinationId" : "23",
+          "id" : "78",
+          "sourceId" : "22",
           "tags" : "Relationship"
         } ],
         "tags" : "Element,Container,Container_Lib1_B_Activity"
       }, {
         "documentation" : { },
-        "id" : "12",
-        "name" : "Lib1:C",
+        "id" : "23",
+        "name" : "Lib1:C Activity",
         "properties" : {
           "structurizr.dsl.identifier" : "ss.act_lib1_c"
         },
         "relationships" : [ {
           "description" : "Запускает (ставит в очередь)",
-          "destinationId" : "13",
-          "id" : "22",
-          "sourceId" : "12",
-          "tags" : "Relationship"
-        }, {
-          "description" : "Отправляет метрики",
-          "destinationId" : "1",
-          "id" : "31",
-          "sourceId" : "12",
-          "tags" : "Relationship"
-        }, {
-          "description" : "Отправляет трейсы",
-          "destinationId" : "3",
-          "id" : "40",
-          "sourceId" : "12",
+          "destinationId" : "24",
+          "id" : "79",
+          "sourceId" : "23",
           "tags" : "Relationship"
         } ],
         "tags" : "Element,Container,Container_Lib1_C_Activity"
       }, {
         "documentation" : { },
-        "id" : "13",
-        "name" : "Lib1:D",
+        "id" : "24",
+        "name" : "Lib1:D Activity",
         "properties" : {
           "structurizr.dsl.identifier" : "ss.act_lib1_d"
         },
         "tags" : "Element,Container,Container_Lib1_D_Activity"
       }, {
         "documentation" : { },
-        "id" : "14",
+        "id" : "25",
         "name" : "Lib2:Entry Activity",
         "properties" : {
           "structurizr.dsl.identifier" : "ss.act_lib2_entry"
         },
         "relationships" : [ {
           "description" : "Запускает (ставит в очередь)",
-          "destinationId" : "15",
-          "id" : "24",
-          "sourceId" : "14",
-          "tags" : "Relationship"
-        }, {
-          "description" : "Отправляет метрики",
-          "destinationId" : "1",
-          "id" : "32",
-          "sourceId" : "14",
-          "tags" : "Relationship"
-        }, {
-          "description" : "Отправляет трейсы",
-          "destinationId" : "3",
-          "id" : "41",
-          "sourceId" : "14",
+          "destinationId" : "26",
+          "id" : "81",
+          "sourceId" : "25",
           "tags" : "Relationship"
         } ],
         "tags" : "Element,Container,Container_Lib2_Entry_Activity"
       }, {
         "documentation" : { },
-        "id" : "15",
-        "name" : "Lib2:A",
+        "id" : "26",
+        "name" : "Lib2:A Activity",
         "properties" : {
           "structurizr.dsl.identifier" : "ss.act_lib2_a"
         },
         "relationships" : [ {
           "description" : "Запускает (ставит в очередь)",
-          "destinationId" : "16",
-          "id" : "25",
-          "sourceId" : "15",
-          "tags" : "Relationship"
-        }, {
-          "description" : "Отправляет метрики",
-          "destinationId" : "1",
-          "id" : "33",
-          "sourceId" : "15",
-          "tags" : "Relationship"
-        }, {
-          "description" : "Отправляет трейсы",
-          "destinationId" : "3",
-          "id" : "42",
-          "sourceId" : "15",
+          "destinationId" : "27",
+          "id" : "82",
+          "sourceId" : "26",
           "tags" : "Relationship"
         } ],
         "tags" : "Element,Container,Container_Lib2_A_Activity"
       }, {
         "documentation" : { },
-        "id" : "16",
-        "name" : "Lib2:B",
+        "id" : "27",
+        "name" : "Lib2:B Activity",
         "properties" : {
           "structurizr.dsl.identifier" : "ss.act_lib2_b"
         },
-        "relationships" : [ {
-          "description" : "Отправляет метрики",
-          "destinationId" : "1",
-          "id" : "34",
-          "sourceId" : "16",
-          "tags" : "Relationship"
-        }, {
-          "description" : "Отправляет трейсы",
-          "destinationId" : "3",
-          "id" : "43",
-          "sourceId" : "16",
-          "tags" : "Relationship"
-        } ],
         "tags" : "Element,Container,Container_Lib2_B_Activity"
+      }, {
+        "components" : [ {
+          "documentation" : { },
+          "id" : "29",
+          "name" : "Execute",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.activity.execute"
+          },
+          "relationships" : [ {
+            "destinationId" : "30",
+            "id" : "56",
+            "sourceId" : "29",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Создает tracing span",
+            "destinationId" : "3",
+            "id" : "63",
+            "properties" : {
+              "structurizr.dsl.identifier" : "rel_act_exec_jaegers"
+            },
+            "sourceId" : "29",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component,ActivityExecute"
+        }, {
+          "documentation" : { },
+          "id" : "30",
+          "name" : "Prologue",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.activity.prologue"
+          },
+          "relationships" : [ {
+            "destinationId" : "31",
+            "id" : "57",
+            "sourceId" : "30",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Инкрементирует счетчик выполняющихся activities",
+            "destinationId" : "1",
+            "id" : "66",
+            "properties" : {
+              "structurizr.dsl.identifier" : "prol_to_prom"
+            },
+            "sourceId" : "30",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component,ActivityPrologue,Gray"
+        }, {
+          "documentation" : { },
+          "id" : "31",
+          "name" : "ExecuteInternal",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.activity.execute_internal"
+          },
+          "relationships" : [ {
+            "destinationId" : "32",
+            "id" : "58",
+            "sourceId" : "31",
+            "tags" : "Relationship"
+          }, {
+            "destinationId" : "33",
+            "id" : "59",
+            "sourceId" : "31",
+            "tags" : "Relationship"
+          }, {
+            "destinationId" : "34",
+            "id" : "60",
+            "sourceId" : "31",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component,ActivityExecuteInternal,Blue"
+        }, {
+          "description" : "Обрабатывает Work Items",
+          "documentation" : { },
+          "id" : "32",
+          "name" : "DoWork",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.activity.do_work"
+          },
+          "tags" : "Element,Component,ActivityDoWork,Blue"
+        }, {
+          "description" : "Ставит в очередь следующую activity",
+          "documentation" : { },
+          "id" : "33",
+          "name" : "EnqueueNextActivity",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.activity.enqueue_next"
+          },
+          "tags" : "Element,Component,ActivityEnqueueNext,Blue"
+        }, {
+          "documentation" : { },
+          "id" : "34",
+          "name" : "Epilogue",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.activity.epilogue"
+          },
+          "relationships" : [ {
+            "destinationId" : "35",
+            "id" : "61",
+            "sourceId" : "34",
+            "tags" : "Relationship"
+          }, {
+            "destinationId" : "36",
+            "id" : "62",
+            "sourceId" : "34",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Уменьшает счетчик выполняющихся activities",
+            "destinationId" : "1",
+            "id" : "70",
+            "sourceId" : "34",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Сохраняет время выполнения activity",
+            "destinationId" : "1",
+            "id" : "71",
+            "sourceId" : "34",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component,ActivityEpilogue,Gray"
+        }, {
+          "documentation" : { },
+          "id" : "35",
+          "name" : "Success",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.activity.success"
+          },
+          "relationships" : [ {
+            "description" : "Завершает tracing span",
+            "destinationId" : "3",
+            "id" : "73",
+            "sourceId" : "35",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component,ActivitySuccess,Green"
+        }, {
+          "documentation" : { },
+          "id" : "36",
+          "name" : "Error",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ss.activity.error"
+          },
+          "relationships" : [ {
+            "description" : "Инкрементирует счетчик ошибок",
+            "destinationId" : "1",
+            "id" : "69",
+            "sourceId" : "36",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Завершает tracing span",
+            "destinationId" : "3",
+            "id" : "72",
+            "sourceId" : "36",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component,ActivityError,Red"
+        } ],
+        "documentation" : { },
+        "id" : "28",
+        "name" : "Activity",
+        "properties" : {
+          "structurizr.dsl.identifier" : "ss.activity"
+        },
+        "relationships" : [ {
+          "description" : "Создает tracing span",
+          "destinationId" : "3",
+          "id" : "64",
+          "linkedRelationshipId" : "63",
+          "sourceId" : "28"
+        }, {
+          "description" : "Инкрементирует счетчик выполняющихся activities",
+          "destinationId" : "1",
+          "id" : "67",
+          "linkedRelationshipId" : "66",
+          "sourceId" : "28"
+        } ],
+        "tags" : "Element,Container,Activity"
       } ],
       "documentation" : { },
       "id" : "4",
@@ -316,24 +602,36 @@
         "structurizr.dsl.identifier" : "ss"
       },
       "relationships" : [ {
+        "description" : "Создает tracing span",
+        "destinationId" : "3",
+        "id" : "65",
+        "linkedRelationshipId" : "63",
+        "sourceId" : "4"
+      }, {
+        "description" : "Инкрементирует счетчик выполняющихся activities",
+        "destinationId" : "1",
+        "id" : "68",
+        "linkedRelationshipId" : "66",
+        "sourceId" : "4"
+      }, {
         "description" : "Отправляет метрики",
         "destinationId" : "1",
-        "id" : "27",
-        "linkedRelationshipId" : "26",
-        "sourceId" : "4"
+        "id" : "83",
+        "sourceId" : "4",
+        "tags" : "Relationship,Send_Metrics_Rel"
       }, {
         "description" : "Отправляет трейсы",
         "destinationId" : "3",
-        "id" : "36",
-        "linkedRelationshipId" : "35",
-        "sourceId" : "4"
+        "id" : "84",
+        "sourceId" : "4",
+        "tags" : "Relationship"
       } ],
       "tags" : "Element,Software System"
     } ]
   },
   "name" : "Name",
   "properties" : {
-    "structurizr.dsl" : "d29ya3NwYWNlICJOYW1lIiAiRGVzY3JpcHRpb24iIHsKCiAgICAhaWRlbnRpZmllcnMgaGllcmFyY2hpY2FsCiAgICAhZG9jcyBkb2NzCiAgICAhYWRycyBhZHIKCiAgICBtb2RlbCB7CiAgICAgICAgcHJvbWV0aGV1cyA9IGVsZW1lbnQgIlByb21ldGhldXMiIHsKICAgICAgICAgICAgdGFncyAiUHJvbWV0aGV1cyIKICAgICAgICB9ICAgICAgICAKICAgICAgICBncmFmYW5hID0gZWxlbWVudCAiR3JhZmFuYSIgewogICAgICAgICAgICB0YWdzICJHcmFmYW5hIgogICAgICAgIH0KICAgICAgICBqYWVnZXIgPSBlbGVtZW50ICJKYWVnZXIiIHsKICAgICAgICAgICAgdGFncyAiSmFlZ2VyIgogICAgICAgIH0KICAgICAgICBzcyA9IHNvZnR3YXJlU3lzdGVtICJQcm90b3R5cGUiIHsKICAgICAgICAgICAgaG9zdCA9IGNvbnRhaW5lciAiSG9zdCIgewogICAgICAgICAgICAgICAgYWN0X21haW4gPSBjb21wb25lbnQgIk1haW46RW50cnkgQWN0aXZpdHkiIHsKICAgICAgICAgICAgICAgICAgICB0YWdzICJNYWluX0VudHJ5X0FjdGl2aXR5IgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgYWN0X2xpYjFfZW50cnkgPSBjb21wb25lbnQgIkxpYjE6RW50cnkgQWN0aXZpdHkiIHsKICAgICAgICAgICAgICAgICAgICB0YWdzICJMaWIxX0VudHJ5X0FjdGl2aXR5IgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICB9CiAgICAgICAgICAgIGFjdF9tYWluID0gY29udGFpbmVyICJNYWluOkVudHJ5IEFjdGl2aXR5IiB7CiAgICAgICAgICAgICAgICB0YWdzICJDb250YWluZXJfTWFpbl9FbnRyeV9BY3Rpdml0eSIKICAgICAgICAgICAgfQogICAgICAgICAgICBhY3RfbGliMV9lbnRyeSA9IGNvbnRhaW5lciAiTGliMTpFbnRyeSBBY3Rpdml0eSIgewogICAgICAgICAgICAgICAgdGFncyAiQ29udGFpbmVyX0xpYjFfRW50cnlfQWN0aXZpdHkiCiAgICAgICAgICAgIH0KICAgICAgICAgICAgYWN0X2xpYjFfYSA9IGNvbnRhaW5lciAiTGliMTpBIiB7CiAgICAgICAgICAgICAgICB0YWdzICJDb250YWluZXJfTGliMV9BX0FjdGl2aXR5IgogICAgICAgICAgICB9CiAgICAgICAgICAgIGFjdF9saWIxX2IgPSBjb250YWluZXIgIkxpYjE6QiIgewogICAgICAgICAgICAgICAgdGFncyAiQ29udGFpbmVyX0xpYjFfQl9BY3Rpdml0eSIKICAgICAgICAgICAgfQogICAgICAgICAgICBhY3RfbGliMV9jID0gY29udGFpbmVyICJMaWIxOkMiIHsKICAgICAgICAgICAgICAgIHRhZ3MgIkNvbnRhaW5lcl9MaWIxX0NfQWN0aXZpdHkiCiAgICAgICAgICAgIH0KICAgICAgICAgICAgYWN0X2xpYjFfZCA9IGNvbnRhaW5lciAiTGliMTpEIiB7CiAgICAgICAgICAgICAgICB0YWdzICJDb250YWluZXJfTGliMV9EX0FjdGl2aXR5IgogICAgICAgICAgICB9CiAgICAgICAgICAgIGFjdF9saWIyX2VudHJ5ID0gY29udGFpbmVyICJMaWIyOkVudHJ5IEFjdGl2aXR5IiB7CiAgICAgICAgICAgICAgICB0YWdzICJDb250YWluZXJfTGliMl9FbnRyeV9BY3Rpdml0eSIKICAgICAgICAgICAgfQogICAgICAgICAgICBhY3RfbGliMl9hID0gY29udGFpbmVyICJMaWIyOkEiIHsKICAgICAgICAgICAgICAgIHRhZ3MgIkNvbnRhaW5lcl9MaWIyX0FfQWN0aXZpdHkiCiAgICAgICAgICAgIH0KICAgICAgICAgICAgYWN0X2xpYjJfYiA9IGNvbnRhaW5lciAiTGliMjpCIiB7CiAgICAgICAgICAgICAgICB0YWdzICJDb250YWluZXJfTGliMl9CX0FjdGl2aXR5IgogICAgICAgICAgICB9CiAgICAgICAgfQoKICAgICAgICBzcy5ob3N0IC0+IHNzLmFjdF9tYWluICLQl9Cw0L/Rg9GB0LrQsNC10YIg0L/QviDQs9GA0LDRhNC40LrRgyIKCiAgICAgICAgc3MuYWN0X21haW4gLT4gc3MuYWN0X2xpYjFfZW50cnkgItCX0LDQv9GD0YHQutCw0LXRgiAo0YHRgtCw0LLQuNGCINCyINC+0YfQtdGA0LXQtNGMKSIKICAgICAgICBzcy5hY3RfbGliMV9lbnRyeSAtPiBzcy5hY3RfbGliMV9hICLQl9Cw0L/Rg9GB0LrQsNC10YIgKNGB0YLQsNCy0LjRgiDQsiDQvtGH0LXRgNC10LTRjCkiCiAgICAgICAgc3MuYWN0X2xpYjFfYSAtPiBzcy5hY3RfbGliMV9iICLQl9Cw0L/Rg9GB0LrQsNC10YIgKNGB0YLQsNCy0LjRgiDQsiDQvtGH0LXRgNC10LTRjCkiCiAgICAgICAgc3MuYWN0X2xpYjFfYiAtPiBzcy5hY3RfbGliMV9jICLQl9Cw0L/Rg9GB0LrQsNC10YIgKNGB0YLQsNCy0LjRgiDQsiDQvtGH0LXRgNC10LTRjCkiCiAgICAgICAgc3MuYWN0X2xpYjFfYyAtPiBzcy5hY3RfbGliMV9kICLQl9Cw0L/Rg9GB0LrQsNC10YIgKNGB0YLQsNCy0LjRgiDQsiDQvtGH0LXRgNC10LTRjCkiCiAgICAgICAgCiAgICAgICAgc3MuYWN0X21haW4gLT4gc3MuYWN0X2xpYjJfZW50cnkgItCX0LDQv9GD0YHQutCw0LXRgiAo0YHRgtCw0LLQuNGCINCyINC+0YfQtdGA0LXQtNGMKSIKICAgICAgICBzcy5hY3RfbGliMl9lbnRyeSAtPiBzcy5hY3RfbGliMl9hICLQl9Cw0L/Rg9GB0LrQsNC10YIgKNGB0YLQsNCy0LjRgiDQsiDQvtGH0LXRgNC10LTRjCkiCiAgICAgICAgc3MuYWN0X2xpYjJfYSAtPiBzcy5hY3RfbGliMl9iICLQl9Cw0L/Rg9GB0LrQsNC10YIgKNGB0YLQsNCy0LjRgiDQsiDQvtGH0LXRgNC10LTRjCkiCgogICAgICAgIHNzLmFjdF9tYWluIC0+IHByb21ldGhldXMgItCe0YLQv9GA0LDQstC70Y/QtdGCINC80LXRgtGA0LjQutC4IgogICAgICAgIHNzLmFjdF9saWIxX2VudHJ5IC0+IHByb21ldGhldXMgItCe0YLQv9GA0LDQstC70Y/QtdGCINC80LXRgtGA0LjQutC4IgogICAgICAgIHNzLmFjdF9saWIxX2EgLT4gcHJvbWV0aGV1cyAi0J7RgtC/0YDQsNCy0LvRj9C10YIg0LzQtdGC0YDQuNC60LgiCiAgICAgICAgc3MuYWN0X2xpYjFfYiAtPiBwcm9tZXRoZXVzICLQntGC0L/RgNCw0LLQu9GP0LXRgiDQvNC10YLRgNC40LrQuCIKICAgICAgICBzcy5hY3RfbGliMV9jIC0+IHByb21ldGhldXMgItCe0YLQv9GA0LDQstC70Y/QtdGCINC80LXRgtGA0LjQutC4IgogICAgICAgIHNzLmFjdF9saWIyX2VudHJ5IC0+IHByb21ldGhldXMgItCe0YLQv9GA0LDQstC70Y/QtdGCINC80LXRgtGA0LjQutC4IgogICAgICAgIHNzLmFjdF9saWIyX2EgLT4gcHJvbWV0aGV1cyAi0J7RgtC/0YDQsNCy0LvRj9C10YIg0LzQtdGC0YDQuNC60LgiCiAgICAgICAgc3MuYWN0X2xpYjJfYiAtPiBwcm9tZXRoZXVzICLQntGC0L/RgNCw0LLQu9GP0LXRgiDQvNC10YLRgNC40LrQuCIKCiAgICAgICAgc3MuYWN0X21haW4gLT4gamFlZ2VyICLQntGC0L/RgNCw0LLQu9GP0LXRgiDRgtGA0LXQudGB0YsiCiAgICAgICAgc3MuYWN0X2xpYjFfZW50cnkgLT4gamFlZ2VyICLQntGC0L/RgNCw0LLQu9GP0LXRgiDRgtGA0LXQudGB0YsiCiAgICAgICAgc3MuYWN0X2xpYjFfYSAtPiBqYWVnZXIgItCe0YLQv9GA0LDQstC70Y/QtdGCINGC0YDQtdC50YHRiyIKICAgICAgICBzcy5hY3RfbGliMV9iIC0+IGphZWdlciAi0J7RgtC/0YDQsNCy0LvRj9C10YIg0YLRgNC10LnRgdGLIgogICAgICAgIHNzLmFjdF9saWIxX2MgLT4gamFlZ2VyICLQntGC0L/RgNCw0LLQu9GP0LXRgiDRgtGA0LXQudGB0YsiCiAgICAgICAgc3MuYWN0X2xpYjJfZW50cnkgLT4gamFlZ2VyICLQntGC0L/RgNCw0LLQu9GP0LXRgiDRgtGA0LXQudGB0YsiCiAgICAgICAgc3MuYWN0X2xpYjJfYSAtPiBqYWVnZXIgItCe0YLQv9GA0LDQstC70Y/QtdGCINGC0YDQtdC50YHRiyIKICAgICAgICBzcy5hY3RfbGliMl9iIC0+IGphZWdlciAi0J7RgtC/0YDQsNCy0LvRj9C10YIg0YLRgNC10LnRgdGLIgoKICAgICAgICBncmFmYW5hIC0+IHByb21ldGhldXMgItCe0YLQvtCx0YDQsNC20LDQtdGCINC80LXRgtGA0LjQutC4IgogICAgICAgIGdyYWZhbmEgLT4gamFlZ2VyICLQntGC0L7QsdGA0LDQttCw0LXRgiDRgtGA0LXQudGB0YsiCiAgICAgICAgCiAgICAgICAgc3MuaG9zdC5hY3RfbWFpbiAtPiBzcy5ob3N0LmFjdF9saWIxX2VudHJ5ICLQodGC0LDQstC40YIg0LIg0L7Rh9C10YDQtdC00YwiCiAgICB9CgogICAgdmlld3MgewogICAgICAgIGNvbnRhaW5lciBzcyAiU3lzdGVtIiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgICAgICBpbmNsdWRlIGdyYWZhbmEKICAgICAgICAgICAgYXV0b2xheW91dCBscgogICAgICAgIH0KCiAgICAgICAgY29tcG9uZW50IHNzLmhvc3QgIkhvc3QiIHsKICAgICAgICAgICAgaW5jbHVkZSAqCiAgICAgICAgICAgIGF1dG9sYXlvdXQgbHIKICAgICAgICB9CgogICAgICAgIHN0eWxlcyB7CiAgICAgICAgICAgIGVsZW1lbnQgIkVsZW1lbnQiIHsKICAgICAgICAgICAgICAgIGNvbG9yICNmZmZmZmYKICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJQZXJzb24iIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgI2QzNDQwNwogICAgICAgICAgICAgICAgc2hhcGUgcGVyc29uCiAgICAgICAgICAgIH0KICAgICAgICAgICAgZWxlbWVudCAiU29mdHdhcmUgU3lzdGVtIiB7CiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICNmODY2MjgKICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJDb250YWluZXIiIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgI2Y4ODcyOAogICAgICAgICAgICB9CiAgICAgICAgICAgIGVsZW1lbnQgIkRhdGFiYXNlIiB7CiAgICAgICAgICAgICAgICBzaGFwZSBjeWxpbmRlcgogICAgICAgICAgICB9CiAgICAgICAgfQogICAgfQoKICAgIGNvbmZpZ3VyYXRpb24gewogICAgICAgIHNjb3BlIHNvZnR3YXJlc3lzdGVtCiAgICB9Cgp9"
+    "structurizr.dsl" : "d29ya3NwYWNlICJOYW1lIiAiRGVzY3JpcHRpb24iIHsKCiAgICAhaWRlbnRpZmllcnMgaGllcmFyY2hpY2FsCiAgICAhZG9jcyBkb2NzCiAgICAhYWRycyBhZHIKCiAgICBtb2RlbCB7CiAgICAgICAgcHJvbWV0aGV1cyA9IGVsZW1lbnQgIlByb21ldGhldXMiIHsKICAgICAgICAgICAgdGFncyAiUHJvbWV0aGV1cyIKICAgICAgICB9ICAgICAgICAKICAgICAgICBncmFmYW5hID0gZWxlbWVudCAiR3JhZmFuYSIgewogICAgICAgICAgICB0YWdzICJHcmFmYW5hIiwgIkdyZWVuIgogICAgICAgIH0KICAgICAgICBqYWVnZXIgPSBlbGVtZW50ICJKYWVnZXIiIHsKICAgICAgICAgICAgdGFncyAiSmFlZ2VyIgogICAgICAgIH0KICAgICAgICBzcyA9IHNvZnR3YXJlU3lzdGVtICJQcm90b3R5cGUiIHsKICAgICAgICAgICAgaG9zdCA9IGNvbnRhaW5lciAiSG9zdCIgewogICAgICAgICAgICAgICAgYWN0X21haW4gPSBjb21wb25lbnQgIk1haW46RW50cnkgQWN0aXZpdHkiIHsKICAgICAgICAgICAgICAgICAgICB0YWdzICJNYWluX0VudHJ5X0FjdGl2aXR5IgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgYWN0X2xpYjFfZW50cnkgPSBjb21wb25lbnQgIkxpYjE6RW50cnkgQWN0aXZpdHkiIHsKICAgICAgICAgICAgICAgICAgICB0YWdzICJMaWIxX0VudHJ5X0FjdGl2aXR5IiwgIlJlZCIKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIGFjdF9saWIxX2EgPSBjb21wb25lbnQgIkxpYjE6QSBBY3Rpdml0eSIgewogICAgICAgICAgICAgICAgICAgIHRhZ3MgIkxpYjFfQV9BY3Rpdml0eSIsICJSZWQiCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICBhY3RfbGliMV9iID0gY29tcG9uZW50ICJMaWIxOkIgQWN0aXZpdHkiIHsKICAgICAgICAgICAgICAgICAgICB0YWdzICJMaWIxX0JfQWN0aXZpdHkiLCAiUmVkIgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgYWN0X2xpYjFfYyA9IGNvbXBvbmVudCAiTGliMTpDIEFjdGl2aXR5IiB7CiAgICAgICAgICAgICAgICAgICAgdGFncyAiTGliMV9DX0FjdGl2aXR5IiwgIlJlZCIKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIGFjdF9saWIxX2QgPSBjb21wb25lbnQgIkxpYjE6RCBBY3Rpdml0eSIgewogICAgICAgICAgICAgICAgICAgIHRhZ3MgIkxpYjFfRF9BY3Rpdml0eSIsICJSZWQiCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICBhY3RfbGliMl9lbnRyeSA9IGNvbXBvbmVudCAiTGliMjpFbnRyeSBBY3Rpdml0eSIgewogICAgICAgICAgICAgICAgICAgIHRhZ3MgIkxpYjJfRW50cnlfQWN0aXZpdHkiLCAiR3JheSIKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIGFjdF9saWIyX2EgPSBjb21wb25lbnQgIkxpYjI6QSBBY3Rpdml0eSIgewogICAgICAgICAgICAgICAgICAgIHRhZ3MgIkxpYjJfQV9BY3Rpdml0eSIsICJHcmF5IgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgYWN0X2xpYjJfYiA9IGNvbXBvbmVudCAiTGliMjpCIEFjdGl2aXR5IiB7CiAgICAgICAgICAgICAgICAgICAgdGFncyAiTGliMl9CX0FjdGl2aXR5IiwgIkdyYXkiCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICBhY3Rpdml0eV9zY2hlZHVsZXIgPSBjb21wb25lbnQgIkFjdGl2aXR5IFNjaGVkdWxlciIgewogICAgICAgICAgICAgICAgICAgIHRhZ3MgIkFjdGl2aXR5X1NjaGVkdWxlciIsICJTY2hlZHVsZXIiLCAiR3JlZW4iCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICBtYWluX2FjdGl2aXR5X3NjaGVkdWxlciA9IGNvbXBvbmVudCAiTWFpbjpFbnRyeSBBY3Rpdml0eSBTY2hlZHVsZXIiIHsKICAgICAgICAgICAgICAgICAgICB0YWdzICJNYWluX0FjdGl2aXR5X1NjaGVkdWxlciIsICJTY2hlZHVsZXIiLCAiR3JlZW4iCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICBtYWluX2FjdGl2aXR5X2V4ZWN1dG9yID0gY29tcG9uZW50ICJNYWluOkVudHJ5IEFjdGl2aXR5IEV4ZWN1dG9yIiB7CiAgICAgICAgICAgICAgICAgICAgdGFncyAiTWFpbl9BY3Rpdml0eV9FeGVjdXRvciIsICJSb2JvdCIKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIGFjdGl2aXR5X2V4ZWN1dG9yID0gY29tcG9uZW50ICJBY3Rpdml0eSBFeGVjdXRvciIgewogICAgICAgICAgICAgICAgICAgIHRhZ3MgIkFjdGl2aXR5X0V4ZWN1dG9yIiwgIlJvYm90IgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICB9CgogICAgICAgICAgICBhY3RfbWFpbiA9IGNvbnRhaW5lciAiTWFpbjpFbnRyeSBBY3Rpdml0eSIgewogICAgICAgICAgICAgICAgdGFncyAiQ29udGFpbmVyX01haW5fRW50cnlfQWN0aXZpdHkiCiAgICAgICAgICAgIH0KICAgICAgICAgICAgYWN0X2xpYjFfZW50cnkgPSBjb250YWluZXIgIkxpYjE6RW50cnkgQWN0aXZpdHkiIHsKICAgICAgICAgICAgICAgIHRhZ3MgIkNvbnRhaW5lcl9MaWIxX0VudHJ5X0FjdGl2aXR5IgogICAgICAgICAgICB9CiAgICAgICAgICAgIGFjdF9saWIxX2EgPSBjb250YWluZXIgIkxpYjE6QSBBY3Rpdml0eSIgewogICAgICAgICAgICAgICAgdGFncyAiQ29udGFpbmVyX0xpYjFfQV9BY3Rpdml0eSIKICAgICAgICAgICAgfQogICAgICAgICAgICBhY3RfbGliMV9iID0gY29udGFpbmVyICJMaWIxOkIgQWN0aXZpdHkiIHsKICAgICAgICAgICAgICAgIHRhZ3MgIkNvbnRhaW5lcl9MaWIxX0JfQWN0aXZpdHkiCiAgICAgICAgICAgIH0KICAgICAgICAgICAgYWN0X2xpYjFfYyA9IGNvbnRhaW5lciAiTGliMTpDIEFjdGl2aXR5IiB7CiAgICAgICAgICAgICAgICB0YWdzICJDb250YWluZXJfTGliMV9DX0FjdGl2aXR5IgogICAgICAgICAgICB9CiAgICAgICAgICAgIGFjdF9saWIxX2QgPSBjb250YWluZXIgIkxpYjE6RCBBY3Rpdml0eSIgewogICAgICAgICAgICAgICAgdGFncyAiQ29udGFpbmVyX0xpYjFfRF9BY3Rpdml0eSIKICAgICAgICAgICAgfQogICAgICAgICAgICBhY3RfbGliMl9lbnRyeSA9IGNvbnRhaW5lciAiTGliMjpFbnRyeSBBY3Rpdml0eSIgewogICAgICAgICAgICAgICAgdGFncyAiQ29udGFpbmVyX0xpYjJfRW50cnlfQWN0aXZpdHkiCiAgICAgICAgICAgIH0KICAgICAgICAgICAgYWN0X2xpYjJfYSA9IGNvbnRhaW5lciAiTGliMjpBIEFjdGl2aXR5IiB7CiAgICAgICAgICAgICAgICB0YWdzICJDb250YWluZXJfTGliMl9BX0FjdGl2aXR5IgogICAgICAgICAgICB9CiAgICAgICAgICAgIGFjdF9saWIyX2IgPSBjb250YWluZXIgIkxpYjI6QiBBY3Rpdml0eSAiIHsKICAgICAgICAgICAgICAgIHRhZ3MgIkNvbnRhaW5lcl9MaWIyX0JfQWN0aXZpdHkiCiAgICAgICAgICAgIH0KCiAgICAgICAgICAgIGFjdGl2aXR5ID0gY29udGFpbmVyICJBY3Rpdml0eSIgewogICAgICAgICAgICAgICAgdGFncyAiQWN0aXZpdHkiCgogICAgICAgICAgICAgICAgZXhlY3V0ZSA9IGNvbXBvbmVudCAiRXhlY3V0ZSIgeyAKICAgICAgICAgICAgICAgICAgICB0YWdzICJBY3Rpdml0eUV4ZWN1dGUiIAogICAgICAgICAgICAgICAgfQoKICAgICAgICAgICAgICAgIHByb2xvZ3VlID0gY29tcG9uZW50ICJQcm9sb2d1ZSIgeyAKICAgICAgICAgICAgICAgICAgICB0YWdzICJBY3Rpdml0eVByb2xvZ3VlIiwgIkdyYXkiCiAgICAgICAgICAgICAgICB9CgogICAgICAgICAgICAgICAgZXhlY3V0ZV9pbnRlcm5hbCA9IGNvbXBvbmVudCAiRXhlY3V0ZUludGVybmFsIiB7IAogICAgICAgICAgICAgICAgICAgIHRhZ3MgIkFjdGl2aXR5RXhlY3V0ZUludGVybmFsIiwgIkJsdWUiCiAgICAgICAgICAgICAgICB9CgogICAgICAgICAgICAgICAgZG9fd29yayA9IGNvbXBvbmVudCAiRG9Xb3JrIiB7IAogICAgICAgICAgICAgICAgICAgIHRhZ3MgIkFjdGl2aXR5RG9Xb3JrIiwgIkJsdWUiCiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gItCe0LHRgNCw0LHQsNGC0YvQstCw0LXRgiBXb3JrIEl0ZW1zIgogICAgICAgICAgICAgICAgfQoKICAgICAgICAgICAgICAgIGVucXVldWVfbmV4dCA9IGNvbXBvbmVudCAiRW5xdWV1ZU5leHRBY3Rpdml0eSIgeyAKICAgICAgICAgICAgICAgICAgICB0YWdzICJBY3Rpdml0eUVucXVldWVOZXh0IiwgIkJsdWUiCiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gItCh0YLQsNCy0LjRgiDQsiDQvtGH0LXRgNC10LTRjCDRgdC70LXQtNGD0Y7RidGD0Y4gYWN0aXZpdHkiCiAgICAgICAgICAgICAgICB9CgogICAgICAgICAgICAgICAgZXBpbG9ndWUgPSBjb21wb25lbnQgIkVwaWxvZ3VlIiB7IAogICAgICAgICAgICAgICAgICAgIHRhZ3MgIkFjdGl2aXR5RXBpbG9ndWUiLCAiR3JheSIKICAgICAgICAgICAgICAgIH0KCiAgICAgICAgICAgICAgICBzdWNjZXNzID0gY29tcG9uZW50ICJTdWNjZXNzIiB7IAogICAgICAgICAgICAgICAgICAgIHRhZ3MgIkFjdGl2aXR5U3VjY2VzcyIsICJHcmVlbiIKICAgICAgICAgICAgICAgIH0KCiAgICAgICAgICAgICAgICBlcnJvciA9IGNvbXBvbmVudCAiRXJyb3IiIHsgCiAgICAgICAgICAgICAgICAgICAgdGFncyAiQWN0aXZpdHlFcnJvciIsICJSZWQiCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgIH0KICAgICAgICB9CgogICAgICAgICMgQ29tcG9uZW50IHJlbGF0aW9uc2hpcHMKICAgICAgICBzcy5ob3N0Lm1haW5fYWN0aXZpdHlfZXhlY3V0b3IgLT4gc3MuaG9zdC5hY3RfbWFpbiAi0JfQsNC/0YPRgdC60LDQtdGCIgogICAgICAgIHNzLmhvc3QuYWN0X21haW4gLT4gc3MuaG9zdC5hY3Rpdml0eV9zY2hlZHVsZXIgIkxpYjE6RW50cnkgRGVzY3JpcHRvciIKICAgICAgICBzcy5ob3N0LmFjdF9tYWluIC0+IHNzLmhvc3QuYWN0aXZpdHlfc2NoZWR1bGVyICJMaWIyOkVudHJ5IERlc2NyaXB0b3IiCiAgICAgICAgc3MuaG9zdC5tYWluX2FjdGl2aXR5X3NjaGVkdWxlciAtPiBzcy5ob3N0Lm1haW5fYWN0aXZpdHlfZXhlY3V0b3IgItCe0YLQv9GA0LDQstC70Y/QtdGCIE1haW46RW50cnkg0L3QsCDQuNGB0L/QvtC70L3QtdC90LjQtSDQv9C+INCz0YDQsNGE0LjQutGDIgogICAgICAgIHNzLmhvc3QuYWN0aXZpdHlfc2NoZWR1bGVyIC0+IHNzLmhvc3QuYWN0aXZpdHlfZXhlY3V0b3IgItCe0YLQv9GA0LDQstC70Y/QtdGCIEFjdGl2aXR5INC90LAg0LjRgdC/0L7Qu9C90LXQvdC40LUg0L/QviDQs9GA0LDRhNC40LrRgyIKICAgICAgICBzcy5ob3N0LmFjdGl2aXR5X2V4ZWN1dG9yIC0+IHNzLmhvc3QuYWN0X2xpYjFfZW50cnkgItCX0LDQv9GD0YHQutCw0LXRgiIKICAgICAgICBzcy5ob3N0LmFjdGl2aXR5X2V4ZWN1dG9yIC0+IHNzLmhvc3QuYWN0X2xpYjFfYSAi0JfQsNC/0YPRgdC60LDQtdGCIgogICAgICAgIHNzLmhvc3QuYWN0aXZpdHlfZXhlY3V0b3IgLT4gc3MuaG9zdC5hY3RfbGliMV9iICLQl9Cw0L/Rg9GB0LrQsNC10YIiCiAgICAgICAgc3MuaG9zdC5hY3Rpdml0eV9leGVjdXRvciAtPiBzcy5ob3N0LmFjdF9saWIxX2MgItCX0LDQv9GD0YHQutCw0LXRgiIKICAgICAgICBzcy5ob3N0LmFjdGl2aXR5X2V4ZWN1dG9yIC0+IHNzLmhvc3QuYWN0X2xpYjFfZCAi0JfQsNC/0YPRgdC60LDQtdGCIgogICAgICAgIHNzLmhvc3QuYWN0X2xpYjFfZW50cnkgLT4gc3MuaG9zdC5hY3Rpdml0eV9zY2hlZHVsZXIgItCh0YLQsNCy0LjRgiDQsiDQvtGH0LXRgNC10LTRjCBMaWIxOkEiCiAgICAgICAgc3MuaG9zdC5hY3RfbGliMV9hIC0+IHNzLmhvc3QuYWN0aXZpdHlfc2NoZWR1bGVyICLQodGC0LDQstC40YIg0LIg0L7Rh9C10YDQtdC00YwgTGliMTpCIgogICAgICAgIHNzLmhvc3QuYWN0X2xpYjFfYiAtPiBzcy5ob3N0LmFjdGl2aXR5X3NjaGVkdWxlciAi0KHRgtCw0LLQuNGCINCyINC+0YfQtdGA0LXQtNGMIExpYjE6QyIKICAgICAgICBzcy5ob3N0LmFjdF9saWIxX2MgLT4gc3MuaG9zdC5hY3Rpdml0eV9zY2hlZHVsZXIgItCh0YLQsNCy0LjRgiDQsiDQvtGH0LXRgNC10LTRjCBMaWIxOkQiCiAgICAgICAgc3MuaG9zdC5hY3Rpdml0eV9leGVjdXRvciAtPiBzcy5ob3N0LmFjdF9saWIyX2VudHJ5ICLQl9Cw0L/Rg9GB0LrQsNC10YIiCiAgICAgICAgc3MuaG9zdC5hY3Rpdml0eV9leGVjdXRvciAtPiBzcy5ob3N0LmFjdF9saWIyX2EgItCX0LDQv9GD0YHQutCw0LXRgiIKICAgICAgICBzcy5ob3N0LmFjdGl2aXR5X2V4ZWN1dG9yIC0+IHNzLmhvc3QuYWN0X2xpYjJfYiAi0JfQsNC/0YPRgdC60LDQtdGCIgogICAgICAgIHNzLmhvc3QuYWN0X2xpYjJfZW50cnkgLT4gc3MuaG9zdC5hY3Rpdml0eV9zY2hlZHVsZXIgItCh0YLQsNCy0LjRgiDQsiDQvtGH0LXRgNC10LTRjCBMaWIyOkEiCiAgICAgICAgc3MuaG9zdC5hY3RfbGliMl9hIC0+IHNzLmhvc3QuYWN0aXZpdHlfc2NoZWR1bGVyICLQodGC0LDQstC40YIg0LIg0L7Rh9C10YDQtdC00YwgTGliMjpCIgoKICAgICAgICBzcy5hY3Rpdml0eS5leGVjdXRlIC0+IHNzLmFjdGl2aXR5LnByb2xvZ3VlCiAgICAgICAgc3MuYWN0aXZpdHkucHJvbG9ndWUgLT4gc3MuYWN0aXZpdHkuZXhlY3V0ZV9pbnRlcm5hbAogICAgICAgIHNzLmFjdGl2aXR5LmV4ZWN1dGVfaW50ZXJuYWwgLT4gc3MuYWN0aXZpdHkuZG9fd29yawogICAgICAgIHNzLmFjdGl2aXR5LmV4ZWN1dGVfaW50ZXJuYWwgLT4gc3MuYWN0aXZpdHkuZW5xdWV1ZV9uZXh0CiAgICAgICAgc3MuYWN0aXZpdHkuZXhlY3V0ZV9pbnRlcm5hbCAtPiBzcy5hY3Rpdml0eS5lcGlsb2d1ZQogICAgICAgIHNzLmFjdGl2aXR5LmVwaWxvZ3VlIC0+IHNzLmFjdGl2aXR5LnN1Y2Nlc3MKICAgICAgICBzcy5hY3Rpdml0eS5lcGlsb2d1ZSAtPiBzcy5hY3Rpdml0eS5lcnJvcgogICAgICAgIHJlbF9hY3RfZXhlY19qYWVnZXJzID0gc3MuYWN0aXZpdHkuZXhlY3V0ZSAtPiBqYWVnZXIgItCh0L7Qt9C00LDQtdGCIHRyYWNpbmcgc3BhbiIKICAgICAgICBwcm9sX3RvX3Byb20gPSBzcy5hY3Rpdml0eS5wcm9sb2d1ZSAtPiBwcm9tZXRoZXVzICLQmNC90LrRgNC10LzQtdC90YLQuNGA0YPQtdGCINGB0YfQtdGC0YfQuNC6INCy0YvQv9C+0LvQvdGP0Y7RidC40YXRgdGPIGFjdGl2aXRpZXMiCiAgICAgICAgc3MuYWN0aXZpdHkuZXJyb3IgLT4gcHJvbWV0aGV1cyAi0JjQvdC60YDQtdC80LXQvdGC0LjRgNGD0LXRgiDRgdGH0LXRgtGH0LjQuiDQvtGI0LjQsdC+0LoiCiAgICAgICAgc3MuYWN0aXZpdHkuZXBpbG9ndWUgLT4gcHJvbWV0aGV1cyAi0KPQvNC10L3RjNGI0LDQtdGCINGB0YfQtdGC0YfQuNC6INCy0YvQv9C+0LvQvdGP0Y7RidC40YXRgdGPIGFjdGl2aXRpZXMiCiAgICAgICAgc3MuYWN0aXZpdHkuZXBpbG9ndWUgLT4gcHJvbWV0aGV1cyAi0KHQvtGF0YDQsNC90Y/QtdGCINCy0YDQtdC80Y8g0LLRi9C/0L7Qu9C90LXQvdC40Y8gYWN0aXZpdHkiCiAgICAgICAgc3MuYWN0aXZpdHkuZXJyb3IgLT4gamFlZ2VyICLQl9Cw0LLQtdGA0YjQsNC10YIgdHJhY2luZyBzcGFuIgogICAgICAgIHNzLmFjdGl2aXR5LnN1Y2Nlc3MgLT4gamFlZ2VyICLQl9Cw0LLQtdGA0YjQsNC10YIgdHJhY2luZyBzcGFuIgoKICAgICAgICBzcy5ob3N0IC0+IHNzLmFjdF9tYWluICLQl9Cw0L/Rg9GB0LrQsNC10YIg0L/QviDQs9GA0LDRhNC40LrRgyIKCiAgICAgICAgc3MuYWN0X21haW4gLT4gc3MuYWN0X2xpYjFfZW50cnkgItCX0LDQv9GD0YHQutCw0LXRgiAo0YHRgtCw0LLQuNGCINCyINC+0YfQtdGA0LXQtNGMKSIKICAgICAgICBzcy5hY3RfbGliMV9lbnRyeSAtPiBzcy5hY3RfbGliMV9hICLQl9Cw0L/Rg9GB0LrQsNC10YIgKNGB0YLQsNCy0LjRgiDQsiDQvtGH0LXRgNC10LTRjCkiCiAgICAgICAgc3MuYWN0X2xpYjFfYSAtPiBzcy5hY3RfbGliMV9iICLQl9Cw0L/Rg9GB0LrQsNC10YIgKNGB0YLQsNCy0LjRgiDQsiDQvtGH0LXRgNC10LTRjCkiCiAgICAgICAgc3MuYWN0X2xpYjFfYiAtPiBzcy5hY3RfbGliMV9jICLQl9Cw0L/Rg9GB0LrQsNC10YIgKNGB0YLQsNCy0LjRgiDQsiDQvtGH0LXRgNC10LTRjCkiCiAgICAgICAgc3MuYWN0X2xpYjFfYyAtPiBzcy5hY3RfbGliMV9kICLQl9Cw0L/Rg9GB0LrQsNC10YIgKNGB0YLQsNCy0LjRgiDQsiDQvtGH0LXRgNC10LTRjCkiCiAgICAgICAgCiAgICAgICAgc3MuYWN0X21haW4gLT4gc3MuYWN0X2xpYjJfZW50cnkgItCX0LDQv9GD0YHQutCw0LXRgiAo0YHRgtCw0LLQuNGCINCyINC+0YfQtdGA0LXQtNGMKSIKICAgICAgICBzcy5hY3RfbGliMl9lbnRyeSAtPiBzcy5hY3RfbGliMl9hICLQl9Cw0L/Rg9GB0LrQsNC10YIgKNGB0YLQsNCy0LjRgiDQsiDQvtGH0LXRgNC10LTRjCkiCiAgICAgICAgc3MuYWN0X2xpYjJfYSAtPiBzcy5hY3RfbGliMl9iICLQl9Cw0L/Rg9GB0LrQsNC10YIgKNGB0YLQsNCy0LjRgiDQsiDQvtGH0LXRgNC10LTRjCkiCgogICAgICAgICNzcy5hY3RfbWFpbiAtPiBwcm9tZXRoZXVzICLQntGC0L/RgNCw0LLQu9GP0LXRgiDQvNC10YLRgNC40LrQuCIKICAgICAgICAjc3MuYWN0X2xpYjFfZW50cnkgLT4gcHJvbWV0aGV1cyAi0J7RgtC/0YDQsNCy0LvRj9C10YIg0LzQtdGC0YDQuNC60LgiCiAgICAgICAgI3NzLmFjdF9saWIxX2EgLT4gcHJvbWV0aGV1cyAi0J7RgtC/0YDQsNCy0LvRj9C10YIg0LzQtdGC0YDQuNC60LgiCiAgICAgICAgI3NzLmFjdF9saWIxX2IgLT4gcHJvbWV0aGV1cyAi0J7RgtC/0YDQsNCy0LvRj9C10YIg0LzQtdGC0YDQuNC60LgiCiAgICAgICAgI3NzLmFjdF9saWIxX2MgLT4gcHJvbWV0aGV1cyAi0J7RgtC/0YDQsNCy0LvRj9C10YIg0LzQtdGC0YDQuNC60LgiCiAgICAgICAgI3NzLmFjdF9saWIyX2VudHJ5IC0+IHByb21ldGhldXMgItCe0YLQv9GA0LDQstC70Y/QtdGCINC80LXRgtGA0LjQutC4IgogICAgICAgICNzcy5hY3RfbGliMl9hIC0+IHByb21ldGhldXMgItCe0YLQv9GA0LDQstC70Y/QtdGCINC80LXRgtGA0LjQutC4IgogICAgICAgICNzcy5hY3RfbGliMl9iIC0+IHByb21ldGhldXMgItCe0YLQv9GA0LDQstC70Y/QtdGCINC80LXRgtGA0LjQutC4IgoKICAgICAgICAjc3MuYWN0X21haW4gLT4gamFlZ2VyICLQntGC0L/RgNCw0LLQu9GP0LXRgiDRgtGA0LXQudGB0YsiCiAgICAgICAgI3NzLmFjdF9saWIxX2VudHJ5IC0+IGphZWdlciAi0J7RgtC/0YDQsNCy0LvRj9C10YIg0YLRgNC10LnRgdGLIgogICAgICAgICNzcy5hY3RfbGliMV9hIC0+IGphZWdlciAi0J7RgtC/0YDQsNCy0LvRj9C10YIg0YLRgNC10LnRgdGLIgogICAgICAgICNzcy5hY3RfbGliMV9iIC0+IGphZWdlciAi0J7RgtC/0YDQsNCy0LvRj9C10YIg0YLRgNC10LnRgdGLIgogICAgICAgICNzcy5hY3RfbGliMV9jIC0+IGphZWdlciAi0J7RgtC/0YDQsNCy0LvRj9C10YIg0YLRgNC10LnRgdGLIgogICAgICAgICNzcy5hY3RfbGliMl9lbnRyeSAtPiBqYWVnZXIgItCe0YLQv9GA0LDQstC70Y/QtdGCINGC0YDQtdC50YHRiyIKICAgICAgICAjc3MuYWN0X2xpYjJfYSAtPiBqYWVnZXIgItCe0YLQv9GA0LDQstC70Y/QtdGCINGC0YDQtdC50YHRiyIKICAgICAgICAjc3MuYWN0X2xpYjJfYiAtPiBqYWVnZXIgItCe0YLQv9GA0LDQstC70Y/QtdGCINGC0YDQtdC50YHRiyIKCiAgICAgICAgc3MgLT4gcHJvbWV0aGV1cyAi0J7RgtC/0YDQsNCy0LvRj9C10YIg0LzQtdGC0YDQuNC60LgiIHsKICAgICAgICAgICAgdGFncyAiU2VuZF9NZXRyaWNzX1JlbCIKICAgICAgICB9CiAgICAgICAgc3MgLT4gamFlZ2VyICLQntGC0L/RgNCw0LLQu9GP0LXRgiDRgtGA0LXQudGB0YsiCiAgICAgICAgZ3JhZmFuYSAtPiBwcm9tZXRoZXVzICLQntGC0L7QsdGA0LDQttCw0LXRgiDQvNC10YLRgNC40LrQuCIKICAgICAgICBncmFmYW5hIC0+IGphZWdlciAi0J7RgtC+0LHRgNCw0LbQsNC10YIg0YLRgNC10LnRgdGLIgogICAgICAgIAogICAgICAgICNzcy5ob3N0LmFjdF9tYWluIC0+IHNzLmhvc3QuYWN0X2xpYjFfZW50cnkgItCh0YLQsNCy0LjRgiDQsiDQvtGH0LXRgNC10LTRjCIKICAgIH0KCiAgICB2aWV3cyB7CiAgICAgICAgc3lzdGVtQ29udGV4dCBzcyAiU3lzdGVtQ29udGV4dCIgewogICAgICAgICAgICBpbmNsdWRlICogICAgICAgICAgICAKICAgICAgICAgICAgaW5jbHVkZSBwcm9tZXRoZXVzCiAgICAgICAgICAgIGluY2x1ZGUgZ3JhZmFuYQogICAgICAgICAgICBpbmNsdWRlIGphZWdlcgogICAgICAgICAgICBleGNsdWRlIHByb2xfdG9fcHJvbSByZWxfYWN0X2V4ZWNfamFlZ2VycwogICAgICAgICAgICBpbmNsdWRlICJncmFmYW5hIC0+IHByb21ldGhldXMiICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgfQoKICAgICAgICBjb250YWluZXIgc3MgIkFjdGl2aXR5RmxvdyIgewogICAgICAgICAgICBpbmNsdWRlICoKICAgICAgICAgICAgZXhjbHVkZSBwcm9tZXRoZXVzCiAgICAgICAgICAgIGV4Y2x1ZGUgamFlZ2VyCiAgICAgICAgICAgIGV4Y2x1ZGUgc3MuYWN0aXZpdHkKICAgICAgICAgICAgYXV0b2xheW91dCBscgogICAgICAgIH0KCiAgICAgICAgY29tcG9uZW50IHNzLmhvc3QgIjAxX0hvc3QiIHsKICAgICAgICAgICAgaW5jbHVkZSAqCiAgICAgICAgICAgIGF1dG9sYXlvdXQgbHIKICAgICAgICB9CgogICAgICAgIGNvbXBvbmVudCBzcy5hY3Rpdml0eSAiMDJfQWN0aXZpdHlGbG93IiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgICAgICBhdXRvbGF5b3V0IGxyCiAgICAgICAgfQoKICAgICAgICBzdHlsZXMgewogICAgICAgICAgICByZWxhdGlvbnNoaXAgIlNlbmRfTWV0cmljc19SZWwiIHsKICAgICAgICAgICAgICAgIHBvc2l0aW9uIDUwCiAgICAgICAgICAgIH0KICAgICAgICAgICAgZWxlbWVudCAiRWxlbWVudCIgewogICAgICAgICAgICAgICAgY29sb3IgI2ZmZmZmZgogICAgICAgICAgICAgICAgc2hhcGUgUm91bmRlZEJveAogICAgICAgICAgICB9CiAgICAgICAgICAgIGVsZW1lbnQgIlBlcnNvbiIgewogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjZDM0NDA3CiAgICAgICAgICAgICAgICBzaGFwZSBwZXJzb24KICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJTb2Z0d2FyZSBTeXN0ZW0iIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgI2Y4NjYyOAogICAgICAgICAgICAgICAgc2hhcGUgUm91bmRlZEJveAogICAgICAgICAgICB9CiAgICAgICAgICAgIGVsZW1lbnQgIkNvbnRhaW5lciIgewogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjZjg4NzI4CiAgICAgICAgICAgICAgICBzaGFwZSBSb3VuZGVkQm94CiAgICAgICAgICAgIH0KICAgICAgICAgICAgZWxlbWVudCAiQ29tcG9uZW50IiB7CiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICNmODg3MjgKICAgICAgICAgICAgICAgIHNoYXBlIFJvdW5kZWRCb3gKICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJHcmVlbiIgewogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjMmI2ZTFlCiAgICAgICAgICAgIH0KICAgICAgICAgICAgZWxlbWVudCAiUmVkIiB7CiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICNjYTAwMGYKICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJCbHVlIiB7CiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICM0MjQ5YWYKICAgICAgICAgICAgICAgIHNoYXBlIFJvdW5kZWRCb3gKICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJHcmF5IiB7CiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICM4MDgxODkKICAgICAgICAgICAgICAgIHNoYXBlIFJvdW5kZWRCb3gKICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJSb2JvdCIgewogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjNDc0RTkzCiAgICAgICAgICAgICAgICBzaGFwZSBSb2JvdAogICAgICAgICAgICB9CiAgICAgICAgICAgIGVsZW1lbnQgIkphZWdlciIgewogICAgICAgICAgICAgICAgd2lkdGggMjUwICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgY29sb3IgI2ZmZmZmZgogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjNDc0RTkzCiAgICAgICAgICAgICAgICBmb250U2l6ZSAxMgogICAgICAgICAgICAgICAgc2hhcGUgQ3lsaW5kZXIKICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJQcm9tZXRoZXVzIiB7CiAgICAgICAgICAgICAgICB3aWR0aCAyNTAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICBjb2xvciAjZmZmZmZmCiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICNiZjNmMjMKICAgICAgICAgICAgICAgIGZvbnRTaXplIDEyCiAgICAgICAgICAgICAgICBzaGFwZSBDeWxpbmRlcgogICAgICAgICAgICB9CiAgICAgICAgICAgIGVsZW1lbnQgIlNjaGVkdWxlciIgewogICAgICAgICAgICAgICAgY29sb3IgI2ZmZmZmZgogICAgICAgICAgICAgICAgZm9udFNpemUgMTIKICAgICAgICAgICAgICAgIHNoYXBlIEN5bGluZGVyCiAgICAgICAgICAgIH0KICAgICAgICB9CiAgICB9CgogICAgY29uZmlndXJhdGlvbiB7CiAgICAgICAgc2NvcGUgc29mdHdhcmVzeXN0ZW0KICAgIH0KfQ=="
   },
   "views" : {
     "componentViews" : [ {
@@ -348,53 +646,146 @@
       },
       "containerId" : "5",
       "dimensions" : {
-        "height" : 811,
-        "width" : 1640
+        "height" : 4411,
+        "width" : 4640
       },
       "elements" : [ {
         "id" : "6",
-        "x" : 219,
-        "y" : 185
+        "x" : 1719,
+        "y" : 2481
       }, {
         "id" : "7",
-        "x" : 969,
+        "x" : 3969,
+        "y" : 1985
+      }, {
+        "id" : "8",
+        "x" : 3969,
+        "y" : 3785
+      }, {
+        "id" : "9",
+        "x" : 3969,
         "y" : 185
+      }, {
+        "id" : "10",
+        "x" : 1719,
+        "y" : 1881
+      }, {
+        "id" : "11",
+        "x" : 3969,
+        "y" : 1385
+      }, {
+        "id" : "12",
+        "x" : 3969,
+        "y" : 2585
+      }, {
+        "id" : "13",
+        "x" : 3969,
+        "y" : 3185
+      }, {
+        "id" : "14",
+        "x" : 3969,
+        "y" : 785
+      }, {
+        "id" : "15",
+        "x" : 2469,
+        "y" : 2481
+      }, {
+        "id" : "16",
+        "x" : 219,
+        "y" : 2481
+      }, {
+        "id" : "17",
+        "x" : 969,
+        "y" : 2431
+      }, {
+        "id" : "18",
+        "x" : 3219,
+        "y" : 1831
       } ],
       "externalContainerBoundariesVisible" : false,
-      "key" : "Host",
-      "order" : 2,
+      "key" : "01_Host",
+      "order" : 3,
       "relationships" : [ {
-        "id" : "46"
-      } ]
-    } ],
-    "configuration" : {
-      "branding" : { },
-      "lastSavedView" : "System",
-      "metadataSymbols" : "SquareBrackets",
-      "styles" : {
-        "elements" : [ {
-          "color" : "#ffffff",
-          "tag" : "Element"
-        }, {
-          "background" : "#d34407",
-          "shape" : "Person",
-          "tag" : "Person"
-        }, {
-          "background" : "#f86628",
-          "tag" : "Software System"
-        }, {
-          "background" : "#f88728",
-          "tag" : "Container"
-        }, {
-          "shape" : "Cylinder",
-          "tag" : "Database"
+        "id" : "37"
+      }, {
+        "id" : "38",
+        "vertices" : [ {
+          "x" : 2319,
+          "y" : 2781
         } ]
-      },
-      "terminology" : { }
-    },
-    "containerViews" : [ {
+      }, {
+        "id" : "39",
+        "vertices" : [ {
+          "x" : 2319,
+          "y" : 2481
+        } ]
+      }, {
+        "id" : "40"
+      }, {
+        "id" : "41"
+      }, {
+        "id" : "42"
+      }, {
+        "id" : "43",
+        "vertices" : [ {
+          "x" : 3969,
+          "y" : 3635
+        } ]
+      }, {
+        "id" : "44",
+        "vertices" : [ {
+          "x" : 3969,
+          "y" : 635
+        } ]
+      }, {
+        "id" : "45"
+      }, {
+        "id" : "46"
+      }, {
+        "id" : "47",
+        "vertices" : [ {
+          "x" : 3669,
+          "y" : 2381
+        } ]
+      }, {
+        "id" : "48",
+        "vertices" : [ {
+          "x" : 3219,
+          "y" : 3164
+        } ]
+      }, {
+        "id" : "49",
+        "vertices" : [ {
+          "x" : 3969,
+          "y" : 635
+        }, {
+          "x" : 3219,
+          "y" : 1681
+        } ]
+      }, {
+        "id" : "50"
+      }, {
+        "id" : "51"
+      }, {
+        "id" : "52",
+        "vertices" : [ {
+          "x" : 3969,
+          "y" : 3035
+        } ]
+      }, {
+        "id" : "53",
+        "vertices" : [ {
+          "x" : 3969,
+          "y" : 1235
+        } ]
+      }, {
+        "id" : "54"
+      }, {
+        "id" : "55"
+      } ]
+    }, {
       "automaticLayout" : {
-        "applied" : true,
+        "applied" : false,
         "edgeSeparation" : 0,
         "implementation" : "Graphviz",
         "nodeSeparation" : 300,
@@ -402,266 +793,263 @@
         "rankSeparation" : 300,
         "vertices" : false
       },
+      "containerId" : "28",
+      "elements" : [ {
+        "id" : "1",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "3",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "29",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "30",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "31",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "32",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "33",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "34",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "35",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "36",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "externalContainerBoundariesVisible" : false,
+      "key" : "02_ActivityFlow",
+      "order" : 4,
+      "relationships" : [ {
+        "id" : "56"
+      }, {
+        "id" : "57"
+      }, {
+        "id" : "58"
+      }, {
+        "id" : "59"
+      }, {
+        "id" : "60"
+      }, {
+        "id" : "61"
+      }, {
+        "id" : "62"
+      }, {
+        "id" : "63"
+      }, {
+        "id" : "66"
+      }, {
+        "id" : "69"
+      }, {
+        "id" : "70"
+      }, {
+        "id" : "71"
+      }, {
+        "id" : "72"
+      }, {
+        "id" : "73"
+      } ]
+    } ],
+    "configuration" : {
+      "branding" : { },
+      "lastSavedView" : "01_Host",
+      "metadataSymbols" : "SquareBrackets",
+      "styles" : {
+        "elements" : [ {
+          "color" : "#ffffff",
+          "shape" : "RoundedBox",
+          "tag" : "Element"
+        }, {
+          "background" : "#d34407",
+          "shape" : "Person",
+          "tag" : "Person"
+        }, {
+          "background" : "#f86628",
+          "shape" : "RoundedBox",
+          "tag" : "Software System"
+        }, {
+          "background" : "#f88728",
+          "shape" : "RoundedBox",
+          "tag" : "Container"
+        }, {
+          "background" : "#f88728",
+          "shape" : "RoundedBox",
+          "tag" : "Component"
+        }, {
+          "background" : "#2b6e1e",
+          "tag" : "Green"
+        }, {
+          "background" : "#ca000f",
+          "tag" : "Red"
+        }, {
+          "background" : "#4249af",
+          "shape" : "RoundedBox",
+          "tag" : "Blue"
+        }, {
+          "background" : "#808189",
+          "shape" : "RoundedBox",
+          "tag" : "Gray"
+        }, {
+          "background" : "#474e93",
+          "shape" : "Robot",
+          "tag" : "Robot"
+        }, {
+          "background" : "#474e93",
+          "color" : "#ffffff",
+          "fontSize" : 12,
+          "shape" : "Cylinder",
+          "tag" : "Jaeger",
+          "width" : 250
+        }, {
+          "background" : "#bf3f23",
+          "color" : "#ffffff",
+          "fontSize" : 12,
+          "shape" : "Cylinder",
+          "tag" : "Prometheus",
+          "width" : 250
+        }, {
+          "color" : "#ffffff",
+          "fontSize" : 12,
+          "shape" : "Cylinder",
+          "tag" : "Scheduler"
+        } ],
+        "relationships" : [ {
+          "position" : 50,
+          "tag" : "Send_Metrics_Rel"
+        } ]
+      },
+      "terminology" : { }
+    },
+    "containerViews" : [ {
+      "automaticLayout" : {
+        "applied" : false,
+        "edgeSeparation" : 0,
+        "implementation" : "Graphviz",
+        "nodeSeparation" : 300,
+        "rankDirection" : "LeftRight",
+        "rankSeparation" : 300,
+        "vertices" : false
+      },
+      "elements" : [ {
+        "id" : "5",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "19",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "20",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "21",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "22",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "23",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "24",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "25",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "26",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "27",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "externalSoftwareSystemBoundariesVisible" : false,
+      "key" : "ActivityFlow",
+      "order" : 2,
+      "relationships" : [ {
+        "id" : "74"
+      }, {
+        "id" : "75"
+      }, {
+        "id" : "76"
+      }, {
+        "id" : "77"
+      }, {
+        "id" : "78"
+      }, {
+        "id" : "79"
+      }, {
+        "id" : "80"
+      }, {
+        "id" : "81"
+      }, {
+        "id" : "82"
+      } ],
+      "softwareSystemId" : "4"
+    } ],
+    "systemContextViews" : [ {
       "dimensions" : {
-        "height" : 9682,
-        "width" : 5390
+        "height" : 1300,
+        "width" : 1600
       },
       "elements" : [ {
         "id" : "1",
-        "x" : 4719,
-        "y" : 2614
+        "x" : 400,
+        "y" : 765
       }, {
         "id" : "2",
-        "x" : 3969,
-        "y" : 5043
+        "x" : 200,
+        "y" : 165
       }, {
         "id" : "3",
-        "x" : 4719,
-        "y" : 6864
+        "x" : 1155,
+        "y" : 980
       }, {
-        "id" : "5",
-        "x" : 219,
-        "y" : 785
-      }, {
-        "id" : "8",
-        "x" : 969,
-        "y" : 785
-      }, {
-        "id" : "9",
-        "x" : 1719,
-        "y" : 185
-      }, {
-        "id" : "10",
-        "x" : 2469,
-        "y" : 185
-      }, {
-        "id" : "11",
-        "x" : 3219,
-        "y" : 185
-      }, {
-        "id" : "12",
-        "x" : 3969,
-        "y" : 185
-      }, {
-        "id" : "13",
-        "x" : 4719,
-        "y" : 185
-      }, {
-        "id" : "14",
-        "x" : 1719,
-        "y" : 785
-      }, {
-        "id" : "15",
-        "x" : 2469,
-        "y" : 785
-      }, {
-        "id" : "16",
-        "x" : 3219,
-        "y" : 785
+        "id" : "4",
+        "x" : 1070,
+        "y" : 40
       } ],
-      "externalSoftwareSystemBoundariesVisible" : false,
-      "key" : "System",
+      "enterpriseBoundaryVisible" : true,
+      "key" : "SystemContext",
       "order" : 1,
       "relationships" : [ {
-        "id" : "17"
+        "id" : "83"
       }, {
-        "id" : "18"
-      }, {
-        "id" : "19"
-      }, {
-        "id" : "20"
-      }, {
-        "id" : "21"
-      }, {
-        "id" : "22"
-      }, {
-        "id" : "23"
-      }, {
-        "id" : "24"
-      }, {
-        "id" : "25"
-      }, {
-        "id" : "26",
+        "id" : "84",
         "vertices" : [ {
-          "x" : 2469,
-          "y" : 4285
-        }, {
-          "x" : 3669,
-          "y" : 4285
-        }, {
-          "x" : 4419,
-          "y" : 4043
+          "x" : 1325,
+          "y" : 615
         } ]
       }, {
-        "id" : "28",
-        "vertices" : [ {
-          "x" : 2169,
-          "y" : 635
-        }, {
-          "x" : 2469,
-          "y" : 1235
-        }, {
-          "x" : 3219,
-          "y" : 2210
-        }, {
-          "x" : 3969,
-          "y" : 2635
-        } ]
+        "id" : "85"
       }, {
-        "id" : "29",
-        "vertices" : [ {
-          "x" : 2919,
-          "y" : 635
-        }, {
-          "x" : 3219,
-          "y" : 1235
-        }, {
-          "x" : 3969,
-          "y" : 1985
-        }, {
-          "x" : 4419,
-          "y" : 2326
-        } ]
-      }, {
-        "id" : "30",
-        "vertices" : [ {
-          "x" : 4419,
-          "y" : 1481
-        } ]
-      }, {
-        "id" : "31",
-        "vertices" : [ {
-          "x" : 4419,
-          "y" : 710
-        } ]
-      }, {
-        "id" : "32",
-        "vertices" : [ {
-          "x" : 2469,
-          "y" : 4210
-        }, {
-          "x" : 3669,
-          "y" : 4210
-        }, {
-          "x" : 4419,
-          "y" : 3601
-        } ]
-      }, {
-        "id" : "33",
-        "vertices" : [ {
-          "x" : 3219,
-          "y" : 1776
-        }, {
-          "x" : 3969,
-          "y" : 2385
-        } ]
-      }, {
-        "id" : "34",
-        "vertices" : [ {
-          "x" : 4419,
-          "y" : 1926
-        } ]
-      }, {
-        "id" : "35",
-        "vertices" : [ {
-          "x" : 2690,
-          "y" : 9447
-        }, {
-          "x" : 3448,
-          "y" : 9447
-        }, {
-          "x" : 4419,
-          "y" : 8535
-        } ]
-      }, {
-        "id" : "37",
-        "vertices" : [ {
-          "x" : 2169,
-          "y" : 635
-        }, {
-          "x" : 2469,
-          "y" : 1897
-        }, {
-          "x" : 3969,
-          "y" : 7318
-        }, {
-          "x" : 4419,
-          "y" : 7318
-        } ]
-      }, {
-        "id" : "38",
-        "vertices" : [ {
-          "x" : 2919,
-          "y" : 635
-        }, {
-          "x" : 3219,
-          "y" : 1751
-        }, {
-          "x" : 3669,
-          "y" : 3351
-        }, {
-          "x" : 3969,
-          "y" : 6535
-        } ]
-      }, {
-        "id" : "39",
-        "vertices" : [ {
-          "x" : 3669,
-          "y" : 635
-        }, {
-          "x" : 3969,
-          "y" : 5493
-        }, {
-          "x" : 4419,
-          "y" : 6014
-        } ]
-      }, {
-        "id" : "40"
-      }, {
-        "id" : "41",
-        "vertices" : [ {
-          "x" : 2469,
-          "y" : 4285
-        }, {
-          "x" : 3969,
-          "y" : 8460
-        }, {
-          "x" : 4419,
-          "y" : 8460
-        } ]
-      }, {
-        "id" : "42",
-        "vertices" : [ {
-          "x" : 3669,
-          "y" : 4360
-        }, {
-          "x" : 3969,
-          "y" : 7243
-        }, {
-          "x" : 4419,
-          "y" : 7243
-        } ]
-      }, {
-        "id" : "43",
-        "vertices" : [ {
-          "x" : 3669,
-          "y" : 1926
-        }, {
-          "x" : 3969,
-          "y" : 6026
-        } ]
-      }, {
-        "id" : "44",
-        "vertices" : [ {
-          "x" : 4419,
-          "y" : 4818
-        } ]
-      }, {
-        "id" : "45",
-        "vertices" : [ {
-          "x" : 4419,
-          "y" : 5568
-        } ]
+        "id" : "86"
       } ],
       "softwareSystemId" : "4"
     } ]
