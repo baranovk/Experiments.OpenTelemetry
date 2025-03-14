@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Experiments.OpenTelemetry.Domain;
 using Experiments.OpenTelemetry.Telemetry;
 using Functional;
 using Microsoft.Extensions.Logging;
@@ -76,14 +77,14 @@ public abstract class ActivityBase(
         return ctx;
     }
 
-    protected Task QueueNextActivity<TActivity>(string activityUid, ActivityContext ctx, Option<Guid> workItemBatchUid,
+    protected Task QueueNextActivity<TActivity>(string activityUid, ActivityContext ctx, Option<WorkItemsBatchDescriptor> workItemBatchDescriptor,
         CancellationToken cancellationToken = default)
-        => QueueNextActivity(activityUid, typeof(TActivity), ctx, workItemBatchUid, cancellationToken);
+        => QueueNextActivity(activityUid, typeof(TActivity), ctx, workItemBatchDescriptor, cancellationToken);
 
-    protected Task QueueNextActivity(string activityUid, Type activityType, ActivityContext ctx, Option<Guid> workItemBatchUid,
-        CancellationToken cancellationToken = default)
+    protected Task QueueNextActivity(string activityUid, Type activityType, ActivityContext ctx,
+        Option<WorkItemsBatchDescriptor> workItemBatchDescriptor, CancellationToken cancellationToken = default)
     {
-        Scheduler.QueueActivity(new ActivityDescriptor(activityUid, activityType, CaptureContext(ctx), workItemBatchUid));
+        Scheduler.QueueActivity(new ActivityDescriptor(activityUid, activityType, CaptureContext(ctx), workItemBatchDescriptor));
         return Task.CompletedTask;
     }
 
@@ -101,6 +102,18 @@ public abstract class ActivityBase(
         }
     }
 
+    #region Telemetry
+
+    protected virtual void IncrementExecutingActivityCounter() => TelemetryCollector.IncrementExecutingActivityCounter(Uid);
+
+    protected virtual void DecrementExecutingActivityCounter() => TelemetryCollector.DecrementExecutingActivityCounter(Uid);
+
+    protected virtual void IncrementActivityErrorCounter(string errorType) => TelemetryCollector.IncrementActivityErrorCounter(Uid, errorType);
+
+    protected virtual void RecordActivityExecutionTime(TimeSpan executionTime) => TelemetryCollector.RecordActivityExecutionTime(Uid, executionTime);
+
+    #endregion
+
     #endregion
 
     #region Private Methods
@@ -112,7 +125,7 @@ public abstract class ActivityBase(
         swActivityExecutionTime.Start();
 
         Logger.LogInformation("Activity {Uid} has started", Uid);
-        TelemetryCollector.IncrementExecutingActivityCounter(Uid);
+        IncrementExecutingActivityCounter();
 
         return await next(new Unit()).ConfigureAwait(false);
     }
@@ -130,14 +143,14 @@ public abstract class ActivityBase(
         swActivityExecutionTime.Stop();
         Logger.LogInformation("{Uid} has finished. Execution time: {ExecutionTime}", Uid, swActivityExecutionTime.Elapsed);
 
-        TelemetryCollector.DecrementExecutingActivityCounter(Uid);
-        TelemetryCollector.RecordActivityExecutionTime(Uid, TimeSpan.FromMilliseconds(swActivityExecutionTime.ElapsedMilliseconds));
+        DecrementExecutingActivityCounter();
+        RecordActivityExecutionTime(TimeSpan.FromMilliseconds(swActivityExecutionTime.ElapsedMilliseconds));
 
         return error.Match(
             () => { _telemetryActivity?.Stop(); return Task.CompletedTask; },
             ex =>
             {
-                TelemetryCollector.IncrementActivityErrorCounter(Uid, ex is DomainException domEx ? domEx.ErrorType.ToString() : "Unclassified");
+                IncrementActivityErrorCounter(ex is DomainException domEx ? domEx.ErrorType.ToString() : "Unclassified");
                 Logger.LogError(ex, "Execute activity error");
                 _telemetryActivity?.SetStatus(ActivityStatusCode.Error, $"Message: {ex.Message} | StackTrace: {ex.StackTrace}");
                 _telemetryActivity?.Stop();

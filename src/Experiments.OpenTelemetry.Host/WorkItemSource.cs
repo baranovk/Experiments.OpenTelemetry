@@ -1,4 +1,5 @@
 using Experiments.OpenTelemetry.Common;
+using Experiments.OpenTelemetry.Domain;
 using Experiments.OpenTelemetry.Telemetry;
 
 namespace Experiments.OpenTelemetry.Host;
@@ -34,8 +35,8 @@ internal sealed class WorkItemSource : IWorkItemSource
 
             var count = workItems.Count();
             workItemsSegment.Remove(batchUid);
-            _telemetryCollector.DecrementWorkItemsQueueCounter(sourceType.ToString(), count);
-            _telemetryCollector.IncrementWorkItemsProcessedCounter(sourceType.ToString(), count);
+            _telemetryCollector.DecrementWorkItemsQueueCounter(sourceType, count);
+            _telemetryCollector.IncrementWorkItemsProcessedCounter(sourceType, count);
         }
 
         return Task.CompletedTask;
@@ -46,7 +47,7 @@ internal sealed class WorkItemSource : IWorkItemSource
         var key = Guid.NewGuid();
 
         _storage[sourceType].Add(key, workItems);
-        _telemetryCollector.IncrementWorkItemsQueueCounter(sourceType.ToString(), workItems.Count());
+        _telemetryCollector.IncrementWorkItemsQueueCounter(sourceType, workItems.Count());
 
         return Task.FromResult(key);
     }

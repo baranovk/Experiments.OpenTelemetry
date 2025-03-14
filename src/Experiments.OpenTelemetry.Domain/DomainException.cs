@@ -1,4 +1,4 @@
-namespace Experiments.OpenTelemetry.Common;
+namespace Experiments.OpenTelemetry.Domain;
 
 public class DomainException(DomainErrorType errorType, string? message, Exception? innerException) : Exception(message, innerException)
 {
@@ -15,5 +15,5 @@ public class DomainException(DomainErrorType errorType, string? message, Excepti
 
 public enum DomainErrorType
 {
-    Type1, Type2, Type3, Type4, Type5
+    ErrorType1, ErrorType2, ErrorType3, ErrorType4, ErrorType5
 }

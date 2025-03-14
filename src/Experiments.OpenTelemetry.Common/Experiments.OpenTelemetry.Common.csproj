@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\submodules\Functional\src\Functional\Functional.csproj" />
+    <ProjectReference Include="..\Experiments.OpenTelemetry.Domain\Experiments.OpenTelemetry.Domain.csproj" />
     <ProjectReference Include="..\Experiments.OpenTelemetry.Telemetry\Experiments.OpenTelemetry.Telemetry.csproj" />
   </ItemGroup>
 

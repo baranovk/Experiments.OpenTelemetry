@@ -1,4 +1,4 @@
-using System.Diagnostics;
+using Experiments.OpenTelemetry.Domain;
 using Experiments.OpenTelemetry.Telemetry.Resources;
 
 namespace Experiments.OpenTelemetry.Telemetry;
@@ -7,28 +7,58 @@ public partial class TelemetryCollector
 {
     #region Public Methods
 
-    public void IncrementExecutingActivityCounter(string activityUid) => UpdateActivityCounter(Counters.ExecutingActivities, 1, activityUid);
+    public void IncrementExecutingActivityCounter(string activityUid, WorkItemSourceType? workItemSourceType = null)
+        => UpdateExecutingActivityCounter(activityUid, 1, workItemSourceType);
 
-    public void DecrementExecutingActivityCounter(string activityUid) => UpdateActivityCounter(Counters.ExecutingActivities, -1, activityUid);
+    public void DecrementExecutingActivityCounter(string activityUid, WorkItemSourceType? workItemSourceType = null)
+        => UpdateExecutingActivityCounter(activityUid, -1, workItemSourceType);
 
-    public void IncrementActivityErrorCounter(string activityUid, string errorType)
-        => IncrementActivityCounter(Counters.ActivityErrors, 1, activityUid, errorType);
+    public void IncrementActivityErrorCounter(string activityUid, string errorType, WorkItemSourceType? workItemSourceType = null)
+    {
+        if (null == workItemSourceType)
+        {
+            IncrementCounter(Counters.ActivityErrors, 1, activityUid.ToActivityUidTag(), errorType.ToErrorTypeTag());
+        }
+        else
+        {
+            IncrementCounter(Counters.ActivityErrors, 1, activityUid.ToActivityUidTag(),
+                errorType.ToErrorTypeTag(), workItemSourceType.Value.ToWorkItemSourceTypeTag());
+        }
+    }
 
-    public void UpdateActivityQueueLength(string activityUid, long length) => UpdateActivityGauge(Gauges.ActivityQueueLength, length, activityUid);
+    public void UpdateActivityQueueLength(string activityUid, long length, WorkItemSourceType? workItemSourceType = null)
+    {
+        if (null == workItemSourceType)
+        {
+            UpdateGauge(Gauges.ActivityQueueLength, length, activityUid.ToActivityUidTag());
+        }
+        else
+        {
+            UpdateGauge(Gauges.ActivityQueueLength, length, activityUid.ToActivityUidTag(), workItemSourceType.Value.ToWorkItemSourceTypeTag());
+        }
+    }
 
-    public void RecordActivityExecutionTime(string activityUid, TimeSpan executionTime)
-        => UpdateActivityHistogram(Histograms.ActivityExecutionTime, (long)executionTime.TotalSeconds, activityUid);
+    public void RecordActivityExecutionTime(string activityUid, TimeSpan executionTime, WorkItemSourceType? workItemSourceType = null)
+    {
+        if (null == workItemSourceType)
+        {
+            UpdateHistogram(Histograms.ActivityExecutionTime, (long)executionTime.TotalSeconds, activityUid.ToActivityUidTag());
+        }
+        else
+        {
+            UpdateHistogram(Histograms.ActivityExecutionTime, (long)executionTime.TotalSeconds, activityUid.ToActivityUidTag(),
+                workItemSourceType.Value.ToWorkItemSourceTypeTag());
+        }
+    }
 
-    public void IncrementWorkItemsQueueCounter(string workItemSourceType, long delta)
-        => UpdateCounter(Counters.WorkItemsQueueLength, Math.Abs(delta), new KeyValuePair<string, object?>(Tags.WorkItemSourceType, workItemSourceType));
+    public void IncrementWorkItemsQueueCounter(WorkItemSourceType workItemSourceType, long delta)
+        => UpdateCounter(Counters.WorkItemsQueueLength, Math.Abs(delta), workItemSourceType.ToWorkItemSourceTypeTag());
 
-    public void DecrementWorkItemsQueueCounter(string workItemSourceType, long delta)
-        => UpdateCounter(Counters.WorkItemsQueueLength, -1 * Math.Abs(delta),
-                new KeyValuePair<string, object?>(Tags.WorkItemSourceType, workItemSourceType));
+    public void DecrementWorkItemsQueueCounter(WorkItemSourceType workItemSourceType, long delta)
+        => UpdateCounter(Counters.WorkItemsQueueLength, -1 * Math.Abs(delta), workItemSourceType.ToWorkItemSourceTypeTag());
 
-    public void IncrementWorkItemsProcessedCounter(string workItemSourceType, long delta)
-        => UpdateCounter(Counters.WorkItemsProcessed, Math.Abs(delta),
-                new KeyValuePair<string, object?>(Tags.WorkItemSourceType, workItemSourceType));
+    public void IncrementWorkItemsProcessedCounter(WorkItemSourceType workItemSourceType, long delta)
+        => UpdateCounter(Counters.WorkItemsProcessed, Math.Abs(delta), workItemSourceType.ToWorkItemSourceTypeTag());
 
     #endregion
 
@@ -36,12 +66,30 @@ public partial class TelemetryCollector
 
     #region Counters
 
-    private void UpdateActivityCounter(string counterUid, long delta, string activityUid)
-        => UpdateCounter(counterUid, delta, new KeyValuePair<string, object?>(Tags.ActivityUid, activityUid));
+    public void UpdateExecutingActivityCounter(string activityUid, long delta, WorkItemSourceType? workItemSourceType = null)
+    {
+        if (null == workItemSourceType)
+        {
+            UpdateCounter(Counters.ExecutingActivities, delta, activityUid.ToActivityUidTag());
+        }
+        else
+        {
+            UpdateCounter(Counters.ExecutingActivities, delta, activityUid.ToActivityUidTag(), workItemSourceType.Value.ToWorkItemSourceTypeTag());
+        }
+    }
 
-    private void IncrementActivityCounter(string counterUid, long delta, string activityUid, string errorType)
-        => IncrementCounter(counterUid, delta, new KeyValuePair<string, object?>(Tags.ActivityUid, activityUid),
-                new KeyValuePair<string, object?>(Tags.ErrorType, errorType));
+    public void IncrementCounter(string counterUid, string activityUid, string errorType, WorkItemSourceType? workItemSourceType = null)
+    {
+        if (null == workItemSourceType)
+        {
+            IncrementCounter(counterUid, 1, activityUid.ToActivityUidTag(), errorType.ToErrorTypeTag());
+        }
+        else
+        {
+            IncrementCounter(counterUid, 1, activityUid.ToActivityUidTag(),
+                errorType.ToErrorTypeTag(), workItemSourceType.Value.ToWorkItemSourceTypeTag());
+        }
+    }
 
     private void UpdateCounter(string counterUid, long delta, params KeyValuePair<string, object?>[] tags)
     {
@@ -71,9 +119,6 @@ public partial class TelemetryCollector
 
     #region Gauges
 
-    private void UpdateActivityGauge(string gaugeUid, long value, string activityUid)
-        => UpdateGauge(gaugeUid, value, new KeyValuePair<string, object?>(Tags.ActivityUid, activityUid));
-
     private void UpdateGauge(string gaugeUid, long value, params KeyValuePair<string, object?>[] tags)
     {
         if (_gauges.TryGetValue(gaugeUid, out var gauge))
@@ -89,9 +134,6 @@ public partial class TelemetryCollector
 
     #region Histograms
 
-    private void UpdateActivityHistogram(string histogramUid, long value, string activityUid)
-        => UpdateHistogram(histogramUid, value, new KeyValuePair<string, object?>(Tags.ActivityUid, activityUid));
-
     private void UpdateHistogram(string histogramUid, long value, params KeyValuePair<string, object?>[] tags)
     {
         if (_histograms.TryGetValue(histogramUid, out var histogram))
@@ -106,4 +148,14 @@ public partial class TelemetryCollector
     #endregion
 
     #endregion
+}
+
+internal static class TagExtensions
+{
+    public static KeyValuePair<string, object?> ToActivityUidTag(this string activityUid) => new(Tags.ActivityUid, activityUid);
+
+    public static KeyValuePair<string, object?> ToWorkItemSourceTypeTag(this WorkItemSourceType workItemSourceType)
+        => new(Tags.WorkItemSourceType, workItemSourceType);
+
+    public static KeyValuePair<string, object?> ToErrorTypeTag(this string errorType) => new(Tags.ErrorType, errorType);
 }

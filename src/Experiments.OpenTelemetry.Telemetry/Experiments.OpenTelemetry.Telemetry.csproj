@@ -13,6 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Experiments.OpenTelemetry.Domain\Experiments.OpenTelemetry.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Resources\Counters.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

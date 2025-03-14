@@ -4,6 +4,7 @@ using Experiments.OpenTelemetry.Common;
 using Experiments.OpenTelemetry.Library1;
 using Experiments.OpenTelemetry.Library2;
 using Experiments.OpenTelemetry.Telemetry;
+using Functional;
 using Microsoft.Extensions.Logging;
 using static Functional.F;
 
@@ -57,8 +58,11 @@ internal sealed class Program
         var configuration = _scope.Resolve<IHostConfiguration>();
         var configurationUpdater = _scope.Resolve<IHostConfigurationUpdater>();
 
-        void onEnqueueActivity(string activityUid, int activityQueueLength)
-            => telemetryCollector.UpdateActivityQueueLength(activityUid, activityQueueLength);
+        void onEnqueueActivity(string activityUid, int activityQueueLength, Option<WorkItemsBatchDescriptor> workItemsBatchDescriptor)
+            => workItemsBatchDescriptor.Match(
+                    () => telemetryCollector.UpdateActivityQueueLength(activityUid, activityQueueLength),
+                    descriptor => telemetryCollector.UpdateActivityQueueLength(activityUid, activityQueueLength, descriptor.SourceType)
+                );
 
         _entrypointScheduler = new ActivityScheduler(
             logger,
@@ -198,13 +202,13 @@ internal sealed class Program
         if (null != descriptor.ActivityType.BaseType
             && descriptor.ActivityType.BaseType.GetGenericTypeDefinition().IsAssignableFrom(typeof(WorkItemsProcessor<>)))
         {
-            return descriptor.WorkItemsBatchUid.Match(
+            return descriptor.WorkItemsBatchDescriptor.Match(
                 () => throw new InvalidOperationException(),
-                workItemsBatchUid => (scope.Resolve(
+                wibDescriptor => (scope.Resolve(
                             descriptor.ActivityType,
                             new NamedParameter("uid", descriptor.ActivityUid),
                             new NamedParameter("scheduler", _activityScheduler),
-                            new NamedParameter("workItemBatchUid", workItemsBatchUid)) as IProcessFlowJobActivity)!
+                            new NamedParameter("workItemsBatchDescriptor", wibDescriptor)) as IProcessFlowJobActivity)!
             );
         }
 

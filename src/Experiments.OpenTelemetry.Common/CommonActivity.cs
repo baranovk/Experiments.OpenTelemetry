@@ -1,3 +1,4 @@
+using Experiments.OpenTelemetry.Domain;
 using Experiments.OpenTelemetry.Telemetry;
 using Functional;
 using Microsoft.Extensions.Logging;

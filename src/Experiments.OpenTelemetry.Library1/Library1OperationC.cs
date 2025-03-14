@@ -9,14 +9,12 @@ public sealed class Library1OperationC(
     string uid,
     ILogger logger,
     IActivityScheduler scheduler,
-    Guid workItemBatchUid,
+    WorkItemsBatchDescriptor workItemsBatchDescriptor,
     IWorkItemSource workItemSource,
     ITelemetryCollector telemetryCollector,
     IActivityConfiguration configuration)
-    : WorkItemsProcessor<Library1OperationC>(uid, logger, scheduler, workItemBatchUid, workItemSource, telemetryCollector, configuration)
+    : WorkItemsProcessor<Library1OperationC>(uid, logger, scheduler, workItemsBatchDescriptor, workItemSource, telemetryCollector, configuration)
 {
-    protected override WorkItemSourceType WorkItemSourceType => WorkItemSourceType.Type1;
-
     protected override async Task QueueNextActivity(ActivityContext ctx, CancellationToken cancellationToken = default)
-        => await QueueNextActivity<Library1OperationD>("Lib1:D", ctx, Some(WorkItemBatchUid), cancellationToken).ConfigureAwait(false);
+        => await QueueNextActivity<Library1OperationD>("Lib1:D", ctx, Some(WorkItemsBatchDescriptor), cancellationToken).ConfigureAwait(false);
 }

@@ -36,6 +36,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experiments.OpenTelemetry.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experiments.OpenTelemetry.Communication", "src\Experiments.OpenTelemetry.Communication\Experiments.OpenTelemetry.Communication.csproj", "{06B67F0A-E896-404C-8217-4EC6566AE662}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experiments.OpenTelemetry.Domain", "src\Experiments.OpenTelemetry.Domain\Experiments.OpenTelemetry.Domain.csproj", "{9F32E958-DEBA-4796-8743-E2569A9E1456}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,6 +80,10 @@ Global
 		{06B67F0A-E896-404C-8217-4EC6566AE662}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06B67F0A-E896-404C-8217-4EC6566AE662}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06B67F0A-E896-404C-8217-4EC6566AE662}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F32E958-DEBA-4796-8743-E2569A9E1456}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F32E958-DEBA-4796-8743-E2569A9E1456}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F32E958-DEBA-4796-8743-E2569A9E1456}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F32E958-DEBA-4796-8743-E2569A9E1456}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -92,5 +98,6 @@ Global
 		{FA47F5AA-AEB0-4EFE-B1AF-9B6324EF20C9} = {851B6928-D98B-4864-B71B-A93976672F50}
 		{54670670-A5E3-437A-A2BE-319FF177292B} = {851B6928-D98B-4864-B71B-A93976672F50}
 		{06B67F0A-E896-404C-8217-4EC6566AE662} = {851B6928-D98B-4864-B71B-A93976672F50}
+		{9F32E958-DEBA-4796-8743-E2569A9E1456} = {851B6928-D98B-4864-B71B-A93976672F50}
 	EndGlobalSection
 EndGlobal

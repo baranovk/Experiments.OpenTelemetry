@@ -8,16 +8,16 @@ internal sealed class HostConfiguration : IHostConfiguration, IHostConfiguration
     #region Fields
 
     private readonly object _mutex = new();
-    private int _maxConcurrentActivityExecution = 5;
+    private int _maxConcurrentActivityExecution = 10;
     private readonly int _activityQueueLimit = 100;
     private readonly string _prometheusUri = "http://localhost:9090/api/v1/otlp/v1/metrics";
     private readonly string _jaegerUri = "http://localhost:4317";
     private TimeSpan _activityQueuePeriod = TimeSpan.FromMilliseconds(5000);
-    private int _errorRatePercent = 20;
-    private int _activityExecutionTimeMinMilliseconds = 1000;
-    private int _activityExecutionTimeMaxMilliseconds = 6000;
-    private int _activityWorkItemProcessingTimeMinMilliseconds = 1000;
-    private int _activityWorkItemProcessingTimeMaxMilliseconds = 2000;
+    private int _errorRatePercent = 5;
+    private int _activityExecutionTimeMinMilliseconds = 500;
+    private int _activityExecutionTimeMaxMilliseconds = 1000;
+    private int _activityWorkItemProcessingTimeMinMilliseconds = 100;
+    private int _activityWorkItemProcessingTimeMaxMilliseconds = 200;
 
     #endregion
 

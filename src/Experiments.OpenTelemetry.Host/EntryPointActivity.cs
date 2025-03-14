@@ -1,4 +1,5 @@
 using Experiments.OpenTelemetry.Common;
+using Experiments.OpenTelemetry.Domain;
 using Experiments.OpenTelemetry.Library1;
 using Experiments.OpenTelemetry.Library2;
 using Experiments.OpenTelemetry.Telemetry;
@@ -32,13 +33,13 @@ internal sealed class EntryPointActivity(
         var workItemsBatchUid = await EnqueuWorkItems(SourceType, cancellationToken).ConfigureAwait(false);
 
         await QueueNextActivity(ActivityUid, ActivityType, ctx,
-            Some(workItemsBatchUid), cancellationToken).ConfigureAwait(false);
+            Some(new WorkItemsBatchDescriptor(SourceType, workItemsBatchUid)), cancellationToken).ConfigureAwait(false);
     }
 
     private async Task<Guid> EnqueuWorkItems(WorkItemSourceType sourceType, CancellationToken cancellationToken = default)
     {
         var workItems = Enumerable
-                    .Range(1, new Random().Next(10, 21))
+                    .Range(1, new Random().Next(1, 11))
                     .Select(i => new WorkItem(sourceType, i))
                     .ToList();
 

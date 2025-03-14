@@ -1,11 +1,12 @@
 using System.Collections.Concurrent;
 using System.Reactive.Subjects;
 using Experiments.OpenTelemetry.Common;
+using Functional;
 using Microsoft.Extensions.Logging;
 
 namespace Experiments.OpenTelemetry.Host;
 
-internal delegate void OnEnqueueActivity(string activityUid, int activityQueueLength);
+internal delegate void OnEnqueueActivity(string activityUid, int activityQueueLength, Option<WorkItemsBatchDescriptor> workItemsBatchDescriptor);
 
 internal sealed class ActivityScheduler : IObservable<ActivityDescriptor>, IActivityScheduler, IDisposable
 {
@@ -60,7 +61,7 @@ internal sealed class ActivityScheduler : IObservable<ActivityDescriptor>, IActi
     public void QueueActivity(ActivityDescriptor descriptor)
     {
         _activityQueue.Add(descriptor);
-        _onAfterQueueActivity?.Invoke(descriptor.ActivityUid, _activityQueue.Count);
+        _onAfterQueueActivity?.Invoke(descriptor.ActivityUid, _activityQueue.Count, descriptor.WorkItemsBatchDescriptor);
     }
 
     public IDisposable Subscribe(IObserver<ActivityDescriptor> observer) => _activitySubject.Subscribe(observer);

@@ -8,14 +8,12 @@ namespace Experiments.OpenTelemetry.Library1;
 public sealed class Library1OperationB(string uid,
     ILogger logger,
     IActivityScheduler scheduler,
-    Guid workItemBatchUid,
+    WorkItemsBatchDescriptor workItemsBatchDescriptor,
     IWorkItemSource workItemSource,
     ITelemetryCollector telemetryCollector,
     IActivityConfiguration configuration)
-    : WorkItemsProcessor<Library1OperationB>(uid, logger, scheduler, workItemBatchUid, workItemSource, telemetryCollector, configuration)
+    : WorkItemsProcessor<Library1OperationB>(uid, logger, scheduler, workItemsBatchDescriptor, workItemSource, telemetryCollector, configuration)
 {
-    protected override WorkItemSourceType WorkItemSourceType => WorkItemSourceType.Type1;
-
     protected override async Task QueueNextActivity(ActivityContext ctx, CancellationToken cancellationToken = default)
-        => await QueueNextActivity<Library1OperationC>("Lib1:C", ctx, Some(WorkItemBatchUid), cancellationToken).ConfigureAwait(false);
+        => await QueueNextActivity<Library1OperationC>("Lib1:C", ctx, Some(WorkItemsBatchDescriptor), cancellationToken).ConfigureAwait(false);
 }

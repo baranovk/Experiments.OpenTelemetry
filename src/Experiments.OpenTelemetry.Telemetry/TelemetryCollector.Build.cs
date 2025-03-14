@@ -46,8 +46,8 @@ public partial class TelemetryCollector
     private void PrepareMetricsInfrastructure(TelemetryCollectorConfig config)
     {
         _counters.Add(Counters.ActivityErrors, _meter.CreateCounter<long>(Counters.ActivityErrors));
-        _counters.Add(Counters.WorkItemsProcessed, _meter.CreateCounter<long>(Counters.WorkItemsProcessed));
         _gauges.Add(Gauges.ActivityQueueLength, _meter.CreateGauge<long>(Gauges.ActivityQueueLength));
+        _upDownCounters.Add(Counters.WorkItemsProcessed, _meter.CreateUpDownCounter<long>(Counters.WorkItemsProcessed));
         _upDownCounters.Add(Counters.ExecutingActivities, _meter.CreateUpDownCounter<long>(Counters.ExecutingActivities));
         _upDownCounters.Add(Counters.WorkItemsQueueLength, _meter.CreateUpDownCounter<long>(Counters.WorkItemsQueueLength));
         _histograms.Add(Histograms.ActivityExecutionTime, _meter.CreateHistogram<long>(Histograms.ActivityExecutionTime));

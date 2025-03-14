@@ -1,3 +1,5 @@
+using Experiments.OpenTelemetry.Domain;
+
 namespace Experiments.OpenTelemetry.Common;
 
 public interface IWorkItemSource
@@ -7,10 +9,4 @@ public interface IWorkItemSource
     Task<IEnumerable<WorkItem>> GetWorkItemsAsync(WorkItemSourceType sourceType, Guid batchUid, CancellationToken cancellationToken = default);
 
     Task MarkProcessedAsync(WorkItemSourceType sourceType, Guid batchUid, CancellationToken cancellationToken = default);
-}
-
-public enum WorkItemSourceType
-{
-    Type1,
-    Type2
 }
