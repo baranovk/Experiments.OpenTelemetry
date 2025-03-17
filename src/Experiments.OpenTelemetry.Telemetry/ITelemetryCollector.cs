@@ -29,5 +29,7 @@ public interface ITelemetryCollector
 
     Activity? StartActivity(string name, string correlationId, string? parentId = null);
 
+    Activity? SetActivityException(Activity? activity, Exception ex);
+
     #endregion
 }

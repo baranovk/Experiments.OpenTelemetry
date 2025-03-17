@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Experiments.OpenTelemetry.Telemetry.Resources;
 
 namespace Experiments.OpenTelemetry.Telemetry;
 
@@ -21,4 +22,7 @@ public partial class TelemetryCollector
             throw;
         }
     }
+
+    public Activity? SetActivityException(Activity? activity, Exception ex)
+        => activity?.SetTag(Tags.ExceptionMessage, ex.Message)?.SetTag(Tags.ExceptionStackTrace, ex.StackTrace);
 }

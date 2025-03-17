@@ -79,6 +79,24 @@ namespace Experiments.OpenTelemetry.Telemetry.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to exception_message.
+        /// </summary>
+        internal static string ExceptionMessage {
+            get {
+                return ResourceManager.GetString("ExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to exception_stacktrace.
+        /// </summary>
+        internal static string ExceptionStackTrace {
+            get {
+                return ResourceManager.GetString("ExceptionStackTrace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to workitem_source_type.
         /// </summary>
         internal static string WorkItemSourceType {

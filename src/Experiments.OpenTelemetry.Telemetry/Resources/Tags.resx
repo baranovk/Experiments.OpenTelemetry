@@ -123,6 +123,12 @@
   <data name="ErrorType" xml:space="preserve">
     <value>error_type</value>
   </data>
+  <data name="ExceptionMessage" xml:space="preserve">
+    <value>exception_message</value>
+  </data>
+  <data name="ExceptionStackTrace" xml:space="preserve">
+    <value>exception_stacktrace</value>
+  </data>
   <data name="WorkItemSourceType" xml:space="preserve">
     <value>workitem_source_type</value>
   </data>

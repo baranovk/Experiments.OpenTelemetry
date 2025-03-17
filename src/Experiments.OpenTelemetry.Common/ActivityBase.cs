@@ -152,8 +152,12 @@ public abstract class ActivityBase(
             {
                 IncrementActivityErrorCounter(ex is DomainException domEx ? domEx.ErrorType.ToString() : "Unclassified");
                 Logger.LogError(ex, "Execute activity error");
-                _telemetryActivity?.SetStatus(ActivityStatusCode.Error, $"Message: {ex.Message} | StackTrace: {ex.StackTrace}");
-                _telemetryActivity?.Stop();
+
+                TelemetryCollector
+                    .SetActivityException(_telemetryActivity, ex)?
+                    .SetStatus(ActivityStatusCode.Error)?
+                    .Stop();
+
                 return Task.CompletedTask;
             }
         );

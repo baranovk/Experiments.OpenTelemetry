@@ -72,7 +72,7 @@ public partial class TelemetryCollector
     private void PrepareTracingInfrastructure(TelemetryCollectorConfig config)
         => _tracerProvider = Sdk.CreateTracerProviderBuilder()
                 .AddSource(_activitySource.Name)
-                .ConfigureResource(BuildResources)
+                .ConfigureResource(BuildTracingResources)
                 .AddOtlpExporter(options =>
                 {
                     options.ExportProcessorType = ExportProcessorType.Simple;
@@ -84,4 +84,7 @@ public partial class TelemetryCollector
 
     private static void BuildResources(ResourceBuilder rb)
         => rb.Clear().AddService(ServiceName, serviceInstanceId: System.Net.Dns.GetHostEntry(string.Empty).HostName);
+
+    private static void BuildTracingResources(ResourceBuilder rb)
+        => rb.AddService(ServiceName, serviceInstanceId: System.Net.Dns.GetHostEntry(string.Empty).HostName);
 }
