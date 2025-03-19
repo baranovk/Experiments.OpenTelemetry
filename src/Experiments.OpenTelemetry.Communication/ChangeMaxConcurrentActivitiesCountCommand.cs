@@ -1,3 +1,3 @@
 namespace Experiments.OpenTelemetry.Communication;
 
-public record class ChangeMaxConcurrentActivitiesCountCommand(int MaxCount);
+public record ChangeMaxConcurrentActivitiesCountCommand(int MaxCount);

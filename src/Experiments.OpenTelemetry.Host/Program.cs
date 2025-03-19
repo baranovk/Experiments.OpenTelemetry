@@ -56,7 +56,6 @@ internal sealed class Program
         var logger = _scope.Resolve<ILogger>();
         var telemetryCollector = _scope.Resolve<ITelemetryCollector>();
         var configuration = _scope.Resolve<IHostConfiguration>();
-        var configurationUpdater = _scope.Resolve<IHostConfigurationUpdater>();
 
         void onEnqueueActivity(string activityUid, int activityQueueLength, Option<WorkItemsBatchDescriptor> workItemsBatchDescriptor)
             => workItemsBatchDescriptor.Match(
@@ -87,7 +86,7 @@ internal sealed class Program
         var activityExecutor = new ActivityExecutor(() => configuration.MaxConcurrentExecutingActivities,
             resolveActivity, logger, cancellationToken);
 
-        var commandServer = new CommandServer(5000, logger, configurationUpdater);
+        var commandServer = _scope.Resolve<CommandServer>(new NamedParameter("port", 5000));
 
         Task.Run(
             async () => await commandServer.RunAsync(cancellationToken).ConfigureAwait(false),
@@ -168,6 +167,7 @@ internal sealed class Program
         builder.RegisterInstance(_logger).As<ILogger>().SingleInstance();
         builder.RegisterInstance(new TelemetryCollector(telemetryCollectorConfig)).As<ITelemetryCollector>().SingleInstance();
         builder.RegisterType<WorkItemSource>().As<IWorkItemSource>().SingleInstance();
+        builder.RegisterType<CommandServer>().SingleInstance();
 
         builder.RegisterInstance(configuration)
             .As<IHostConfiguration>()

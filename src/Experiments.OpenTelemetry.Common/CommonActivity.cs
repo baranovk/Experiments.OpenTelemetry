@@ -28,24 +28,17 @@ public class CommonActivity<TActivity> : ActivityBase
     {
         if (0 == (IncrementExecutionCount(typeof(TActivity)) % _errorRate))
         {
-            Console.WriteLine("");
+            throw GenerateException();
         }
 
-        await Task.Yield();
-        throw GenerateException();
-        //if (0 == (IncrementExecutionCount(typeof(TActivity)) % _errorRate))
-        //{
-        //    throw GenerateException();
-        //}
+        using (var activity = StartTracingActivity(ctx, "DoWork"))
+        {
+            await DoWork(ctx, cancellationToken).ConfigureAwait(false);
+        }
 
-        //using (var activity = StartTracingActivity(ctx, "DoWork"))
-        //{
-        //    await DoWork(ctx, cancellationToken).ConfigureAwait(false);
-        //}
+        await QueueNextActivity(ctx, cancellationToken).ConfigureAwait(false);
 
-        //await QueueNextActivity(ctx, cancellationToken).ConfigureAwait(false);
-
-        //return new();
+        return new();
     }
 
     protected virtual async Task DoWork(ActivityContext ctx, CancellationToken cancellationToken = default)

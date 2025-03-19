@@ -38,6 +38,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experiments.OpenTelemetry.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experiments.OpenTelemetry.Domain", "src\Experiments.OpenTelemetry.Domain\Experiments.OpenTelemetry.Domain.csproj", "{9F32E958-DEBA-4796-8743-E2569A9E1456}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserInterface.Console.Generic", "submodules\UserInterface.Console.Generic\src\UserInterface.Console.Generic\UserInterface.Console.Generic.csproj", "{945FBD97-E9EE-492A-B69B-4C40A3BDDCDB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Functional", "submodules\UserInterface.Console.Generic\submodules\Functional\src\Functional\Functional.csproj", "{F48790C2-539D-4121-AEA3-A9DE8CC0231B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -84,6 +88,14 @@ Global
 		{9F32E958-DEBA-4796-8743-E2569A9E1456}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F32E958-DEBA-4796-8743-E2569A9E1456}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F32E958-DEBA-4796-8743-E2569A9E1456}.Release|Any CPU.Build.0 = Release|Any CPU
+		{945FBD97-E9EE-492A-B69B-4C40A3BDDCDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{945FBD97-E9EE-492A-B69B-4C40A3BDDCDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{945FBD97-E9EE-492A-B69B-4C40A3BDDCDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{945FBD97-E9EE-492A-B69B-4C40A3BDDCDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F48790C2-539D-4121-AEA3-A9DE8CC0231B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F48790C2-539D-4121-AEA3-A9DE8CC0231B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F48790C2-539D-4121-AEA3-A9DE8CC0231B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F48790C2-539D-4121-AEA3-A9DE8CC0231B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -99,5 +111,7 @@ Global
 		{54670670-A5E3-437A-A2BE-319FF177292B} = {851B6928-D98B-4864-B71B-A93976672F50}
 		{06B67F0A-E896-404C-8217-4EC6566AE662} = {851B6928-D98B-4864-B71B-A93976672F50}
 		{9F32E958-DEBA-4796-8743-E2569A9E1456} = {851B6928-D98B-4864-B71B-A93976672F50}
+		{945FBD97-E9EE-492A-B69B-4C40A3BDDCDB} = {B2E2D382-30D0-49E6-B740-6171FC7EE895}
+		{F48790C2-539D-4121-AEA3-A9DE8CC0231B} = {B2E2D382-30D0-49E6-B740-6171FC7EE895}
 	EndGlobalSection
 EndGlobal
