@@ -33,7 +33,7 @@ internal class ChangeIntegerConfigurationParameterScenario<TChangeCommand> : Han
                 response => response is AckResponse
                                 ? ctx.UI.WriteMessage("OK").Pipe(_ => ctx with { CurrentScenario = new EntryPointScenario() })
                                 : ctx.UI.WriteEmpty()
-                                        .WriteMessage($"Received response: {response}")
+                                        .WriteMessage($"Invalie response was received: {response}")
                                         .Pipe(_ => ctx with { CurrentScenario = new EntryPointScenario() })
             );
 }
