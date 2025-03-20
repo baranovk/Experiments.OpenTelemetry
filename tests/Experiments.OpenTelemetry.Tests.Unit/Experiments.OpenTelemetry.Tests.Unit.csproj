@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Experiments.OpenTelemetry.Library1\Experiments.OpenTelemetry.Library1.csproj" />
-    <ProjectReference Include="..\..\submodules\Functional\src\Functional\Functional.csproj" />
+    <ProjectReference Include="..\..\submodules\UserInterface.Console.Generic\submodules\Functional\src\Functional\Functional.csproj" />
   </ItemGroup>
 
   <ItemGroup>

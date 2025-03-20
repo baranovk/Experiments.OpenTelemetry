@@ -1,3 +1,3 @@
-namespace Experiments.OpenTelemetry.Communication;
+namespace Experiments.OpenTelemetry.Communication.Commands;
 
 public record ChangeActivityWorkItemProcessingTimeThresholdCommand(ThresholdType ThresholdType, int Milliseconds);

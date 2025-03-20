@@ -1,4 +1,4 @@
-using Experiments.OpenTelemetry.Communication;
+using Experiments.OpenTelemetry.Communication.Commands;
 
 namespace Experiments.OpenTelemetry.Host;
 

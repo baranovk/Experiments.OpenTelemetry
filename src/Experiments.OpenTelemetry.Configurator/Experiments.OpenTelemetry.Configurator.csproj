@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\submodules\UserInterface.Console.Generic\src\UserInterface.Console.Generic\UserInterface.Console.Generic.csproj" />
+    <ProjectReference Include="..\Communication.Sockets\Communication.Sockets.csproj" />
     <ProjectReference Include="..\Experiments.OpenTelemetry.Communication\Experiments.OpenTelemetry.Communication.csproj" />
   </ItemGroup>
 

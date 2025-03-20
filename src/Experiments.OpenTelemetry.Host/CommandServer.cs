@@ -1,13 +1,15 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Text.Json;
-using System.Text.RegularExpressions;
+using Communication.Sockets;
 using Experiments.OpenTelemetry.Common;
 using Experiments.OpenTelemetry.Communication;
+using Experiments.OpenTelemetry.Communication.Commands;
+using Experiments.OpenTelemetry.Communication.Responses;
 using Functional;
 using Microsoft.Extensions.Logging;
 using static Functional.F;
+using Unit = System.ValueTuple;
 
 namespace Experiments.OpenTelemetry.Host;
 
@@ -24,7 +26,6 @@ internal sealed class CommandServer(
     private Socket? _listenSocket;
     private Socket? _transmitSocket;
     private readonly byte[] _buffer = new byte[1_024];
-    private static readonly Regex CommandRegex = new(@"^\<\|(?<cmdtype>.*?)\|\>(?<cmddata>.*)$");
     private readonly IHostConfiguration _hostConfiguration = hostConfiguration;
     private readonly IActivityConfiguration _activityConfiguration = activityConfiguration;
     private readonly IHostConfigurationUpdater _hostConfigurationUpdater = hostConfigurationUpdater;
@@ -39,29 +40,20 @@ internal sealed class CommandServer(
         {
             _transmitSocket = await _listenSocket.AcceptAsync(cancellationToken).ConfigureAwait(false);
 
-            int receivedBytesTotal = default;
-
-            (await (_transmitSocket.ReceiveAsync(_buffer, SocketFlags.None, cancellationToken))
-                .AsTask()
-                .IterateUntilAsync(
-                    receivedBytesCount =>
-                    {
-                        receivedBytesTotal += receivedBytesCount;
-                        return _transmitSocket.ReceiveAsync(_buffer, SocketFlags.None, cancellationToken).AsTask();
-                    },
-                    receivedBytesTotal => 0 == receivedBytesTotal
+            (await (await _transmitSocket.ReceiveAsync(_buffer, SocketFlags.None, cancellationToken).ConfigureAwait(false))
+                .Pipe(receivedBytesCount => Try(() => CommunicationUtility.ParseMessage(new Memory<byte>(_buffer, 0, receivedBytesCount)))
+                        .Run()
+                        .Match(
+                            ex => Async<Exceptional<Unit>>(ex),
+                            cmd => TryAsync(() => HandleCommand(cmd, _transmitSocket)).RunAsync()
+                        )
                 )
                 .ConfigureAwait(false)
             )
-            .Pipe(_ => ParseCommand(new ReadOnlySpan<byte>(_buffer, 0, receivedBytesTotal))
-                        .Match(
-                            ex => _logger.LogError(ex, "Parse command exception"),
-                            opt => opt.Match(
-                                () => _logger.LogInformation("Invalid command format"),
-                                cmd => HandleCommand(cmd)
-                            )
-                        )
-                        .Pipe(_ => _transmitSocket.Close())
+            .Pipe(result => result.Match(
+                    ex => { _logger.LogError(ex, "Command processing error"); _transmitSocket.Close(); },
+                    _ => _transmitSocket.Close()
+                )
             );
         }
     }
@@ -74,22 +66,7 @@ internal sealed class CommandServer(
         _listenSocket?.Dispose();
     }
 
-    private static Exceptional<Option<object>> ParseCommand(ReadOnlySpan<byte> buffer)
-        => Some(CommandRegex.Match(Encoding.UTF8.GetString(buffer)))
-            .Match(
-                () => throw new InvalidOperationException(),
-                match => match.Success
-                    ? Try(() => Some(
-                        JsonSerializer.Deserialize(
-                            match.Groups["cmddata"].Value,
-                            Type.GetType(match.Groups["cmdtype"].Value)!
-                        ))
-                      )
-                      .Run()
-                    : Functional.Exceptional.Of<Option<object>>(None)
-            );
-
-    private void HandleCommand(object command)
+    private async Task<Unit> HandleCommand(object command, Socket socket, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Handling {CommandType} command: {CommandDescription}",
             command.GetType().Name, command.ToString());
@@ -97,33 +74,45 @@ internal sealed class CommandServer(
         switch (command)
         {
             case PrintConfigurationParametersCommand:
-                PrintConfigurationParameters();
+                var response = new TextResponse(FormatConfigurationParameters());
+                await socket.SendAsync(
+                    new ReadOnlyMemory<byte>(CommunicationUtility.GenerateMessageBytes(response)), cancellationToken
+                ).ConfigureAwait(false);
                 break;
             case ChangeMaxConcurrentActivitiesCountCommand cmd:
                 _hostConfigurationUpdater.SetMaxConcurrentExecutingActivities(cmd.MaxCount);
+                await socket.SendAsync(new ReadOnlyMemory<byte>(CommunicationUtility.GenerateAckBytes()), cancellationToken).ConfigureAwait(false);
                 break;
             case ChangeEntrypointActivityQueuePeriodCommand cmd:
                 _hostConfigurationUpdater.SetEntrypointActivityQueuePeriod(cmd.Period);
+                await socket.SendAsync(new ReadOnlyMemory<byte>(CommunicationUtility.GenerateAckBytes()), cancellationToken).ConfigureAwait(false);
                 break;
             case ChangeActivityErrorRatePercentCommand cmd:
                 _hostConfigurationUpdater.SetActivityErrorRatePercent(cmd.ErrorRate);
+                await socket.SendAsync(new ReadOnlyMemory<byte>(CommunicationUtility.GenerateAckBytes()), cancellationToken).ConfigureAwait(false);
                 break;
             case ChangeActivityExecutionTimeThresholdCommand { ThresholdType: ThresholdType.Min } cmd:
                 _hostConfigurationUpdater.SetActivityExecutionTimeMinMilliseconds(cmd.Milliseconds);
+                await socket.SendAsync(new ReadOnlyMemory<byte>(CommunicationUtility.GenerateAckBytes()), cancellationToken).ConfigureAwait(false);
                 break;
             case ChangeActivityExecutionTimeThresholdCommand { ThresholdType: ThresholdType.Max } cmd:
                 _hostConfigurationUpdater.SetActivityExecutionTimeMaxMilliseconds(cmd.Milliseconds);
+                await socket.SendAsync(new ReadOnlyMemory<byte>(CommunicationUtility.GenerateAckBytes()), cancellationToken).ConfigureAwait(false);
                 break;
             case ChangeActivityWorkItemProcessingTimeThresholdCommand { ThresholdType: ThresholdType.Min } cmd:
                 _hostConfigurationUpdater.SetActivityWorkItemProcessingTimeMinMilliseconds(cmd.Milliseconds);
+                await socket.SendAsync(new ReadOnlyMemory<byte>(CommunicationUtility.GenerateAckBytes()), cancellationToken).ConfigureAwait(false);
                 break;
             case ChangeActivityWorkItemProcessingTimeThresholdCommand { ThresholdType: ThresholdType.Max } cmd:
                 _hostConfigurationUpdater.SetActivityWorkItemProcessingTimeMaxMilliseconds(cmd.Milliseconds);
+                await socket.SendAsync(new ReadOnlyMemory<byte>(CommunicationUtility.GenerateAckBytes()), cancellationToken).ConfigureAwait(false);
                 break;
         }
+
+        return new();
     }
 
-    private void PrintConfigurationParameters()
+    private string FormatConfigurationParameters()
     {
         var sb = new StringBuilder();
 
@@ -133,12 +122,12 @@ internal sealed class CommandServer(
         sb.Append($"{nameof(_hostConfiguration.ActivityQueueLimit)}: {_hostConfiguration.ActivityQueueLimit}\r\n");
 
         sb.Append("Activity configuration: \r\n");
-        sb.Append($"{nameof(_activityConfiguration.ErrorRatePercent)}: {_activityConfiguration.ErrorRatePercent}");
+        sb.Append($"{nameof(_activityConfiguration.ErrorRatePercent)}: {_activityConfiguration.ErrorRatePercent}\r\n");
         sb.Append($"{nameof(_activityConfiguration.ActivityExecutionTimeMinMilliseconds)}: {_activityConfiguration.ActivityExecutionTimeMinMilliseconds}\r\n");
         sb.Append($"{nameof(_activityConfiguration.ActivityExecutionTimeMaxMilliseconds)}: {_activityConfiguration.ActivityExecutionTimeMaxMilliseconds}\r\n");
         sb.Append($"{nameof(_activityConfiguration.ActivityWorkItemProcessingTimeMinMilliseconds)}: {_activityConfiguration.ActivityWorkItemProcessingTimeMinMilliseconds}\r\n");
         sb.Append($"{nameof(_activityConfiguration.ActivityWorkItemProcessingTimeMaxMilliseconds)}: {_activityConfiguration.ActivityWorkItemProcessingTimeMaxMilliseconds}\r\n");
 
-        _logger.LogInformation("{ConfigurationPerameters}", sb.ToString());
+        return sb.ToString();
     }
 }

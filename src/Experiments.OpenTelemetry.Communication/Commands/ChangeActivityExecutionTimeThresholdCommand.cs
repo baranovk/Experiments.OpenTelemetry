@@ -1,4 +1,4 @@
-namespace Experiments.OpenTelemetry.Communication;
+namespace Experiments.OpenTelemetry.Communication.Commands;
 
 public record ChangeActivityExecutionTimeThresholdCommand(ThresholdType ThresholdType, int Milliseconds);
 
