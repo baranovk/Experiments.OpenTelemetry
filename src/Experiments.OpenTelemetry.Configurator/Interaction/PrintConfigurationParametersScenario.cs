@@ -9,11 +9,9 @@ namespace Experiments.OpenTelemetry.Configurator.Interaction;
 internal sealed class PrintConfigurationParametersScenario : InteractionScenario
 {
     public override async Task<Context> Execute(Context context)
-        => (await context.UI.WriteMessage($"Sending {nameof(PrintConfigurationParametersCommand)}...")
-                .Pipe(_ => TryAsync(
-                                    () => Utility.SendCommandAsync(new PrintConfigurationParametersCommand())
-                                ).RunAsync()
-                      ).ConfigureAwait(false)
+        => (await context.UI
+                .WriteMessage($"Sending {nameof(PrintConfigurationParametersCommand)}...")
+                .Pipe(_ => TryAsync(() => Utility.SendCommandAsync(new PrintConfigurationParametersCommand())).RunAsync()).ConfigureAwait(false)
             )
             .Match(
                 ex => context.UI.WriteEmpty().WriteMessage(ex.ToString()).Pipe(_ => context with { CurrentScenario = new EntryPointScenario() }),

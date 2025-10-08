@@ -72,6 +72,7 @@ csharp_style_expression_bodied_lambdas = true:silent
 csharp_style_expression_bodied_local_functions = false:silent
 dotnet_diagnostic.S1075.severity = suggestion
 dotnet_diagnostic.S2094.severity = suggestion
+csharp_space_around_binary_operators = before_and_after
 
 [*.{xml,config,*proj,nuspec,props,resx,targets,yml,tasks}]
 indent_size = 2

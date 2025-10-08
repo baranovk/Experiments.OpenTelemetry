@@ -10,10 +10,12 @@ internal sealed class HostConfiguration : IHostConfiguration, IHostConfiguration
     private readonly object _mutex = new();
     private int _maxConcurrentActivityExecution = 10;
     private readonly int _activityQueueLimit = 100;
+    // TODO: get _prometheusUri from env
     private readonly string _prometheusUri = "http://localhost:9090/api/v1/otlp/v1/metrics";
+    // TODO: get _jaegerUri from env
     private readonly string _jaegerUri = "http://localhost:4317";
-    private TimeSpan _activityQueuePeriod = TimeSpan.FromMilliseconds(5000);
-    private int _errorRatePercent = 5;
+    private TimeSpan _activityQueuePeriod = TimeSpan.FromMilliseconds(1000);
+    private int _errorRatePercent = 10;
     private int _activityExecutionTimeMinMilliseconds = 500;
     private int _activityExecutionTimeMaxMilliseconds = 1000;
     private int _activityWorkItemProcessingTimeMinMilliseconds = 100;
